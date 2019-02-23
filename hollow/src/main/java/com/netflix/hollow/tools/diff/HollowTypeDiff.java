@@ -174,7 +174,7 @@ public class HollowTypeDiff {
     void calculateDiffs() {
         final HollowDiffNodeIdentifier rootId = new HollowDiffNodeIdentifier(type);
 
-        SimultaneousExecutor executor = new SimultaneousExecutor();
+        SimultaneousExecutor executor = new SimultaneousExecutor(getClass(), "calculate-diffs");
 
         final int numThreads = executor.getCorePoolSize();
 

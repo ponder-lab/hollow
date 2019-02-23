@@ -122,7 +122,7 @@ public class HollowSpecificDiff {
      */
     public void calculate() {
         resetResults();
-        SimultaneousExecutor executor = new SimultaneousExecutor();
+        SimultaneousExecutor executor = new SimultaneousExecutor(getClass(), "calculate-diff");
         final int numThreads = executor.getCorePoolSize();
 
         for(int i=0;i<numThreads;i++) {
