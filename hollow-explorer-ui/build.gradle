@@ -13,5 +13,6 @@ dependencies {
 
     compileOnly 'org.eclipse.jetty:jetty-server:9.4.3.v20170317'
 
-    testImplementation 'junit:junit:4.11'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
 }

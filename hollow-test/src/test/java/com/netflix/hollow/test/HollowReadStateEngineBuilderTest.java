@@ -16,13 +16,15 @@
  */
 package com.netflix.hollow.test;
 
-import static org.junit.Assert.assertEquals;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
 
 import com.netflix.hollow.api.objects.generic.GenericHollowObject;
 import com.netflix.hollow.core.read.engine.HollowReadStateEngine;
 import java.util.Arrays;
 import java.util.HashSet;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class HollowReadStateEngineBuilderTest {
     @Test
@@ -58,10 +60,12 @@ public class HollowReadStateEngineBuilderTest {
         builder.build();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBuild_cannotAddAfterBuild() {
-        HollowReadStateEngineBuilder builder = new HollowReadStateEngineBuilder();
-        builder.build();
-        builder.add("foo");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            HollowReadStateEngineBuilder builder = new HollowReadStateEngineBuilder();
+            builder.build();
+            builder.add("foo");
+        });
     }
 }

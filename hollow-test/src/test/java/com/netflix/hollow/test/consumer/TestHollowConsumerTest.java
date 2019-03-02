@@ -16,8 +16,8 @@
  */
 package com.netflix.hollow.test.consumer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static com.netflix.hollow.test.AssertShim.fail;
 
 import com.netflix.hollow.api.consumer.HollowConsumer.AnnouncementWatcher;
 import com.netflix.hollow.api.objects.generic.GenericHollowObject;
@@ -25,7 +25,7 @@ import com.netflix.hollow.core.read.dataaccess.HollowDataAccess;
 import com.netflix.hollow.test.HollowWriteStateEngineBuilder;
 import java.util.Arrays;
 import java.util.HashSet;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestHollowConsumerTest {
     @Test

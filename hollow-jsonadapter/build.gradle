@@ -8,5 +8,6 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
     implementation 'commons-lang:commons-lang:latest.release'
 
-    testImplementation 'junit:junit:4.11'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
 }
