@@ -50,7 +50,7 @@ public abstract class HollowAnnouncementWatcher {
      */
     public HollowAnnouncementWatcher() {
         refreshExecutor = Executors.newFixedThreadPool(1,
-                r -> daemonThread(r, getClass(), "announcement-watcher"));
+                r -> daemonThread(r, getClass(), "watch"));
     }
 
     /**

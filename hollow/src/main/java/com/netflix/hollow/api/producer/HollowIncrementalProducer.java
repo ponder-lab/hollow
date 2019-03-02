@@ -307,7 +307,7 @@ public class HollowIncrementalProducer {
      * @param callback
      */
     private void executeInParallel(Collection<Object> objList, String description, final Callback callback) {
-        SimultaneousExecutor executor = new SimultaneousExecutor(threadsPerCpu, getClass(), "incremental-producer-" + description);
+        SimultaneousExecutor executor = new SimultaneousExecutor(threadsPerCpu, getClass(), description);
         for(final Object obj : objList) {
             executor.execute(() -> callback.call(obj));
         }

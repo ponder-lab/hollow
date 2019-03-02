@@ -49,7 +49,7 @@ public class TimeSliceSamplingDirector extends HollowSamplingDirector {
     public void startSampling() {
         if(!isInPlay) {
             isInPlay = true;
-            daemonThread(new SampleToggler(), getClass(), "sampling-toggler")
+            daemonThread(new SampleToggler(), getClass(), "toggler")
                     .start();
         }
     }

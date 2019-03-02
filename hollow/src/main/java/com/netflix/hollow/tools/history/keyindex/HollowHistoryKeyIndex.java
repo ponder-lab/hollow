@@ -164,7 +164,7 @@ public class HollowHistoryKeyIndex {
         // to temporary files or allocating memory
         // @@@ for small states it's more efficient to sequentially write to
         // and read from a byte array but it is tricky to estimate the size
-        SimultaneousExecutor executor = new SimultaneousExecutor(1, HollowHistoryKeyIndex.class, "round-trip-state-engine");
+        SimultaneousExecutor executor = new SimultaneousExecutor(1, HollowHistoryKeyIndex.class, "round-trip");
         Exception pipeException = null;
         // Ensure read-side is closed after completion of read
         try (PipedInputStream in = new PipedInputStream(1 << 15)) {

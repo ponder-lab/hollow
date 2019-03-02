@@ -60,7 +60,7 @@ public class HollowFilesystemAnnouncementWatcher implements HollowConsumer.Annou
     @SuppressWarnings("unused")
     public HollowFilesystemAnnouncementWatcher(Path publishPath) {
         this(publishPath, newScheduledThreadPool(1,
-                r -> daemonThread(r, HollowFilesystemAnnouncementWatcher.class, "announcement-watcher; path=" + publishPath)));
+                r -> daemonThread(r, HollowFilesystemAnnouncementWatcher.class, "watch; path=" + publishPath)));
         ownedExecutor = true;
     }
 
