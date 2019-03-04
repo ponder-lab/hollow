@@ -21,8 +21,8 @@ import com.netflix.hollow.diffview.effigy.HollowEffigyFactory;
 import com.netflix.hollow.diffview.effigy.pairer.HollowEffigyDiffRecord;
 import com.netflix.hollow.tools.diff.HollowDiff;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowEffigyDiffRecordTest {
 
@@ -37,7 +37,7 @@ public class HollowEffigyDiffRecordTest {
 
         HollowEffigyDiffRecord diffRecord = new HollowEffigyDiffRecord(fromEffigy);
 
-        Assert.assertEquals(8, diffRecord.calculateDiff(toEffigy, 8));
+        assertEquals(8, diffRecord.calculateDiff(toEffigy, 8));
     }
 
 }

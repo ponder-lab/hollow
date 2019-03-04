@@ -22,8 +22,8 @@ import com.netflix.hollow.core.schema.HollowMapSchema;
 import com.netflix.hollow.core.write.HollowMapTypeWriteState;
 import com.netflix.hollow.core.write.HollowMapWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowMapFastDeltaTest extends AbstractStateEngineTest {
 
@@ -173,10 +173,10 @@ public class HollowMapFastDeltaTest extends AbstractStateEngineTest {
     }
 
     private void assertMap(HollowMapTypeReadState readState, int ordinal, int... elements) {
-        Assert.assertEquals(elements.length / 2, readState.size(ordinal));
+        assertEquals(elements.length / 2, readState.size(ordinal));
 
         for(int i=0;i<elements.length;i+=2) {
-            Assert.assertEquals(elements[i+1], readState.get(ordinal, elements[i]));
+            assertEquals(elements[i+1], readState.get(ordinal, elements[i]));
         }
     }
 

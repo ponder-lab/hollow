@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HollowIndexTraversalTest extends AbstractStateEngineTest {
 

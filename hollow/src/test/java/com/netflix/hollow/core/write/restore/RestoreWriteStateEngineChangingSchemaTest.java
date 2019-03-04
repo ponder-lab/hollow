@@ -26,9 +26,9 @@ import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngineTest {
 
@@ -40,7 +40,7 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
 
     private boolean afterRestoreWithNewSchemas;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         typeASchema_state1 = new HollowObjectSchema("TypeA", 3);
         typeASchema_state1.addField("a1", FieldType.BOOLEAN);
@@ -131,9 +131,9 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
 
         try {
             roundTripDelta();
-            Assert.fail("Should have thrown Exception when attempting to produce a delta!");
+            fail("Should have thrown Exception when attempting to produce a delta!");
         } catch(IllegalStateException expected) {
-            Assert.assertTrue(expected.getMessage().contains("TypeA"));
+            assertTrue(expected.getMessage().contains("TypeA"));
         }
 
 
@@ -144,8 +144,8 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
 
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 
-        Assert.assertEquals(a1, obj.getBoolean("a1"));
-        Assert.assertEquals(a2, obj.getString("a2"));
+        assertEquals(a1, obj.getBoolean("a1"));
+        assertEquals(a2, obj.getString("a2"));
     }
 
     private void assertTypeAWithTypeC(int ordinal, boolean a1, String a2, String c1) {
@@ -153,12 +153,12 @@ public class RestoreWriteStateEngineChangingSchemaTest extends AbstractStateEngi
 
         GenericHollowObject typeAObj = new GenericHollowObject(new HollowObjectGenericDelegate(typeAState), ordinal);
 
-        Assert.assertEquals(a1, typeAObj.getBoolean("a1"));
-        Assert.assertEquals(a2, typeAObj.getString("a2"));
+        assertEquals(a1, typeAObj.getBoolean("a1"));
+        assertEquals(a2, typeAObj.getString("a2"));
 
         GenericHollowObject typeCObj = (GenericHollowObject) typeAObj.getReferencedGenericRecord("a4");
 
-        Assert.assertEquals(c1, typeCObj.getString("c1"));
+        assertEquals(c1, typeCObj.getString("c1"));
     }
 
     private void addState1Record(boolean a1, String a2, long b1, float b2) {

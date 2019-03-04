@@ -23,13 +23,13 @@ import com.netflix.hollow.core.write.HollowMapTypeWriteState;
 import com.netflix.hollow.core.write.HollowMapWriteRecord;
 import java.io.IOException;
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowMapShardedTest extends AbstractStateEngineTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
     }
@@ -50,14 +50,14 @@ public class HollowMapShardedTest extends AbstractStateEngineTest {
         
         roundTripSnapshot();
         
-        Assert.assertEquals(8, readStateEngine.getTypeState("TestMap").numShards());
+        assertEquals(8, readStateEngine.getTypeState("TestMap").numShards());
         
         HollowMapTypeDataAccess mapDataAccess = (HollowMapTypeDataAccess) readStateEngine.getTypeDataAccess("TestMap");
         for(int i=0;i<1000;i++) {
-            Assert.assertEquals(3, mapDataAccess.size(i));
-            Assert.assertEquals(i+1, mapDataAccess.get(i, i));
-            Assert.assertEquals(i+3, mapDataAccess.get(i, i+2));
-            Assert.assertEquals(i+5, mapDataAccess.get(i, i+4));
+            assertEquals(3, mapDataAccess.size(i));
+            assertEquals(i+1, mapDataAccess.get(i, i));
+            assertEquals(i+3, mapDataAccess.get(i, i+2));
+            assertEquals(i+5, mapDataAccess.get(i, i+4));
         }
 
         for(int i=0;i<2000;i++) {
@@ -77,10 +77,10 @@ public class HollowMapShardedTest extends AbstractStateEngineTest {
         
         int ordinal = populatedOrdinals.nextSetBit(0);
         while(ordinal != -1) {
-            Assert.assertEquals(3, mapDataAccess.size(ordinal));
-            Assert.assertEquals(expectedValue+1, mapDataAccess.get(ordinal, expectedValue));
-            Assert.assertEquals(expectedValue+3, mapDataAccess.get(ordinal, expectedValue+2));
-            Assert.assertEquals(expectedValue+5, mapDataAccess.get(ordinal, expectedValue+4));
+            assertEquals(3, mapDataAccess.size(ordinal));
+            assertEquals(expectedValue+1, mapDataAccess.get(ordinal, expectedValue));
+            assertEquals(expectedValue+3, mapDataAccess.get(ordinal, expectedValue+2));
+            assertEquals(expectedValue+5, mapDataAccess.get(ordinal, expectedValue+4));
             
             expectedValue += 2;
             ordinal = populatedOrdinals.nextSetBit(ordinal+1);

@@ -22,15 +22,15 @@ import com.netflix.hollow.core.memory.encoding.ZigZag;
 import com.netflix.hollow.core.memory.pool.WastefulRecycler;
 import com.netflix.hollow.core.schema.HollowObjectSchema;
 import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowObjectWriteRecordTest {
 
     HollowObjectSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema("Test", 3);
 
@@ -61,9 +61,9 @@ public class HollowObjectWriteRecordTest {
         int field0Length = VarInt.sizeOfVLong(field0);
         int field2 = VarInt.readVInt(buf.getUnderlyingArray(), field0Length + 1);
 
-        Assert.assertEquals(123556, ZigZag.decodeLong(field0));
-        Assert.assertTrue(VarInt.readVNull(buf.getUnderlyingArray(), field0Length));
-        Assert.assertEquals(1023, ZigZag.decodeInt(field2));
+        assertEquals(123556, ZigZag.decodeLong(field0));
+        assertTrue(VarInt.readVNull(buf.getUnderlyingArray(), field0Length));
+        assertEquals(1023, ZigZag.decodeInt(field2));
 
     }
 

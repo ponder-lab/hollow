@@ -32,9 +32,9 @@ import com.netflix.hollow.tools.history.keyindex.HollowHistoryKeyIndex;
 import com.netflix.hollow.tools.history.keyindex.HollowHistoryTypeKeyIndex;
 import java.io.IOException;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowHistoryTest extends AbstractStateEngineTest {
 
@@ -48,7 +48,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
     private static final String B_FN_PREFIX = "b";
     
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         emptyTypeSchema = new HollowObjectSchema("Empty", 1);
         emptyTypeSchema.addField("value", FieldType.STRING);
@@ -192,7 +192,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
         // Double Snapshot - With New Type
         {
             initWriteStateEngine();
-            Assert.assertNull(writeStateEngine.getTypeState(B_TYPE));
+            assertNull(writeStateEngine.getTypeState(B_TYPE));
 
             addRecord(1, 2, 3);
             // addRecord(2, 3, 4);
@@ -307,7 +307,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
         roundTripSnapshot();
 
         HollowHistory history = new HollowHistory(readStateEngine, 1L, 2);
-        Assert.assertEquals(0, history.getNumberOfHistoricalStates());
+        assertEquals(0, history.getNumberOfHistoricalStates());
 
         {
             addRecord(1, 2, 3);
@@ -316,7 +316,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
             roundTripDelta();
             history.deltaOccurred(2L);
 
-            Assert.assertEquals(1, history.getNumberOfHistoricalStates());
+            assertEquals(1, history.getNumberOfHistoricalStates());
         }
 
 
@@ -327,7 +327,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
             roundTripDelta();
             history.deltaOccurred(3L);
 
-            Assert.assertEquals(2, history.getNumberOfHistoricalStates());
+            assertEquals(2, history.getNumberOfHistoricalStates());
             historicalStates = history.getHistoricalStates();
         }
 
@@ -338,13 +338,13 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
             roundTripDelta();
             history.deltaOccurred(4L);
 
-            Assert.assertEquals(2, history.getNumberOfHistoricalStates());
-            Assert.assertEquals(historicalStates[0], history.getHistoricalStates()[1]);
+            assertEquals(2, history.getNumberOfHistoricalStates());
+            assertEquals(historicalStates[0], history.getHistoricalStates()[1]);
         }
 
         {
             history.removeHistoricalStates(1);
-            Assert.assertEquals(1, history.getNumberOfHistoricalStates());
+            assertEquals(1, history.getNumberOfHistoricalStates());
             historicalStates = history.getHistoricalStates();
         }
 
@@ -354,13 +354,13 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
             roundTripDelta();
             history.deltaOccurred(5L);
 
-            Assert.assertEquals(2, history.getNumberOfHistoricalStates());
-            Assert.assertEquals(historicalStates[0], history.getHistoricalStates()[1]);
+            assertEquals(2, history.getNumberOfHistoricalStates());
+            assertEquals(historicalStates[0], history.getHistoricalStates()[1]);
         }
 
         {
             history.removeHistoricalStates(history.getNumberOfHistoricalStates());
-            Assert.assertEquals(0, history.getNumberOfHistoricalStates());
+            assertEquals(0, history.getNumberOfHistoricalStates());
         }
 
         {
@@ -370,7 +370,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
             roundTripDelta();
             history.deltaOccurred(6L);
 
-            Assert.assertEquals(1, history.getNumberOfHistoricalStates());
+            assertEquals(1, history.getNumberOfHistoricalStates());
         }
     }
 
@@ -424,9 +424,9 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
     }
 
     private void assertRecord(HollowObject obj, int a1, int a2, int a3) {
-        Assert.assertEquals(a1, obj.getInt("a1"));
-        Assert.assertEquals(a2, obj.getInt("a2"));
-        Assert.assertEquals(a3, obj.getInt("a3"));
+        assertEquals(a1, obj.getInt("a1"));
+        assertEquals(a2, obj.getInt("a2"));
+        assertEquals(a3, obj.getInt("a3"));
     }
 
     @SuppressWarnings("unused")
@@ -448,7 +448,7 @@ public class HollowHistoryTest extends AbstractStateEngineTest {
     private void assertRecord(HollowObject obj, String fnPrefix, int... vals) {
         for (int i = 0; i < vals.length; i++) {
             String fn = fnPrefix + (i + 1);
-            Assert.assertEquals(vals[i], obj.getInt(fn));
+            assertEquals(vals[i], obj.getInt(fn));
         }
     }
 

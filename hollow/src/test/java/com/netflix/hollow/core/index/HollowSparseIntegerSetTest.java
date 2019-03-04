@@ -24,9 +24,9 @@ import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for HollowSparseIntegerSet.
@@ -37,7 +37,7 @@ public class HollowSparseIntegerSetTest {
     private HollowReadStateEngine readStateEngine;
     private HollowObjectMapper objectMapper;
 
-    @Before
+    @BeforeEach
     public void beforeTestSetup() {
         writeStateEngine = new HollowWriteStateEngine();
         readStateEngine = new HollowReadStateEngine();
@@ -53,7 +53,7 @@ public class HollowSparseIntegerSetTest {
         StateEngineRoundTripper.roundTripSnapshot(writeStateEngine, readStateEngine);
 
         HollowSparseIntegerSet hollowIntSet = new HollowSparseIntegerSet(readStateEngine, "Movie", "id.value", getPredicate());
-        Assert.assertEquals(0, hollowIntSet.cardinality());
+        assertEquals(0, hollowIntSet.cardinality());
 
         hollowIntSet.listenForDeltaUpdates();
 
@@ -62,7 +62,7 @@ public class HollowSparseIntegerSetTest {
         objectMapper.add(new Movie(new Video(8192), "Random", 2009));
         StateEngineRoundTripper.roundTripDelta(writeStateEngine, readStateEngine);
 
-        Assert.assertEquals(11, hollowIntSet.cardinality());// 11 movies released in 2009 as per predicate
+        assertEquals(11, hollowIntSet.cardinality());// 11 movies released in 2009 as per predicate
     }
 
 
@@ -74,20 +74,20 @@ public class HollowSparseIntegerSetTest {
         StateEngineRoundTripper.roundTripSnapshot(writeStateEngine, readStateEngine);
 
         HollowSparseIntegerSet hollowIntSet = new HollowSparseIntegerSet(readStateEngine, "Movie", "id.value", getPredicate());
-        Assert.assertFalse(hollowIntSet.get(1));
-        Assert.assertFalse(hollowIntSet.get(2));
-        Assert.assertFalse(hollowIntSet.get(3));
-        Assert.assertFalse(hollowIntSet.get(4));
+        assertFalse(hollowIntSet.get(1));
+        assertFalse(hollowIntSet.get(2));
+        assertFalse(hollowIntSet.get(3));
+        assertFalse(hollowIntSet.get(4));
 
-        Assert.assertTrue(hollowIntSet.get(77));
-        Assert.assertTrue(hollowIntSet.get(66));
-        Assert.assertTrue(hollowIntSet.get(55));
-        Assert.assertTrue(hollowIntSet.get(512));
-        Assert.assertTrue(hollowIntSet.get(513));
-        Assert.assertTrue(hollowIntSet.get(Integer.MAX_VALUE));
-        Assert.assertTrue(hollowIntSet.get(40));
-        Assert.assertTrue(hollowIntSet.get(28));
-        Assert.assertTrue(hollowIntSet.get(30));
+        assertTrue(hollowIntSet.get(77));
+        assertTrue(hollowIntSet.get(66));
+        assertTrue(hollowIntSet.get(55));
+        assertTrue(hollowIntSet.get(512));
+        assertTrue(hollowIntSet.get(513));
+        assertTrue(hollowIntSet.get(Integer.MAX_VALUE));
+        assertTrue(hollowIntSet.get(40));
+        assertTrue(hollowIntSet.get(28));
+        assertTrue(hollowIntSet.get(30));
 
         // listen for delta updates
         hollowIntSet.listenForDeltaUpdates();
@@ -101,7 +101,7 @@ public class HollowSparseIntegerSetTest {
         StateEngineRoundTripper.roundTripDelta(writeStateEngine, readStateEngine);
 
         // now Avatar should not be there in index.
-        Assert.assertFalse(hollowIntSet.get(512));
+        assertFalse(hollowIntSet.get(512));
     }
 
     // this predicate only indexes movie released in 2009

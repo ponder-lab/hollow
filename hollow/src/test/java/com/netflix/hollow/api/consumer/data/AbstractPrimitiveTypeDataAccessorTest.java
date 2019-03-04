@@ -20,7 +20,7 @@ import com.netflix.hollow.core.read.engine.object.HollowObjectTypeReadState;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.util.Collection;
 import java.util.List;
-import org.junit.Assert;
+import static com.netflix.hollow.test.AssertShim.*;
 
 public abstract class AbstractPrimitiveTypeDataAccessorTest<T> extends AbstractStateEngineTest {
     HollowObjectMapper objectMapper;
@@ -42,14 +42,14 @@ public abstract class AbstractPrimitiveTypeDataAccessorTest<T> extends AbstractS
     protected void assertObject(HollowObjectTypeReadState readState, int ordinal, T expectedValue) {
         Object obj = getData(readState, ordinal);
 
-        Assert.assertEquals(expectedValue, obj);
+        assertEquals(expectedValue, obj);
     }
 
     protected void assertList(Collection<T> listOfObj, List<T> expectedObjs) {
         int i = 0;
         for (T obj : listOfObj) {
             Object expectedObj = expectedObjs.get(i++);
-            Assert.assertEquals(expectedObj, obj);
+            assertEquals(expectedObj, obj);
         }
     }
 
@@ -58,13 +58,13 @@ public abstract class AbstractPrimitiveTypeDataAccessorTest<T> extends AbstractS
 //        for (UpdatedRecord<T> obj : listOfObj) {
 //            T before = obj.getBefore();
 //            T after = obj.getAfter();
-//            Assert.assertNotEquals(before, after);
+//            assertNotEquals(before, after);
 //
 //            T expBefore= beforeValues.get(i);
 //            T expAfter = afterValues.get(i++);
-//            Assert.assertNotEquals(expBefore, expAfter);
-//            Assert.assertEquals(expBefore, before);
-//            Assert.assertEquals(expAfter, after);
+//            assertNotEquals(expBefore, expAfter);
+//            assertEquals(expBefore, before);
+//            assertEquals(expAfter, after);
 //        }
 //    }
 }

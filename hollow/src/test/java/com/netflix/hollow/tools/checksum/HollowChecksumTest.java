@@ -24,16 +24,16 @@ import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowChecksumTest {
     
     HollowReadStateEngine readEngine1;
     HollowReadStateEngine readEngine2;
     
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         HollowObjectSchema schema1 = new HollowObjectSchema("TypeA", 3);
         HollowObjectSchema schema2 = new HollowObjectSchema("TypeA", 3);
@@ -54,7 +54,7 @@ public class HollowChecksumTest {
         HollowChecksum cksum1 = HollowChecksum.forStateEngineWithCommonSchemas(readEngine1, readEngine2);
         HollowChecksum cksum2 = HollowChecksum.forStateEngineWithCommonSchemas(readEngine2, readEngine1);
         
-        Assert.assertEquals(cksum1, cksum2);
+        assertEquals(cksum1, cksum2);
     }
 
     

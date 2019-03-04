@@ -21,8 +21,8 @@ import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import com.netflix.hollow.core.write.objectmapper.HollowInline;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowErgonomicAPIShortcutsTest {
 
@@ -34,24 +34,24 @@ public class HollowErgonomicAPIShortcutsTest {
 
         HollowErgonomicAPIShortcuts shortcuts = new HollowErgonomicAPIShortcuts(writeEngine);
 
-        Assert.assertEquals(5, shortcuts.numShortcuts());
+        assertEquals(5, shortcuts.numShortcuts());
         
-        Assert.assertArrayEquals(new String[] { "value" }, shortcuts.getShortcut("StringReferenceReference.ref").getPath());
-        Assert.assertArrayEquals(new String[] { "StringReference" }, shortcuts.getShortcut("StringReferenceReference.ref").getPathTypes());
-        Assert.assertArrayEquals(new String[] { "value" }, shortcuts.getShortcut("TypeA.a2").getPath());
-        Assert.assertArrayEquals(new String[] { "StringReference" }, shortcuts.getShortcut("TypeA.a2").getPathTypes());
-        Assert.assertArrayEquals(new String[] { "value" }, shortcuts.getShortcut("TypeB.b1").getPath());
-        Assert.assertArrayEquals(new String[] { "StringReference" }, shortcuts.getShortcut("TypeB.b1").getPathTypes());
-        Assert.assertArrayEquals(new String[] { "ref", "value" }, shortcuts.getShortcut("TypeA.a3").getPath());
-        Assert.assertArrayEquals(new String[] { "StringReferenceReference", "StringReference" }, shortcuts.getShortcut("TypeA.a3").getPathTypes());
-        Assert.assertArrayEquals(new String[] { "ref", "value" }, shortcuts.getShortcut("TypeB.b2").getPath());
-        Assert.assertArrayEquals(new String[] { "StringReferenceReference", "StringReference" }, shortcuts.getShortcut("TypeB.b2").getPathTypes());
+        assertArrayEquals(new String[] { "value" }, shortcuts.getShortcut("StringReferenceReference.ref").getPath());
+        assertArrayEquals(new String[] { "StringReference" }, shortcuts.getShortcut("StringReferenceReference.ref").getPathTypes());
+        assertArrayEquals(new String[] { "value" }, shortcuts.getShortcut("TypeA.a2").getPath());
+        assertArrayEquals(new String[] { "StringReference" }, shortcuts.getShortcut("TypeA.a2").getPathTypes());
+        assertArrayEquals(new String[] { "value" }, shortcuts.getShortcut("TypeB.b1").getPath());
+        assertArrayEquals(new String[] { "StringReference" }, shortcuts.getShortcut("TypeB.b1").getPathTypes());
+        assertArrayEquals(new String[] { "ref", "value" }, shortcuts.getShortcut("TypeA.a3").getPath());
+        assertArrayEquals(new String[] { "StringReferenceReference", "StringReference" }, shortcuts.getShortcut("TypeA.a3").getPathTypes());
+        assertArrayEquals(new String[] { "ref", "value" }, shortcuts.getShortcut("TypeB.b2").getPath());
+        assertArrayEquals(new String[] { "StringReferenceReference", "StringReference" }, shortcuts.getShortcut("TypeB.b2").getPathTypes());
 
-        Assert.assertEquals(FieldType.STRING, shortcuts.getShortcut("StringReferenceReference.ref").getType());
-        Assert.assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeA.a2").getType());
-        Assert.assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeB.b1").getType());
-        Assert.assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeA.a3").getType());
-        Assert.assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeB.b2").getType());
+        assertEquals(FieldType.STRING, shortcuts.getShortcut("StringReferenceReference.ref").getType());
+        assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeA.a2").getType());
+        assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeB.b1").getType());
+        assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeA.a3").getType());
+        assertEquals(FieldType.STRING, shortcuts.getShortcut("TypeB.b2").getType());
     }
 
     @SuppressWarnings("unused")

@@ -25,15 +25,15 @@ import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
 import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowObjectRemovalTest extends AbstractStateEngineTest {
 
     HollowObjectSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema("TestObject", 2);
         schema.addField("f1", FieldType.INT);
@@ -71,8 +71,8 @@ public class HollowObjectRemovalTest extends AbstractStateEngineTest {
 
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 
-        Assert.assertEquals(int1, obj.getInt("f1"));
-        Assert.assertEquals(int2, obj.getInt("f2"));
+        assertEquals(int1, obj.getInt("f1"));
+        assertEquals(int2, obj.getInt("f2"));
     }
 
     private void addRecord(int int1, int int2) {

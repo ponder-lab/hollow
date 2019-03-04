@@ -22,16 +22,16 @@ import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import com.netflix.hollow.core.write.objectmapper.HollowPrimaryKey;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
 public class PrimaryKeyTest {
     
     HollowWriteStateEngine writeEngine;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         writeEngine = new HollowWriteStateEngine();
         HollowObjectMapper mapper = new HollowObjectMapper(writeEngine);
@@ -44,21 +44,21 @@ public class PrimaryKeyTest {
         HollowObjectSchema schema = (HollowObjectSchema) writeEngine.getTypeState("TypeWithTraversablePrimaryKey").getSchema();
         PrimaryKey traversablePrimaryKey = schema.getPrimaryKey();
         
-        Assert.assertEquals(2, traversablePrimaryKey.getFieldPathIndex(writeEngine, 0).length);
-        Assert.assertEquals(3, traversablePrimaryKey.getFieldPathIndex(writeEngine, 1).length);
-        Assert.assertEquals(1, traversablePrimaryKey.getFieldPathIndex(writeEngine, 2).length);
+        assertEquals(2, traversablePrimaryKey.getFieldPathIndex(writeEngine, 0).length);
+        assertEquals(3, traversablePrimaryKey.getFieldPathIndex(writeEngine, 1).length);
+        assertEquals(1, traversablePrimaryKey.getFieldPathIndex(writeEngine, 2).length);
         
         PrimaryKey anotherTraversablePrimaryKey = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType.id");
-        Assert.assertEquals(3, anotherTraversablePrimaryKey.getFieldPathIndex(writeEngine, 0).length);
+        assertEquals(3, anotherTraversablePrimaryKey.getFieldPathIndex(writeEngine, 0).length);
         
         PrimaryKey hardStopPrimaryKey = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType.id!");
-        Assert.assertEquals(2, hardStopPrimaryKey.getFieldPathIndex(writeEngine, 0).length);
+        assertEquals(2, hardStopPrimaryKey.getFieldPathIndex(writeEngine, 0).length);
         
         PrimaryKey hardStopPrimaryKey2 = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType2!");
-        Assert.assertEquals(1, hardStopPrimaryKey2.getFieldPathIndex(writeEngine, 0).length);
+        assertEquals(1, hardStopPrimaryKey2.getFieldPathIndex(writeEngine, 0).length);
         
         PrimaryKey hardStopPrimaryKey3 = new PrimaryKey("TypeWithTraversablePrimaryKey", "strList!");
-        Assert.assertEquals(1, hardStopPrimaryKey3.getFieldPathIndex(writeEngine, 0).length);
+        assertEquals(1, hardStopPrimaryKey3.getFieldPathIndex(writeEngine, 0).length);
     }
     
     @Test
@@ -66,58 +66,58 @@ public class PrimaryKeyTest {
         try {
             PrimaryKey invalidFieldDefinition = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType.nofield");
             invalidFieldDefinition.getFieldPathIndex(writeEngine, 0);
-            Assert.fail("IllegalArgumentException expected");
+            fail("IllegalArgumentException expected");
         } catch (FieldPaths.FieldPathException expected) {
-            Assert.assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_FOUND, expected.error);
-            Assert.assertEquals(1, expected.fieldSegments.size());
-            Assert.assertEquals(1, expected.segmentIndex);
-            Assert.assertEquals("SubTypeWithTraversablePrimaryKey", expected.enclosingSchema.getName());
+            assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_FOUND, expected.error);
+            assertEquals(1, expected.fieldSegments.size());
+            assertEquals(1, expected.segmentIndex);
+            assertEquals("SubTypeWithTraversablePrimaryKey", expected.enclosingSchema.getName());
         }
         
         try {
             PrimaryKey invalidFieldDefinition = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType.id.value.alldone");
             invalidFieldDefinition.getFieldPathIndex(writeEngine, 0);
-            Assert.fail("IllegalArgumentException expected");
+            fail("IllegalArgumentException expected");
         } catch (FieldPaths.FieldPathException expected) {
-            Assert.assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_TRAVERSABLE, expected.error);
-            Assert.assertEquals(3, expected.fieldSegments.size());
-            Assert.assertEquals(2, expected.segmentIndex);
-            Assert.assertEquals("value", expected.fieldSegments.get(2).getName());
-            Assert.assertEquals("String", expected.enclosingSchema.getName());
+            assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_TRAVERSABLE, expected.error);
+            assertEquals(3, expected.fieldSegments.size());
+            assertEquals(2, expected.segmentIndex);
+            assertEquals("value", expected.fieldSegments.get(2).getName());
+            assertEquals("String", expected.enclosingSchema.getName());
         }
         
         try {
             PrimaryKey invalidFieldDefinition = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType2");
             invalidFieldDefinition.getFieldPathIndex(writeEngine, 0);
-            Assert.fail("IllegalArgumentException expected");
+            fail("IllegalArgumentException expected");
         } catch (FieldPaths.FieldPathException expected) {
-            Assert.assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_EXPANDABLE, expected.error);
-            Assert.assertEquals(1, expected.fieldSegments.size());
-            Assert.assertEquals("subType2", expected.fieldSegments.get(0).getName());
-            Assert.assertEquals("SubTypeWithNonTraversablePrimaryKey", expected.enclosingSchema.getName());
+            assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_EXPANDABLE, expected.error);
+            assertEquals(1, expected.fieldSegments.size());
+            assertEquals("subType2", expected.fieldSegments.get(0).getName());
+            assertEquals("SubTypeWithNonTraversablePrimaryKey", expected.enclosingSchema.getName());
         }
         
         try {
             PrimaryKey invalidFieldDefinition = new PrimaryKey("TypeWithTraversablePrimaryKey", "strList.element.value");
             invalidFieldDefinition.getFieldPathIndex(writeEngine, 0);
-            Assert.fail("IllegalArgumentException expected");
+            fail("IllegalArgumentException expected");
         } catch (FieldPaths.FieldPathException expected) {
-            Assert.assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_TRAVERSABLE, expected.error);
-            Assert.assertEquals(1, expected.fieldSegments.size());
-            Assert.assertEquals(1, expected.segmentIndex);
-            Assert.assertEquals("element", expected.segments[expected.segmentIndex]);
-            Assert.assertEquals("ListOfString", expected.enclosingSchema.getName());
+            assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_TRAVERSABLE, expected.error);
+            assertEquals(1, expected.fieldSegments.size());
+            assertEquals(1, expected.segmentIndex);
+            assertEquals("element", expected.segments[expected.segmentIndex]);
+            assertEquals("ListOfString", expected.enclosingSchema.getName());
         }
         
         try {
             PrimaryKey invalidFieldDefinition = new PrimaryKey("UnknownType", "id");
             invalidFieldDefinition.getFieldPathIndex(writeEngine, 0);
-            Assert.fail("IllegalArgumentException expected");
+            fail("IllegalArgumentException expected");
         } catch (FieldPaths.FieldPathException expected) {
-            Assert.assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_BINDABLE, expected.error);
-            Assert.assertEquals(0, expected.fieldSegments.size());
-            Assert.assertEquals(0, expected.segmentIndex);
-            Assert.assertEquals("UnknownType", expected.rootType);
+            assertEquals(FieldPaths.FieldPathException.ErrorKind.NOT_BINDABLE, expected.error);
+            assertEquals(0, expected.fieldSegments.size());
+            assertEquals(0, expected.segmentIndex);
+            assertEquals("UnknownType", expected.rootType);
         }
     }
     
@@ -126,15 +126,15 @@ public class PrimaryKeyTest {
     public void testAutoExpand() {
         { // verify fieldPath auto expand
             PrimaryKey autoExpandPK = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType");
-            Assert.assertEquals(FieldType.STRING, autoExpandPK.getFieldType(writeEngine, 0));
-            Assert.assertEquals(null, autoExpandPK.getFieldSchema(writeEngine, 0));
+            assertEquals(FieldType.STRING, autoExpandPK.getFieldType(writeEngine, 0));
+            assertEquals(null, autoExpandPK.getFieldSchema(writeEngine, 0));
         }
 
         { // verify disabled fieldPath auto expand with ending "!" 
             PrimaryKey autoExpandPK = new PrimaryKey("TypeWithTraversablePrimaryKey", "subType!");
-            Assert.assertNotEquals(FieldType.STRING, autoExpandPK.getFieldType(writeEngine, 0));
-            Assert.assertEquals(FieldType.REFERENCE, autoExpandPK.getFieldType(writeEngine, 0));
-            Assert.assertEquals("SubTypeWithTraversablePrimaryKey", autoExpandPK.getFieldSchema(writeEngine, 0).getName());
+            assertNotEquals(FieldType.STRING, autoExpandPK.getFieldType(writeEngine, 0));
+            assertEquals(FieldType.REFERENCE, autoExpandPK.getFieldType(writeEngine, 0));
+            assertEquals("SubTypeWithTraversablePrimaryKey", autoExpandPK.getFieldSchema(writeEngine, 0).getName());
         }
     }
     

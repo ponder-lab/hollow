@@ -28,8 +28,8 @@ import com.netflix.hollow.core.schema.HollowSchema;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class MissingMapTest extends AbstractStateEngineTest {
     @Test
@@ -40,29 +40,29 @@ public class MissingMapTest extends AbstractStateEngineTest {
 
         GenericHollowMap map = (GenericHollowMap) GenericHollowRecordHelper.instantiate(readStateEngine, "MissingMap", 0);
 
-        Assert.assertEquals(2, map.size());
-        Assert.assertTrue(map.containsKey(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 2)));
-        Assert.assertEquals(300, map.get(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 3)).getOrdinal());
-        Assert.assertFalse(map.containsKey(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 0)));
-        Assert.assertNull(map.get(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 4)));
+        assertEquals(2, map.size());
+        assertTrue(map.containsKey(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 2)));
+        assertEquals(300, map.get(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 3)).getOrdinal());
+        assertFalse(map.containsKey(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 0)));
+        assertNull(map.get(new FakeMissingHollowRecord(new HollowObjectMissingDataAccess(readStateEngine, "MissingObject"), 4)));
 
         Iterator<Map.Entry<HollowRecord, HollowRecord>> rec = map.entrySet().iterator();
 
-        Assert.assertTrue(rec.hasNext());
+        assertTrue(rec.hasNext());
         Map.Entry<HollowRecord, HollowRecord> next = rec.next();
-        Assert.assertEquals(2, next.getKey().getOrdinal());
-        Assert.assertEquals("MissingObject", next.getKey().getSchema().getName());
-        Assert.assertEquals(200, next.getValue().getOrdinal());
-        Assert.assertEquals("MissingObject", next.getValue().getSchema().getName());
-        Assert.assertTrue(rec.hasNext());
+        assertEquals(2, next.getKey().getOrdinal());
+        assertEquals("MissingObject", next.getKey().getSchema().getName());
+        assertEquals(200, next.getValue().getOrdinal());
+        assertEquals("MissingObject", next.getValue().getSchema().getName());
+        assertTrue(rec.hasNext());
         next = rec.next();
-        Assert.assertEquals(3, next.getKey().getOrdinal());
-        Assert.assertEquals("MissingObject", next.getKey().getSchema().getName());
-        Assert.assertEquals(300, next.getValue().getOrdinal());
-        Assert.assertEquals("MissingObject", next.getValue().getSchema().getName());
-        Assert.assertEquals(300, map.get(next.getKey()).getOrdinal());
-        Assert.assertEquals("MissingObject", map.get(next.getKey()).getSchema().getName());
-        Assert.assertFalse(rec.hasNext());
+        assertEquals(3, next.getKey().getOrdinal());
+        assertEquals("MissingObject", next.getKey().getSchema().getName());
+        assertEquals(300, next.getValue().getOrdinal());
+        assertEquals("MissingObject", next.getValue().getSchema().getName());
+        assertEquals(300, map.get(next.getKey()).getOrdinal());
+        assertEquals("MissingObject", map.get(next.getKey()).getSchema().getName());
+        assertFalse(rec.hasNext());
     }
 
     private class FakeMissingDataHandler extends DefaultMissingDataHandler {

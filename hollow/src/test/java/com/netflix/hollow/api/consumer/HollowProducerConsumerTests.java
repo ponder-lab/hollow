@@ -31,16 +31,16 @@ import com.netflix.hollow.tools.compact.HollowCompactor.CompactionConfig;
 import java.time.Duration;
 import java.util.BitSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowProducerConsumerTests {
 
     private InMemoryBlobStore blobStore;
     private InMemoryAnnouncement announcement;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
         announcement = new InMemoryAnnouncement();
@@ -58,7 +58,7 @@ public class HollowProducerConsumerTests {
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         consumer.triggerRefreshTo(version);
 
-        Assert.assertEquals(version, consumer.getCurrentVersionId());
+        assertEquals(version, consumer.getCurrentVersionId());
     }
 
     @Test
@@ -75,11 +75,11 @@ public class HollowProducerConsumerTests {
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         consumer.triggerRefreshTo(v3);
 
-        Assert.assertEquals(v3, consumer.getCurrentVersionId());
+        assertEquals(v3, consumer.getCurrentVersionId());
 
-        Assert.assertEquals(v1, blobStore.retrieveSnapshotBlob(v3).getToVersion());
-        Assert.assertEquals(v2, blobStore.retrieveDeltaBlob(v1).getToVersion());
-        Assert.assertEquals(v3, blobStore.retrieveDeltaBlob(v2).getToVersion());
+        assertEquals(v1, blobStore.retrieveSnapshotBlob(v3).getToVersion());
+        assertEquals(v2, blobStore.retrieveDeltaBlob(v1).getToVersion());
+        assertEquals(v3, blobStore.retrieveDeltaBlob(v2).getToVersion());
     }
 
     @Test
@@ -96,11 +96,11 @@ public class HollowProducerConsumerTests {
                 .build();
         consumer.triggerRefresh();
 
-        Assert.assertEquals(v1, consumer.getCurrentVersionId());
+        assertEquals(v1, consumer.getCurrentVersionId());
 
         long v2 = runCycle(producer, 2);
 
-        Assert.assertEquals(v2, consumer.getCurrentVersionId());
+        assertEquals(v2, consumer.getCurrentVersionId());
     }
 
     @Test
@@ -117,13 +117,13 @@ public class HollowProducerConsumerTests {
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         consumer.triggerRefreshTo(v3);
 
-        Assert.assertEquals(v3, consumer.getCurrentVersionId());
+        assertEquals(v3, consumer.getCurrentVersionId());
 
         blobStore.removeSnapshot(
                 v1); // <-- not necessary to cause following of reverse deltas -- just asserting that's what happened.
         consumer.triggerRefreshTo(v1);
 
-        Assert.assertEquals(v1, consumer.getCurrentVersionId());
+        assertEquals(v1, consumer.getCurrentVersionId());
     }
 
     @Test
@@ -144,18 +144,18 @@ public class HollowProducerConsumerTests {
                 .build();
         consumer.triggerRefresh();
 
-        Assert.assertEquals(v3, consumer.getCurrentVersionId());
+        assertEquals(v3, consumer.getCurrentVersionId());
 
         announcement.pin(v1);
 
-        Assert.assertEquals(v1, consumer.getCurrentVersionId());
+        assertEquals(v1, consumer.getCurrentVersionId());
 
         /// another cycle occurs while we're pinned
         long v4 = runCycle(producer, 4);
 
         announcement.unpin();
 
-        Assert.assertEquals(v4, consumer.getCurrentVersionId());
+        assertEquals(v4, consumer.getCurrentVersionId());
     }
 
     @Test
@@ -170,15 +170,15 @@ public class HollowProducerConsumerTests {
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
 
         consumer.triggerRefresh();
-        Assert.assertEquals(v1, consumer.getCurrentVersionId());
+        assertEquals(v1, consumer.getCurrentVersionId());
 
         consumer.triggerRefresh();
-        Assert.assertEquals(v1, consumer.getCurrentVersionId());
+        assertEquals(v1, consumer.getCurrentVersionId());
 
         long v2 = runCycle(producer, 2);
 
         consumer.triggerRefresh();
-        Assert.assertEquals(v2, consumer.getCurrentVersionId());
+        assertEquals(v2, consumer.getCurrentVersionId());
     }
 
     @Test
@@ -198,8 +198,8 @@ public class HollowProducerConsumerTests {
 
         long v2 = runCycle(producer, 2);
 
-        Assert.assertNotNull(blobStore.retrieveDeltaBlob(v1));
-        Assert.assertEquals(v2, blobStore.retrieveDeltaBlob(v1).getToVersion());
+        assertNotNull(blobStore.retrieveDeltaBlob(v1));
+        assertEquals(v2, blobStore.retrieveDeltaBlob(v1).getToVersion());
     }
 
     @Test
@@ -217,10 +217,10 @@ public class HollowProducerConsumerTests {
         long v4 = runCycle(producer, 4);
 
         /// first cycle always publishes in-band -- does not use the Executor, so we expect a snapshot for v1.
-        Assert.assertEquals(v1, blobStore.retrieveSnapshotBlob(v1).getToVersion());
-        Assert.assertEquals(v1, blobStore.retrieveSnapshotBlob(v2).getToVersion());
-        Assert.assertEquals(v1, blobStore.retrieveSnapshotBlob(v3).getToVersion());
-        Assert.assertEquals(v1, blobStore.retrieveSnapshotBlob(v4).getToVersion());
+        assertEquals(v1, blobStore.retrieveSnapshotBlob(v1).getToVersion());
+        assertEquals(v1, blobStore.retrieveSnapshotBlob(v2).getToVersion());
+        assertEquals(v1, blobStore.retrieveSnapshotBlob(v3).getToVersion());
+        assertEquals(v1, blobStore.retrieveSnapshotBlob(v4).getToVersion());
     }
 
     @Test
@@ -240,9 +240,9 @@ public class HollowProducerConsumerTests {
         long v2 = runCycle(producer, 2);
         long v3 = runCycle(producer, 3);
 
-        Assert.assertEquals(1, v1);
-        Assert.assertEquals(2, v2);
-        Assert.assertEquals(3, v3);
+        assertEquals(1, v1);
+        assertEquals(2, v2);
+        assertEquals(3, v3);
     }
 
     @Test
@@ -267,30 +267,30 @@ public class HollowProducerConsumerTests {
 
                     @Override public void onValidationStatusComplete(
                             ValidationStatus status, long version, Duration elapsed) {
-                        Assert.assertTrue(isStartCalled);
-                        Assert.assertTrue(status.failed());
-                        Assert.assertEquals(1, status.getResults().size());
+                        assertTrue(isStartCalled);
+                        assertTrue(status.failed());
+                        assertEquals(1, status.getResults().size());
 
                         ValidationResult r = status.getResults().get(0);
-                        Assert.assertEquals("Test validator", r.getName());
-                        Assert.assertEquals("Expected to fail!", r.getMessage());
-                        Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
+                        assertEquals("Test validator", r.getName());
+                        assertEquals("Expected to fail!", r.getMessage());
+                        assertEquals(ValidationResultType.FAILED, r.getResultType());
                     }
                 })
                 .build();
 
         try {
             runCycle(producer, 1);
-            Assert.fail();
+            fail();
         } catch (ValidationStatusException expected) {
             ValidationStatus status = expected.getValidationStatus();
-            Assert.assertTrue(status.failed());
-            Assert.assertEquals(1, status.getResults().size());
+            assertTrue(status.failed());
+            assertEquals(1, status.getResults().size());
 
             ValidationResult r = status.getResults().get(0);
-            Assert.assertEquals("Test validator", r.getName());
-            Assert.assertEquals("Expected to fail!", r.getMessage());
-            Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
+            assertEquals("Test validator", r.getName());
+            assertEquals("Expected to fail!", r.getMessage());
+            assertEquals(ValidationResultType.FAILED, r.getResultType());
         }
     }
 
@@ -316,30 +316,30 @@ public class HollowProducerConsumerTests {
 
                     @Override public void onValidationStatusComplete(
                             ValidationStatus status, long version, Duration elapsed) {
-                        Assert.assertTrue(isStartCalled);
-                        Assert.assertTrue(status.failed());
-                        Assert.assertEquals(1, status.getResults().size());
+                        assertTrue(isStartCalled);
+                        assertTrue(status.failed());
+                        assertEquals(1, status.getResults().size());
 
                         ValidationResult r = status.getResults().get(0);
-                        Assert.assertEquals("Test validator", r.getName());
-                        Assert.assertEquals("Expected to fail!", r.getMessage());
-                        Assert.assertEquals(ValidationResultType.ERROR, r.getResultType());
+                        assertEquals("Test validator", r.getName());
+                        assertEquals("Expected to fail!", r.getMessage());
+                        assertEquals(ValidationResultType.ERROR, r.getResultType());
                     }
                 })
                 .build();
 
         try {
             runCycle(producer, 1);
-            Assert.fail();
+            fail();
         } catch (ValidationStatusException expected) {
             ValidationStatus status = expected.getValidationStatus();
-            Assert.assertTrue(status.failed());
-            Assert.assertEquals(1, status.getResults().size());
+            assertTrue(status.failed());
+            assertEquals(1, status.getResults().size());
 
             ValidationResult r = status.getResults().get(0);
-            Assert.assertEquals("Test validator", r.getName());
-            Assert.assertEquals("Expected to fail!", r.getMessage());
-            Assert.assertEquals(ValidationResultType.ERROR, r.getResultType());
+            assertEquals("Test validator", r.getName());
+            assertEquals("Expected to fail!", r.getMessage());
+            assertEquals(ValidationResultType.ERROR, r.getResultType());
         }
     }
 
@@ -370,21 +370,21 @@ public class HollowProducerConsumerTests {
                     @Override public void onValidationStatusComplete(
                             ValidationStatus status, long version, Duration elapsed) {
                         if (counter.get() == 2) {
-                            Assert.assertTrue(status.failed());
-                            Assert.assertEquals(1, status.getResults().size());
+                            assertTrue(status.failed());
+                            assertEquals(1, status.getResults().size());
 
                             ValidationResult r = status.getResults().get(0);
-                            Assert.assertEquals("Test validator", r.getName());
-                            Assert.assertEquals("Expected to fail!", r.getMessage());
-                            Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
+                            assertEquals("Test validator", r.getName());
+                            assertEquals("Expected to fail!", r.getMessage());
+                            assertEquals(ValidationResultType.FAILED, r.getResultType());
                         } else {
-                            Assert.assertTrue(status.passed());
-                            Assert.assertEquals(1, status.getResults().size());
+                            assertTrue(status.passed());
+                            assertEquals(1, status.getResults().size());
 
                             ValidationResult r = status.getResults().get(0);
-                            Assert.assertEquals("Test validator", r.getName());
-                            Assert.assertEquals("Pass", r.getMessage());
-                            Assert.assertEquals(ValidationResultType.PASSED, r.getResultType());
+                            assertEquals("Test validator", r.getName());
+                            assertEquals("Pass", r.getMessage());
+                            assertEquals(ValidationResultType.PASSED, r.getResultType());
                         }
                     }
                 })
@@ -394,16 +394,16 @@ public class HollowProducerConsumerTests {
 
         try {
             runCycle(producer, 2);
-            Assert.fail();
+            fail();
         } catch (ValidationStatusException expected) {
             ValidationStatus status = expected.getValidationStatus();
-            Assert.assertTrue(status.failed());
-            Assert.assertEquals(1, status.getResults().size());
+            assertTrue(status.failed());
+            assertEquals(1, status.getResults().size());
 
             ValidationResult r = status.getResults().get(0);
-            Assert.assertEquals("Test validator", r.getName());
-            Assert.assertEquals("Expected to fail!", r.getMessage());
-            Assert.assertEquals(ValidationResultType.FAILED, r.getResultType());
+            assertEquals("Test validator", r.getName());
+            assertEquals("Expected to fail!", r.getMessage());
+            assertEquals(ValidationResultType.FAILED, r.getResultType());
         }
 
         runCycle(producer, 3);
@@ -432,7 +432,7 @@ public class HollowProducerConsumerTests {
 
         /// assert that a compaction is now necessary
         long popOrdinalsLength = consumer.getStateEngine().getTypeState("Integer").getPopulatedOrdinals().length();
-        Assert.assertEquals(20000, popOrdinalsLength);
+        assertEquals(20000, popOrdinalsLength);
 
         /// run a compaction cycle
         long v3 = producer.runCompactionCycle(new CompactionConfig(0, 20));
@@ -440,7 +440,7 @@ public class HollowProducerConsumerTests {
         /// assert that a compaction actually happened
         consumer.triggerRefreshTo(v3);
         popOrdinalsLength = consumer.getStateEngine().getTypeState("Integer").getPopulatedOrdinals().length();
-        Assert.assertEquals(10000, popOrdinalsLength);
+        assertEquals(10000, popOrdinalsLength);
 
         BitSet foundValues = new BitSet(20000);
         for (int i = 0; i < popOrdinalsLength; i++) {
@@ -449,7 +449,7 @@ public class HollowProducerConsumerTests {
         }
 
         for (int i = 10000; i < 20000; i++) {
-            Assert.assertTrue(foundValues.get(i));
+            assertTrue(foundValues.get(i));
         }
     }
 

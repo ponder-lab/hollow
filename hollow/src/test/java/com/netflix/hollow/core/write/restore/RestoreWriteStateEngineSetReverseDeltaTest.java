@@ -26,8 +26,8 @@ import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class RestoreWriteStateEngineSetReverseDeltaTest extends AbstractStateEngineTest {
     @Test
@@ -63,7 +63,7 @@ public class RestoreWriteStateEngineSetReverseDeltaTest extends AbstractStateEng
     private void assertSetContains(int setOrdinal, int valueOrdinal, int hashCode) {
         HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
         
-        Assert.assertTrue(typeState.contains(setOrdinal, valueOrdinal, hashCode));
+        assertTrue(typeState.contains(setOrdinal, valueOrdinal, hashCode));
     }
 
     

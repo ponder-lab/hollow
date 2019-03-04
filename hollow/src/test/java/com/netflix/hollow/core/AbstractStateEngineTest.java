@@ -21,7 +21,7 @@ import com.netflix.hollow.core.read.filter.HollowFilterConfig;
 import com.netflix.hollow.core.util.StateEngineRoundTripper;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import java.io.IOException;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractStateEngineTest {
 
@@ -32,7 +32,7 @@ public abstract class AbstractStateEngineTest {
     protected HollowFilterConfig readFilter;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         initWriteStateEngine();
     }

@@ -17,8 +17,8 @@
 package com.netflix.hollow.core.index;
 
 import com.netflix.hollow.core.memory.pool.WastefulRecycler;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class GrowingSegmentedLongArrayTest {
 
@@ -27,7 +27,7 @@ public class GrowingSegmentedLongArrayTest {
         GrowingSegmentedLongArray arr = new GrowingSegmentedLongArray(WastefulRecycler.SMALL_ARRAY_RECYCLER);
         
         for(int i=0;i<100000;i++) {
-            Assert.assertEquals(0, arr.get(i));
+            assertEquals(0, arr.get(i));
         }
         
         for(int i=0;i<100000;i++) {
@@ -35,7 +35,7 @@ public class GrowingSegmentedLongArrayTest {
         }
         
         for(int i=0;i<100000;i++) {
-            Assert.assertEquals(i, arr.get(i));
+            assertEquals(i, arr.get(i));
         }
         
         arr.destroy();

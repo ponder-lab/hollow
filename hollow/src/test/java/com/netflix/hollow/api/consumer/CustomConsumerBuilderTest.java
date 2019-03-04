@@ -7,9 +7,9 @@ import com.netflix.hollow.core.read.filter.HollowFilterConfig;
 import com.netflix.hollow.core.util.HollowObjectHashCodeFinder;
 import java.util.List;
 import java.util.concurrent.Executor;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 // this test doesn't do much beyond making sure that a custom builder will
 // compile and ensure that HollowConsumer.Builder is parameterized correctly
@@ -19,7 +19,7 @@ public class CustomConsumerBuilderTest {
 
     private InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
@@ -29,8 +29,8 @@ public class CustomConsumerBuilderTest {
         HollowConsumer consumer = new AugmentedBuilder()
                 .withBlobRetriever(blobStore)
                 .build();
-        Assert.assertNotNull(consumer);
-        Assert.assertFalse(consumer instanceof AugmentedConsumer);
+        assertNotNull(consumer);
+        assertFalse(consumer instanceof AugmentedConsumer);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class CustomConsumerBuilderTest {
                 .withBlobRetriever(blobStore) // should be called before custom builder methods
                 .withAugmentation()
                 .build();
-        Assert.assertTrue(consumer instanceof AugmentedConsumer);
+        assertTrue(consumer instanceof AugmentedConsumer);
     }
 
     private static class AugmentedBuilder extends HollowConsumer.Builder<AugmentedBuilder> {

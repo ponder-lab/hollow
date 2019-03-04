@@ -23,13 +23,13 @@ import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.IOException;
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowSetShardedTest extends AbstractStateEngineTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
     }
@@ -50,14 +50,14 @@ public class HollowSetShardedTest extends AbstractStateEngineTest {
         
         roundTripSnapshot();
         
-        Assert.assertEquals(4, readStateEngine.getTypeState("TestSet").numShards());
+        assertEquals(4, readStateEngine.getTypeState("TestSet").numShards());
         
         HollowSetTypeDataAccess setDataAccess = (HollowSetTypeDataAccess) readStateEngine.getTypeDataAccess("TestSet");
         for(int i=0;i<1000;i++) {
-            Assert.assertEquals(3, setDataAccess.size(i));
-            Assert.assertTrue(setDataAccess.contains(i, i));
-            Assert.assertTrue(setDataAccess.contains(i, i+1));
-            Assert.assertTrue(setDataAccess.contains(i, i+2));
+            assertEquals(3, setDataAccess.size(i));
+            assertTrue(setDataAccess.contains(i, i));
+            assertTrue(setDataAccess.contains(i, i+1));
+            assertTrue(setDataAccess.contains(i, i+2));
         }
 
         for(int i=0;i<2000;i++) {
@@ -77,10 +77,10 @@ public class HollowSetShardedTest extends AbstractStateEngineTest {
         
         int ordinal = populatedOrdinals.nextSetBit(0);
         while(ordinal != -1) {
-            Assert.assertEquals(3, setDataAccess.size(ordinal));
-            Assert.assertTrue(setDataAccess.contains(ordinal, expectedValue));
-            Assert.assertTrue(setDataAccess.contains(ordinal, expectedValue+1));
-            Assert.assertTrue(setDataAccess.contains(ordinal, expectedValue+2));
+            assertEquals(3, setDataAccess.size(ordinal));
+            assertTrue(setDataAccess.contains(ordinal, expectedValue));
+            assertTrue(setDataAccess.contains(ordinal, expectedValue+1));
+            assertTrue(setDataAccess.contains(ordinal, expectedValue+2));
             
             expectedValue += 2;
             ordinal = populatedOrdinals.nextSetBit(ordinal+1);

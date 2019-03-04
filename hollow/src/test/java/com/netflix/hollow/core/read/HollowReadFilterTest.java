@@ -33,9 +33,9 @@ import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class HollowReadFilterTest extends AbstractStateEngineTest {
@@ -46,7 +46,7 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
     HollowMapSchema mapSchema;
     HollowObjectSchema elementSchema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         objSchema = new HollowObjectSchema("TestObject", 5);
         objSchema.addField("field1", FieldType.STRING);
@@ -71,7 +71,7 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
         readFilter.addType(objSchema.getName());
         runThroughTheMotions();
 
-        Assert.assertNull(readStateEngine.getTypeState(objSchema.getName()));
+        assertNull(readStateEngine.getTypeState(objSchema.getName()));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
         readFilter.addType(listSchema.getName());
         runThroughTheMotions();
 
-        Assert.assertNull(readStateEngine.getTypeState(listSchema.getName()));
+        assertNull(readStateEngine.getTypeState(listSchema.getName()));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
         readFilter.addType(setSchema.getName());
         runThroughTheMotions();
 
-        Assert.assertNull(readStateEngine.getTypeState(setSchema.getName()));
+        assertNull(readStateEngine.getTypeState(setSchema.getName()));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
         readFilter.addType(mapSchema.getName());
         runThroughTheMotions();
 
-        Assert.assertNull(readStateEngine.getTypeState(mapSchema.getName()));
+        assertNull(readStateEngine.getTypeState(mapSchema.getName()));
     }
 
     @Test
@@ -109,9 +109,9 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
         readFilter.addType(mapSchema.getName());
         runThroughTheMotions();
 
-        Assert.assertNull(readStateEngine.getTypeState(listSchema.getName()));
-        Assert.assertNull(readStateEngine.getTypeState(setSchema.getName()));
-        Assert.assertNull(readStateEngine.getTypeState(mapSchema.getName()));
+        assertNull(readStateEngine.getTypeState(listSchema.getName()));
+        assertNull(readStateEngine.getTypeState(setSchema.getName()));
+        assertNull(readStateEngine.getTypeState(mapSchema.getName()));
     }
 
     @Test
@@ -125,18 +125,18 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState(objSchema.getName());
 
         HollowObjectSchema filteredSchema = typeState.getSchema();
-        Assert.assertEquals("field1", filteredSchema.getFieldName(0));
-        Assert.assertEquals("field4", filteredSchema.getFieldName(1));
+        assertEquals("field1", filteredSchema.getFieldName(0));
+        assertEquals("field4", filteredSchema.getFieldName(1));
 
-        Assert.assertEquals("obj1", typeState.readString(0, 0));
-        Assert.assertEquals("OBJECT number two", typeState.readString(1, 0));
-        Assert.assertEquals("#3", typeState.readString(2, 0));
-        Assert.assertEquals("number four!", typeState.readString(3, 0));
+        assertEquals("obj1", typeState.readString(0, 0));
+        assertEquals("OBJECT number two", typeState.readString(1, 0));
+        assertEquals("#3", typeState.readString(2, 0));
+        assertEquals("number four!", typeState.readString(3, 0));
 
-        Assert.assertEquals(1.01D, typeState.readDouble(0, 1), 0);
-        Assert.assertEquals(2.02D, typeState.readDouble(1, 1), 0);
-        Assert.assertEquals(3.03D, typeState.readDouble(2, 1), 0);
-        Assert.assertEquals(4.04D, typeState.readDouble(3, 1), 0);
+        assertEquals(1.01D, typeState.readDouble(0, 1), 0);
+        assertEquals(2.02D, typeState.readDouble(1, 1), 0);
+        assertEquals(3.03D, typeState.readDouble(2, 1), 0);
+        assertEquals(4.04D, typeState.readDouble(3, 1), 0);
     }
 
     @Test
@@ -150,24 +150,24 @@ public class HollowReadFilterTest extends AbstractStateEngineTest {
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState(objSchema.getName());
 
         HollowObjectSchema filteredSchema = typeState.getSchema();
-        Assert.assertEquals("field2", filteredSchema.getFieldName(0));
-        Assert.assertEquals("field3", filteredSchema.getFieldName(1));
-        Assert.assertEquals("field5", filteredSchema.getFieldName(2));
+        assertEquals("field2", filteredSchema.getFieldName(0));
+        assertEquals("field3", filteredSchema.getFieldName(1));
+        assertEquals("field5", filteredSchema.getFieldName(2));
 
-        Assert.assertEquals(1000, typeState.readInt(0, 0));
-        Assert.assertEquals(2000, typeState.readInt(1, 0));
-        Assert.assertEquals(3000, typeState.readInt(2, 0));
-        Assert.assertEquals(4000, typeState.readInt(3, 0));
+        assertEquals(1000, typeState.readInt(0, 0));
+        assertEquals(2000, typeState.readInt(1, 0));
+        assertEquals(3000, typeState.readInt(2, 0));
+        assertEquals(4000, typeState.readInt(3, 0));
 
-        Assert.assertEquals("ONE", typeState.readString(0, 1));
-        Assert.assertEquals("TWO", typeState.readString(1, 1));
-        Assert.assertEquals("THREE", typeState.readString(2, 1));
-        Assert.assertEquals("FOUR", typeState.readString(3, 1));
+        assertEquals("ONE", typeState.readString(0, 1));
+        assertEquals("TWO", typeState.readString(1, 1));
+        assertEquals("THREE", typeState.readString(2, 1));
+        assertEquals("FOUR", typeState.readString(3, 1));
 
-        Assert.assertEquals(1.1F, typeState.readFloat(0, 2), 0);
-        Assert.assertEquals(2.2F, typeState.readFloat(1, 2), 0);
-        Assert.assertEquals(3.3F, typeState.readFloat(2, 2), 0);
-        Assert.assertEquals(4.4F, typeState.readFloat(3, 2), 0);
+        assertEquals(1.1F, typeState.readFloat(0, 2), 0);
+        assertEquals(2.2F, typeState.readFloat(1, 2), 0);
+        assertEquals(3.3F, typeState.readFloat(2, 2), 0);
+        assertEquals(4.4F, typeState.readFloat(3, 2), 0);
     }
 
 

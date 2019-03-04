@@ -18,8 +18,8 @@ package com.netflix.hollow.api.consumer;
 
 import com.netflix.hollow.api.client.HollowUpdatePlan;
 import com.netflix.hollow.test.consumer.TestBlob;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowUpdatePlanTest {
 
@@ -28,19 +28,19 @@ public class HollowUpdatePlanTest {
         HollowUpdatePlan plan = new HollowUpdatePlan();
         plan.add(new TestBlob(1));
 
-        Assert.assertTrue(plan.isSnapshotPlan());
+        assertTrue(plan.isSnapshotPlan());
 
         plan.add(new TestBlob(1, 2));
 
-        Assert.assertTrue(plan.isSnapshotPlan());
+        assertTrue(plan.isSnapshotPlan());
 
         plan = new HollowUpdatePlan();
 
-        Assert.assertFalse(plan.isSnapshotPlan());
+        assertFalse(plan.isSnapshotPlan());
 
         plan.add(new TestBlob(1, 2));
 
-        Assert.assertFalse(plan.isSnapshotPlan());
+        assertFalse(plan.isSnapshotPlan());
     }
 
     @Test
@@ -50,11 +50,11 @@ public class HollowUpdatePlanTest {
         HollowUpdatePlan plan = new HollowUpdatePlan();
         plan.add(snapshotTransition);
 
-        Assert.assertSame(snapshotTransition, plan.getSnapshotTransition());
+        assertSame(snapshotTransition, plan.getSnapshotTransition());
 
         plan.add(new TestBlob(1, 2));
 
-        Assert.assertSame(snapshotTransition, plan.getSnapshotTransition());
+        assertSame(snapshotTransition, plan.getSnapshotTransition());
     }
 
     @Test
@@ -64,40 +64,40 @@ public class HollowUpdatePlanTest {
         HollowUpdatePlan plan = new HollowUpdatePlan();
         plan.add(snapshotTransition);
 
-        Assert.assertTrue(plan.getDeltaTransitions().isEmpty());
+        assertTrue(plan.getDeltaTransitions().isEmpty());
 
         TestBlob delta1 = new TestBlob(1, 2);
         plan.add(delta1);
 
-        Assert.assertEquals(1, plan.getDeltaTransitions().size());
+        assertEquals(1, plan.getDeltaTransitions().size());
 
         TestBlob delta2 = new TestBlob(2, 3);
         plan.add(delta2);
 
-        Assert.assertEquals(2, plan.getDeltaTransitions().size());
-        Assert.assertSame(snapshotTransition, plan.getSnapshotTransition());
-        Assert.assertSame(delta1, plan.getDeltaTransitions().get(0));
-        Assert.assertSame(delta2, plan.getDeltaTransitions().get(1));
+        assertEquals(2, plan.getDeltaTransitions().size());
+        assertSame(snapshotTransition, plan.getSnapshotTransition());
+        assertSame(delta1, plan.getDeltaTransitions().get(0));
+        assertSame(delta2, plan.getDeltaTransitions().get(1));
     }
 
     @Test
     public void testGetDeltaTransitionsForDeltaPlan() {
         HollowUpdatePlan plan = new HollowUpdatePlan();
 
-        Assert.assertTrue(plan.getDeltaTransitions().isEmpty());
+        assertTrue(plan.getDeltaTransitions().isEmpty());
 
         TestBlob delta1 = new TestBlob(1, 2);
         plan.add(delta1);
 
-        Assert.assertEquals(1, plan.getDeltaTransitions().size());
+        assertEquals(1, plan.getDeltaTransitions().size());
 
         TestBlob delta2 = new TestBlob(2, 3);
         plan.add(delta2);
 
-        Assert.assertEquals(2, plan.getDeltaTransitions().size());
-        Assert.assertNull(plan.getSnapshotTransition());
-        Assert.assertSame(delta1, plan.getDeltaTransitions().get(0));
-        Assert.assertSame(delta2, plan.getDeltaTransitions().get(1));
+        assertEquals(2, plan.getDeltaTransitions().size());
+        assertNull(plan.getSnapshotTransition());
+        assertSame(delta1, plan.getDeltaTransitions().get(0));
+        assertSame(delta2, plan.getDeltaTransitions().get(1));
     }
 
 }

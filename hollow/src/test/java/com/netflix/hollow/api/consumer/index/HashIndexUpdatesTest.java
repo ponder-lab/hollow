@@ -20,14 +20,14 @@ import com.netflix.hollow.api.consumer.HollowConsumer;
 import com.netflix.hollow.api.consumer.InMemoryBlobStore;
 import com.netflix.hollow.api.producer.HollowProducer;
 import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HashIndexUpdatesTest {
     InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
@@ -49,7 +49,7 @@ public class HashIndexUpdatesTest {
                 .usingPath("i", int.class);
         consumer.addRefreshListener(hi);
 
-        Assert.assertEquals(1L, hi.findMatches(1).count());
+        assertEquals(1L, hi.findMatches(1).count());
 
 
         long v2 = producer.runCycle(ws -> {
@@ -61,7 +61,7 @@ public class HashIndexUpdatesTest {
         }
         consumer.triggerRefreshTo(v2);
 
-        Assert.assertEquals(2L, hi.findMatches(1).count());
+        assertEquals(2L, hi.findMatches(1).count());
 
 
         consumer.removeRefreshListener(hi);
@@ -75,7 +75,7 @@ public class HashIndexUpdatesTest {
         }
         consumer.triggerRefreshTo(v3);
 
-        Assert.assertEquals(2L, hi.findMatches(1).count());
+        assertEquals(2L, hi.findMatches(1).count());
     }
 
     @Test

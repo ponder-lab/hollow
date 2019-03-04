@@ -17,15 +17,15 @@
 package com.netflix.hollow.tools.diff.exact;
 
 import com.netflix.hollow.core.util.IntList;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DiffEqualOrdinalFilterTest {
 
     DiffEqualOrdinalFilter filter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         DiffEqualOrdinalMap map = new DiffEqualOrdinalMap(10);
 
@@ -80,10 +80,10 @@ public class DiffEqualOrdinalFilterTest {
     }
 
     private void assertList(IntList list, int... expectedEntries) {
-        Assert.assertEquals(expectedEntries.length, list.size());
+        assertEquals(expectedEntries.length, list.size());
 
         for(int i=0;i<list.size();i++) {
-            Assert.assertEquals(expectedEntries[i], list.get(i));
+            assertEquals(expectedEntries[i], list.get(i));
         }
     }
 }

@@ -33,9 +33,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FlatRecordWriterTests {
 
@@ -48,7 +48,7 @@ public class FlatRecordWriterTests {
     private HollowProducer producer;
     private InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mapper = new HollowObjectMapper(new HollowWriteStateEngine());
         mapper.initializeTypeState(TypeA.class);
@@ -67,7 +67,7 @@ public class FlatRecordWriterTests {
         int recSize1 = flatRecordSize(new TypeA(1, "two", "three", "four"));
         int recSize2 = flatRecordSize(new TypeA(1, "two", "three", "four", "three"));
         
-        Assert.assertTrue(recSize2 - recSize1 == 1);
+        assertTrue(recSize2 - recSize1 == 1);
     }
     
     @Test
@@ -87,28 +87,28 @@ public class FlatRecordWriterTests {
         GenericHollowObject typeA0 = new GenericHollowObject(consumer.getStateEngine(), "TypeA", 0);
         GenericHollowObject typeA1 = new GenericHollowObject(consumer.getStateEngine(), "TypeA", 1);
         
-        Assert.assertEquals(1, typeA0.getInt("a1"));
-        Assert.assertEquals("two", typeA0.getString("a2"));
-        Assert.assertEquals("three", typeA0.getObject("a3").getString("b1"));
-        Assert.assertEquals(2, typeA0.getSet("a4").size());
-        Assert.assertTrue(typeA0.getSet("a4").findElement("four") != null);
-        Assert.assertTrue(typeA0.getSet("a4").findElement("five") != null);
+        assertEquals(1, typeA0.getInt("a1"));
+        assertEquals("two", typeA0.getString("a2"));
+        assertEquals("three", typeA0.getObject("a3").getString("b1"));
+        assertEquals(2, typeA0.getSet("a4").size());
+        assertTrue(typeA0.getSet("a4").findElement("four") != null);
+        assertTrue(typeA0.getSet("a4").findElement("five") != null);
 
-        Assert.assertEquals(2, typeA1.getInt("a1"));
-        Assert.assertEquals("two", typeA1.getString("a2"));
-        Assert.assertEquals("four", typeA1.getObject("a3").getString("b1"));
-        Assert.assertEquals(4, typeA1.getSet("a4").size());
-        Assert.assertTrue(typeA1.getSet("a4").findElement("six") != null);
-        Assert.assertTrue(typeA1.getSet("a4").findElement("eight") != null);
-        Assert.assertTrue(typeA1.getSet("a4").findElement("é with acute accent") != null);
-        Assert.assertTrue(typeA1.getSet("a4").findElement("ten") != null);
+        assertEquals(2, typeA1.getInt("a1"));
+        assertEquals("two", typeA1.getString("a2"));
+        assertEquals("four", typeA1.getObject("a3").getString("b1"));
+        assertEquals(4, typeA1.getSet("a4").size());
+        assertTrue(typeA1.getSet("a4").findElement("six") != null);
+        assertTrue(typeA1.getSet("a4").findElement("eight") != null);
+        assertTrue(typeA1.getSet("a4").findElement("é with acute accent") != null);
+        assertTrue(typeA1.getSet("a4").findElement("ten") != null);
 
         GenericHollowObject typeC0 = new GenericHollowObject(consumer.getStateEngine(), "TypeC", 0);
 
-        Assert.assertEquals("one", typeC0.getString("c1"));
-        Assert.assertEquals("four", typeC0.getObject("c2").getString("b1"));
+        assertEquals("one", typeC0.getString("c1"));
+        assertEquals("four", typeC0.getObject("c2").getString("b1"));
         
-        Assert.assertEquals(typeC0.getObject("c2").getOrdinal(), typeA0.getSet("a4").findElement("four").getOrdinal());
+        assertEquals(typeC0.getObject("c2").getOrdinal(), typeA0.getSet("a4").findElement("four").getOrdinal());
     }
     
     @Test
@@ -142,25 +142,25 @@ public class FlatRecordWriterTests {
         GenericHollowObject typeA0 = new GenericHollowObject(consumer.getStateEngine(), "TypeA", 0);
         GenericHollowObject typeA1 = new GenericHollowObject(consumer.getStateEngine(), "TypeA", 1);
         
-        Assert.assertEquals(1, typeA0.getInt("a1"));
-        Assert.assertEquals("two", typeA0.getString("a2"));
-        Assert.assertEquals("three", typeA0.getObject("a3").getString("b1"));
-        Assert.assertNull(typeA0.getSet("a4"));
-        Assert.assertNull(typeA0.getBytes("a5"));
+        assertEquals(1, typeA0.getInt("a1"));
+        assertEquals("two", typeA0.getString("a2"));
+        assertEquals("three", typeA0.getObject("a3").getString("b1"));
+        assertNull(typeA0.getSet("a4"));
+        assertNull(typeA0.getBytes("a5"));
 
-        Assert.assertEquals(2, typeA1.getInt("a1"));
-        Assert.assertEquals("two", typeA1.getString("a2"));
-        Assert.assertEquals("four", typeA1.getObject("a3").getString("b1"));
-        Assert.assertNull(typeA1.getSet("a4"));
-        Assert.assertNull(typeA1.getBytes("a4"));
+        assertEquals(2, typeA1.getInt("a1"));
+        assertEquals("two", typeA1.getString("a2"));
+        assertEquals("four", typeA1.getObject("a3").getString("b1"));
+        assertNull(typeA1.getSet("a4"));
+        assertNull(typeA1.getBytes("a4"));
 
         GenericHollowObject typeC0 = new GenericHollowObject(consumer.getStateEngine(), "TypeC", 0);
 
-        Assert.assertTrue(typeC0.isNull("c1"));
-        Assert.assertEquals("three", typeC0.getObject("c2").getString("b1"));
-        Assert.assertTrue(typeC0.isNull("c3"));
+        assertTrue(typeC0.isNull("c1"));
+        assertEquals("three", typeC0.getObject("c2").getString("b1"));
+        assertTrue(typeC0.isNull("c3"));
         
-        Assert.assertEquals(typeC0.getObject("c2").getOrdinal(), typeA0.getObject("a3").getOrdinal());
+        assertEquals(typeC0.getObject("c2").getOrdinal(), typeA0.getObject("a3").getOrdinal());
     }
     
     private FlatRecord flatten(Object obj) {

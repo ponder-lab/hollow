@@ -20,8 +20,8 @@ import com.netflix.hollow.core.read.engine.HollowReadStateEngine;
 import com.netflix.hollow.core.util.StateEngineRoundTripper;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class NegativeFloatTest {
 
@@ -38,7 +38,7 @@ public class NegativeFloatTest {
 
         for(int i=0;i<10;i++) {
             GenericHollowObject obj = new GenericHollowObject(readEngine, "TypeWithFloat", i);
-            Assert.assertEquals(i, obj.getInt("i"));
+            assertEquals(i, obj.getInt("i"));
         }
     }
 

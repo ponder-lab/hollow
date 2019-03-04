@@ -20,14 +20,14 @@ import com.netflix.hollow.api.consumer.HollowConsumer;
 import com.netflix.hollow.api.consumer.InMemoryBlobStore;
 import com.netflix.hollow.api.producer.HollowProducer;
 import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UniqueKeyUpdatesTest {
     InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
@@ -69,7 +69,7 @@ public class UniqueKeyUpdatesTest {
                 .usingBean(Key.class);
         consumer.addRefreshListener(uki);
 
-        Assert.assertNotNull(uki.findMatch(new Key(1, "1", 2)));
+        assertNotNull(uki.findMatch(new Key(1, "1", 2)));
 
 
         long v2 = producer.runCycle(ws -> {
@@ -88,8 +88,8 @@ public class UniqueKeyUpdatesTest {
         }
         consumer.triggerRefreshTo(v2);
 
-        Assert.assertNotNull(uki.findMatch(new Key(1, "1", 2)));
-        Assert.assertNotNull(uki.findMatch(new Key(2, "1", 2)));
+        assertNotNull(uki.findMatch(new Key(1, "1", 2)));
+        assertNotNull(uki.findMatch(new Key(2, "1", 2)));
 
 
         consumer.removeRefreshListener(uki);
@@ -114,9 +114,9 @@ public class UniqueKeyUpdatesTest {
         }
         consumer.triggerRefreshTo(v3);
 
-        Assert.assertNotNull(uki.findMatch(new Key(1, "1", 2)));
-        Assert.assertNotNull(uki.findMatch(new Key(2, "1", 2)));
-        Assert.assertNull(uki.findMatch(new Key(3, "1", 2)));
+        assertNotNull(uki.findMatch(new Key(1, "1", 2)));
+        assertNotNull(uki.findMatch(new Key(2, "1", 2)));
+        assertNull(uki.findMatch(new Key(3, "1", 2)));
     }
 
     @Test

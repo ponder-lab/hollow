@@ -18,12 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import static com.netflix.hollow.test.AssertShim.*;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class HashIndexTest {
     // Map of primitive class to box class
@@ -44,7 +42,7 @@ public class HashIndexTest {
 
     static DataModel.Consumer.Api api;
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
         InMemoryBlobStore blobStore = new InMemoryBlobStore();
 
@@ -68,6 +66,8 @@ public class HashIndexTest {
         api = consumer.getAPI(DataModel.Consumer.Api.class);
     }
 
+    /*
+     FIXME(timt): switch to @ParameterizedTest
     public static abstract class MatchTestParameterized<T extends HollowObject, Q> extends HashIndexTest {
         final String path;
         final Class<Q> type;
@@ -91,9 +91,9 @@ public class HashIndexTest {
                     .findMatches(value)
                     .collect(toList());
 
-            Assert.assertEquals(1, r.size());
-            Assert.assertTrue(selectType.isInstance(r.get(0)));
-            Assert.assertEquals(0, r.get(0).getOrdinal());
+            assertEquals(1, r.size());
+            assertTrue(selectType.isInstance(r.get(0)));
+            assertEquals(0, r.get(0).getOrdinal());
         }
     }
 
@@ -213,8 +213,8 @@ public class HashIndexTest {
             List<DataModel.Consumer.Values> r = hi.findMatches(ValueFieldsQuery.create())
                     .collect(toList());
 
-            Assert.assertEquals(1, r.size());
-            Assert.assertEquals(0, r.get(0).getOrdinal());
+            assertEquals(1, r.size());
+            assertEquals(0, r.get(0).getOrdinal());
         }
 
         static class ValueMethodsQuery {
@@ -306,8 +306,8 @@ public class HashIndexTest {
             List<DataModel.Consumer.Values> r = hi.findMatches(ValueMethodsQuery.create())
                     .collect(toList());
 
-            Assert.assertEquals(1, r.size());
-            Assert.assertEquals(0, r.get(0).getOrdinal());
+            assertEquals(1, r.size());
+            assertEquals(0, r.get(0).getOrdinal());
         }
     }
 
@@ -437,8 +437,8 @@ public class HashIndexTest {
             List<DataModel.Consumer.References> r = hi.findMatches(value)
                     .collect(toList());
 
-            Assert.assertEquals(1, r.size());
-            Assert.assertEquals(0, r.get(0).getOrdinal());
+            assertEquals(1, r.size());
+            assertEquals(0, r.get(0).getOrdinal());
         }
     }
 
@@ -521,9 +521,9 @@ public class HashIndexTest {
             List<S> r = hi.findMatches(1)
                     .collect(toList());
 
-            Assert.assertEquals(1, r.size());
-            Assert.assertTrue(type.isInstance(r.get(0)));
-            Assert.assertEquals(0, r.get(0).getOrdinal());
+            assertEquals(1, r.size());
+            assertTrue(type.isInstance(r.get(0)));
+            assertEquals(0, r.get(0).getOrdinal());
         }
     }
 
@@ -537,9 +537,9 @@ public class HashIndexTest {
 
             List<DataModel.Consumer.TypeA> r = hi.findMatches(1)
                     .sorted(Comparator.comparingInt(HollowObject::getOrdinal)).collect(toList());
-            Assert.assertEquals(100, r.size());
+            assertEquals(100, r.size());
             for (int i = 0; i < r.size(); i++) {
-                Assert.assertEquals(i, r.get(i).getOrdinal());
+                assertEquals(i, r.get(i).getOrdinal());
             }
         }
 
@@ -554,9 +554,9 @@ public class HashIndexTest {
                     .sorted(Comparator.comparingInt(HollowObject::getOrdinal))
                     .map(DataModel.Consumer.HString::getValue)
                     .collect(toList());
-            Assert.assertEquals(100, r.size());
+            assertEquals(100, r.size());
             for (int i = 0; i < r.size(); i++) {
-                Assert.assertEquals("TypeA" + i, r.get(i));
+                assertEquals("TypeA" + i, r.get(i));
             }
         }
 
@@ -571,7 +571,7 @@ public class HashIndexTest {
                     .sorted(Comparator.comparingInt(HollowObject::getOrdinal))
                     .mapToInt(gho -> gho.getInt("i"))
                     .allMatch(i -> i == 1);
-            Assert.assertTrue(r);
+            assertTrue(r);
         }
 
         @Test
@@ -585,9 +585,9 @@ public class HashIndexTest {
                     .sorted(Comparator.comparingInt(HollowObject::getOrdinal))
                     .map(gho -> gho.getString("value"))
                     .collect(toList());
-            Assert.assertEquals(100, r.size());
+            assertEquals(100, r.size());
             for (int i = 0; i < r.size(); i++) {
-                Assert.assertEquals("TypeA" + i, r.get(i));
+                assertEquals("TypeA" + i, r.get(i));
             }
         }
     }
@@ -622,4 +622,6 @@ public class HashIndexTest {
                     .usingPath("", DataModel.Consumer.References.class);
         }
     }
+     */
+
 }

@@ -45,9 +45,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowCombinerTest {
 
@@ -61,7 +61,7 @@ public class HollowCombinerTest {
     HollowWriteStateEngine shard2;
     HollowWriteStateEngine shard3;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         aSchema = new HollowObjectSchema("A", 2, new PrimaryKey("A", "a1"));
         aSchema.addField("a1", FieldType.INT);
@@ -97,72 +97,72 @@ public class HollowCombinerTest {
 
         HollowReadStateEngine combinedResult = roundTrip(combiner.getCombinedStateEngine());
 
-        Assert.assertEquals(6, combinedResult.getTypeState("A").maxOrdinal());
-        Assert.assertEquals(3, combinedResult.getTypeState("B").maxOrdinal());
-        Assert.assertEquals(5, combinedResult.getTypeState("C").maxOrdinal());
+        assertEquals(6, combinedResult.getTypeState("A").maxOrdinal());
+        assertEquals(3, combinedResult.getTypeState("B").maxOrdinal());
+        assertEquals(5, combinedResult.getTypeState("C").maxOrdinal());
 
         HollowSetTypeReadState bTypeState = (HollowSetTypeReadState)combinedResult.getTypeState("B");
 
-        Assert.assertTrue(setOrderingExists(bTypeState, "C1", "C2", "C3"));
-        Assert.assertTrue(setOrderingExists(bTypeState, "C2", "C3", "C4"));
-        Assert.assertTrue(setOrderingExists(bTypeState, "C1", "C4", "C5"));
-        Assert.assertTrue(setOrderingExists(bTypeState, "C4", "C5", "C6"));
+        assertTrue(setOrderingExists(bTypeState, "C1", "C2", "C3"));
+        assertTrue(setOrderingExists(bTypeState, "C2", "C3", "C4"));
+        assertTrue(setOrderingExists(bTypeState, "C1", "C4", "C5"));
+        assertTrue(setOrderingExists(bTypeState, "C4", "C5", "C6"));
     }
 
     @Test
     public void testCombinerPrimaryKey() throws IOException {
         HollowWriteStateEngine sEngine = createStateEngine();
         List<PrimaryKey> pKeys = extractPrimaryKeys(sEngine);
-        Assert.assertEquals(1, pKeys.size());
+        assertEquals(1, pKeys.size());
 
         // Make sure combinedResult has PrimaryKey transferred
         {
             HollowCombiner combiner = new HollowCombiner(roundTrip(sEngine), roundTrip(shard1));
             HollowReadStateEngine combinedResult = roundTrip(combiner.getCombinedStateEngine());
-            Assert.assertEquals(1, extractPrimaryKeys(combinedResult).size());
-            Assert.assertEquals(pKeys, extractPrimaryKeys(combinedResult));
+            assertEquals(1, extractPrimaryKeys(combinedResult).size());
+            assertEquals(pKeys, extractPrimaryKeys(combinedResult));
         }
 
         // validate deduping
         {
             PrimaryKey oldPK = pKeys.get(0);
             PrimaryKey newPK = new PrimaryKey(oldPK.getType(), oldPK.getFieldPaths());
-            Assert.assertEquals(oldPK.getType(), newPK.getType());
-            Assert.assertEquals(oldPK, newPK);
+            assertEquals(oldPK.getType(), newPK.getType());
+            assertEquals(oldPK, newPK);
 
             HollowCombiner combiner = new HollowCombiner(roundTrip(sEngine), roundTrip(shard1));
             combiner.setPrimaryKeys(newPK);
-            Assert.assertEquals(1, combiner.getPrimaryKeys().size());
-            Assert.assertEquals(oldPK, combiner.getPrimaryKeys().get(0));
-            Assert.assertEquals(newPK, combiner.getPrimaryKeys().get(0));
+            assertEquals(1, combiner.getPrimaryKeys().size());
+            assertEquals(oldPK, combiner.getPrimaryKeys().get(0));
+            assertEquals(newPK, combiner.getPrimaryKeys().get(0));
         }
 
         // validate new PK of same type replaces old one
         {
             PrimaryKey oldPK = pKeys.get(0);
             PrimaryKey newPK = new PrimaryKey(oldPK.getType(), "xyz");
-            Assert.assertEquals(oldPK.getType(), newPK.getType());
-            Assert.assertNotEquals(oldPK, newPK);
+            assertEquals(oldPK.getType(), newPK.getType());
+            assertNotEquals(oldPK, newPK);
 
             HollowCombiner combiner = new HollowCombiner(roundTrip(sEngine), roundTrip(shard1));
             combiner.setPrimaryKeys(newPK);
-            Assert.assertEquals(1, combiner.getPrimaryKeys().size());
-            Assert.assertNotEquals(oldPK, combiner.getPrimaryKeys().get(0));
-            Assert.assertEquals(newPK, combiner.getPrimaryKeys().get(0));
+            assertEquals(1, combiner.getPrimaryKeys().size());
+            assertNotEquals(oldPK, combiner.getPrimaryKeys().get(0));
+            assertEquals(newPK, combiner.getPrimaryKeys().get(0));
         }
 
         // validate new PK gets added
         {
             PrimaryKey oldPK = pKeys.get(0);
             PrimaryKey newPK = new PrimaryKey("C", "c1");
-            Assert.assertNotEquals(oldPK.getType(), newPK.getType());
-            Assert.assertNotEquals(oldPK, newPK);
+            assertNotEquals(oldPK.getType(), newPK.getType());
+            assertNotEquals(oldPK, newPK);
 
             HollowCombiner combiner = new HollowCombiner(roundTrip(sEngine), roundTrip(shard1));
             combiner.setPrimaryKeys(newPK);
-            Assert.assertEquals(2, combiner.getPrimaryKeys().size());
-            Assert.assertTrue(combiner.getPrimaryKeys().contains(oldPK));
-            Assert.assertTrue(combiner.getPrimaryKeys().contains(newPK));
+            assertEquals(2, combiner.getPrimaryKeys().size());
+            assertTrue(combiner.getPrimaryKeys().contains(oldPK));
+            assertTrue(combiner.getPrimaryKeys().contains(newPK));
         }
     }
 

@@ -24,15 +24,15 @@ import com.netflix.hollow.core.schema.HollowSetSchema;
 import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowHistorySetTest extends AbstractStateEngineTest {
 
     private HollowSetSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowSetSchema("TestSet", "TestObject");
 
@@ -124,7 +124,7 @@ public class HollowHistorySetTest extends AbstractStateEngineTest {
                 actual = iter.next();
             }
 
-            Assert.fail("Did not find expected element " + expected + " for ordinal " + ordinal);
+            fail("Did not find expected element " + expected + " for ordinal " + ordinal);
         }
     }
 

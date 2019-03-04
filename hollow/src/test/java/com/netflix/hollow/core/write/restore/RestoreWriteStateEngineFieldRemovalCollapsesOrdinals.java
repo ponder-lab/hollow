@@ -26,9 +26,9 @@ import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
 import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RestoreWriteStateEngineFieldRemovalCollapsesOrdinals extends AbstractStateEngineTest {
 
@@ -39,7 +39,7 @@ public class RestoreWriteStateEngineFieldRemovalCollapsesOrdinals extends Abstra
 
     private boolean afterRestoreWithNewSchemas;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         typeASchema = new HollowObjectSchema("TypeA", 2);
         typeASchema.addField("a1", FieldType.INT);
@@ -84,8 +84,8 @@ public class RestoreWriteStateEngineFieldRemovalCollapsesOrdinals extends Abstra
         assertTypeB(3, 3);
 
         /// the following are removed objects
-        Assert.assertFalse((readStateEngine.getTypeState("TypeA").getListener(PopulatedOrdinalListener.class)).getPopulatedOrdinals().get(2));
-        Assert.assertFalse((readStateEngine.getTypeState("TypeB").getListener(PopulatedOrdinalListener.class)).getPopulatedOrdinals().get(2));
+        assertFalse((readStateEngine.getTypeState("TypeA").getListener(PopulatedOrdinalListener.class)).getPopulatedOrdinals().get(2));
+        assertFalse((readStateEngine.getTypeState("TypeB").getListener(PopulatedOrdinalListener.class)).getPopulatedOrdinals().get(2));
 
         assertTypeB(2, 1); /// this object was removed, because it was a duplicate with a lower ordinal.
 
@@ -129,15 +129,15 @@ public class RestoreWriteStateEngineFieldRemovalCollapsesOrdinals extends Abstra
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TypeA");
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 
-        Assert.assertEquals(a1, obj.getInt("a1"));
-        Assert.assertEquals(bOrdinal, obj.getOrdinal("a2"));
+        assertEquals(a1, obj.getInt("a1"));
+        assertEquals(bOrdinal, obj.getOrdinal("a2"));
     }
 
     private void assertTypeB(int ordinal, int b1) {
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TypeB");
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(typeState), ordinal);
 
-        Assert.assertEquals(b1, obj.getInt("b1"));
+        assertEquals(b1, obj.getInt("b1"));
     }
 
     @Override

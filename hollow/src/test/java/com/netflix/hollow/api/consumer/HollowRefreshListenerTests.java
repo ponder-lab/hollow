@@ -28,9 +28,9 @@ import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
 import com.netflix.hollow.core.read.engine.HollowReadStateEngine;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowRefreshListenerTests {
 
@@ -40,7 +40,7 @@ public class HollowRefreshListenerTests {
     private HollowProducer producer;
     private HollowConsumer consumer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
         listener = new RecordingRefreshListener();
@@ -72,7 +72,7 @@ public class HollowRefreshListenerTests {
         long v1 = runCycle(producer, 1);
         consumer.triggerRefreshTo(v1+1);
 
-        Assert.assertEquals(1, listener.cycles);
+        assertEquals(1, listener.cycles);
 
         listener.clear();
 
@@ -81,7 +81,7 @@ public class HollowRefreshListenerTests {
         consumer.addRefreshListener(listener);
         consumer.triggerRefreshTo(v2+1);
 
-        Assert.assertEquals(1, listener.cycles);
+        assertEquals(1, listener.cycles);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class HollowRefreshListenerTests {
         listeners.clear();
         consumer.triggerRefreshTo(v1+1);
 
-        Assert.assertEquals(1, listener.cycles);
+        assertEquals(1, listener.cycles);
     }
 
     @Test
@@ -125,35 +125,35 @@ public class HollowRefreshListenerTests {
         consumer.triggerRefreshTo(v5+1);
         
         /// update occurred semantics
-        Assert.assertEquals(1, listener.snapshotUpdateOccurredVersions.size());
-        Assert.assertEquals(v5, listener.snapshotUpdateOccurredVersions.get(0).longValue());
+        assertEquals(1, listener.snapshotUpdateOccurredVersions.size());
+        assertEquals(v5, listener.snapshotUpdateOccurredVersions.get(0).longValue());
         
-        Assert.assertTrue(listener.deltaUpdateOccurredVersions.isEmpty());
+        assertTrue(listener.deltaUpdateOccurredVersions.isEmpty());
         
         /// applied semantics
-        Assert.assertEquals(1, listener.snapshotAppliedVersions.size());
-        Assert.assertEquals(v1, listener.snapshotAppliedVersions.get(0).longValue());
+        assertEquals(1, listener.snapshotAppliedVersions.size());
+        assertEquals(v1, listener.snapshotAppliedVersions.get(0).longValue());
         
-        Assert.assertEquals(4, listener.deltaAppliedVersions.size());
-        Assert.assertEquals(v2, listener.deltaAppliedVersions.get(0).longValue());
-        Assert.assertEquals(v3, listener.deltaAppliedVersions.get(1).longValue());
-        Assert.assertEquals(v4, listener.deltaAppliedVersions.get(2).longValue());
-        Assert.assertEquals(v5, listener.deltaAppliedVersions.get(3).longValue());
+        assertEquals(4, listener.deltaAppliedVersions.size());
+        assertEquals(v2, listener.deltaAppliedVersions.get(0).longValue());
+        assertEquals(v3, listener.deltaAppliedVersions.get(1).longValue());
+        assertEquals(v4, listener.deltaAppliedVersions.get(2).longValue());
+        assertEquals(v5, listener.deltaAppliedVersions.get(3).longValue());
         
         /// blobs loaded semantics
-        Assert.assertEquals(5, listener.blobsLoadedVersions.size());
-        Assert.assertEquals(v1, listener.blobsLoadedVersions.get(0).longValue());
-        Assert.assertEquals(v2, listener.blobsLoadedVersions.get(1).longValue());
-        Assert.assertEquals(v3, listener.blobsLoadedVersions.get(2).longValue());
-        Assert.assertEquals(v4, listener.blobsLoadedVersions.get(3).longValue());
-        Assert.assertEquals(v5, listener.blobsLoadedVersions.get(4).longValue());
+        assertEquals(5, listener.blobsLoadedVersions.size());
+        assertEquals(v1, listener.blobsLoadedVersions.get(0).longValue());
+        assertEquals(v2, listener.blobsLoadedVersions.get(1).longValue());
+        assertEquals(v3, listener.blobsLoadedVersions.get(2).longValue());
+        assertEquals(v4, listener.blobsLoadedVersions.get(3).longValue());
+        assertEquals(v5, listener.blobsLoadedVersions.get(4).longValue());
         
-        Assert.assertEquals(Long.MIN_VALUE, listener.refreshStartCurrentVersion);
-        Assert.assertEquals(v5+1, listener.refreshStartRequestedVersion);
+        assertEquals(Long.MIN_VALUE, listener.refreshStartCurrentVersion);
+        assertEquals(v5+1, listener.refreshStartRequestedVersion);
         
-        Assert.assertEquals(Long.MIN_VALUE, listener.refreshSuccessBeforeVersion);
-        Assert.assertEquals(v5, listener.refreshSuccessAfterVersion);
-        Assert.assertEquals(v5+1, listener.refreshSuccessRequestedVersion);
+        assertEquals(Long.MIN_VALUE, listener.refreshSuccessBeforeVersion);
+        assertEquals(v5, listener.refreshSuccessAfterVersion);
+        assertEquals(v5+1, listener.refreshSuccessRequestedVersion);
     }
     
     @Test
@@ -167,33 +167,33 @@ public class HollowRefreshListenerTests {
         consumer.triggerRefreshTo(v3);
 
         /// update occurred semantics
-        Assert.assertEquals(0, listener.snapshotUpdateOccurredVersions.size());
+        assertEquals(0, listener.snapshotUpdateOccurredVersions.size());
 
-        Assert.assertEquals(3, listener.deltaUpdateOccurredVersions.size());
-        Assert.assertEquals(v1, listener.deltaUpdateOccurredVersions.get(0).longValue());
-        Assert.assertEquals(v2, listener.deltaUpdateOccurredVersions.get(1).longValue());
-        Assert.assertEquals(v3, listener.deltaUpdateOccurredVersions.get(2).longValue());
+        assertEquals(3, listener.deltaUpdateOccurredVersions.size());
+        assertEquals(v1, listener.deltaUpdateOccurredVersions.get(0).longValue());
+        assertEquals(v2, listener.deltaUpdateOccurredVersions.get(1).longValue());
+        assertEquals(v3, listener.deltaUpdateOccurredVersions.get(2).longValue());
         
         /// applied semantics
-        Assert.assertEquals(0, listener.snapshotAppliedVersions.size());
+        assertEquals(0, listener.snapshotAppliedVersions.size());
 
-        Assert.assertEquals(3, listener.deltaAppliedVersions.size());
-        Assert.assertEquals(v1, listener.deltaAppliedVersions.get(0).longValue());
-        Assert.assertEquals(v2, listener.deltaAppliedVersions.get(1).longValue());
-        Assert.assertEquals(v3, listener.deltaAppliedVersions.get(2).longValue());
+        assertEquals(3, listener.deltaAppliedVersions.size());
+        assertEquals(v1, listener.deltaAppliedVersions.get(0).longValue());
+        assertEquals(v2, listener.deltaAppliedVersions.get(1).longValue());
+        assertEquals(v3, listener.deltaAppliedVersions.get(2).longValue());
 
         /// blobs loaded semantics
-        Assert.assertEquals(3, listener.blobsLoadedVersions.size());
-        Assert.assertEquals(v1, listener.blobsLoadedVersions.get(0).longValue());
-        Assert.assertEquals(v2, listener.blobsLoadedVersions.get(1).longValue());
-        Assert.assertEquals(v3, listener.blobsLoadedVersions.get(2).longValue());
+        assertEquals(3, listener.blobsLoadedVersions.size());
+        assertEquals(v1, listener.blobsLoadedVersions.get(0).longValue());
+        assertEquals(v2, listener.blobsLoadedVersions.get(1).longValue());
+        assertEquals(v3, listener.blobsLoadedVersions.get(2).longValue());
 
-        Assert.assertEquals(v0, listener.refreshStartCurrentVersion);
-        Assert.assertEquals(v3, listener.refreshStartRequestedVersion);
+        assertEquals(v0, listener.refreshStartCurrentVersion);
+        assertEquals(v3, listener.refreshStartRequestedVersion);
 
-        Assert.assertEquals(v0, listener.refreshSuccessBeforeVersion);
-        Assert.assertEquals(v3, listener.refreshSuccessAfterVersion);
-        Assert.assertEquals(v3, listener.refreshSuccessRequestedVersion);
+        assertEquals(v0, listener.refreshSuccessBeforeVersion);
+        assertEquals(v3, listener.refreshSuccessAfterVersion);
+        assertEquals(v3, listener.refreshSuccessRequestedVersion);
     }
     
     @Test
@@ -223,11 +223,11 @@ public class HollowRefreshListenerTests {
         
         consumer.triggerRefreshTo(v5);
 
-        Assert.assertEquals(1, snapshotOrdinal0Objects.get(0).getInt("value"));
-        Assert.assertEquals(2, deltaOrdinal1Objects.get(0).getInt("value"));
-        Assert.assertEquals(3, deltaOrdinal0Objects.get(1).getInt("value"));
-        Assert.assertEquals(4, deltaOrdinal1Objects.get(2).getInt("value"));
-        Assert.assertEquals(5, deltaOrdinal0Objects.get(3).getInt("value"));
+        assertEquals(1, snapshotOrdinal0Objects.get(0).getInt("value"));
+        assertEquals(2, deltaOrdinal1Objects.get(0).getInt("value"));
+        assertEquals(3, deltaOrdinal0Objects.get(1).getInt("value"));
+        assertEquals(4, deltaOrdinal1Objects.get(2).getInt("value"));
+        assertEquals(5, deltaOrdinal0Objects.get(3).getInt("value"));
     }
 
     @Test
@@ -263,18 +263,18 @@ public class HollowRefreshListenerTests {
         long v1 = runCycle(producer, 1);
         consumer.triggerRefreshTo(v1+1);
 
-        Assert.assertEquals(1, frl.refreshStarted);
-        Assert.assertEquals(1, frl.refreshSuccessful);
-        Assert.assertEquals(0, frl.srl.refreshStarted);
-        Assert.assertEquals(0, frl.srl.refreshSuccessful);
+        assertEquals(1, frl.refreshStarted);
+        assertEquals(1, frl.refreshSuccessful);
+        assertEquals(0, frl.srl.refreshStarted);
+        assertEquals(0, frl.srl.refreshSuccessful);
 
         long v2 = runCycle(producer, 2);
         consumer.triggerRefreshTo(v2+1);
 
-        Assert.assertEquals(2, frl.refreshStarted);
-        Assert.assertEquals(2, frl.refreshSuccessful);
-        Assert.assertEquals(1, frl.srl.refreshStarted);
-        Assert.assertEquals(1, frl.srl.refreshSuccessful);
+        assertEquals(2, frl.refreshStarted);
+        assertEquals(2, frl.refreshSuccessful);
+        assertEquals(1, frl.srl.refreshStarted);
+        assertEquals(1, frl.srl.refreshSuccessful);
     }
 
     @Test
@@ -316,18 +316,18 @@ public class HollowRefreshListenerTests {
         long v1 = runCycle(producer, 1);
         consumer.triggerRefreshTo(v1+1);
 
-        Assert.assertEquals(1, frl.refreshStarted);
-        Assert.assertEquals(1, frl.refreshSuccessful);
-        Assert.assertEquals(1, frl.srl.refreshStarted);
-        Assert.assertEquals(1, frl.srl.refreshSuccessful);
+        assertEquals(1, frl.refreshStarted);
+        assertEquals(1, frl.refreshSuccessful);
+        assertEquals(1, frl.srl.refreshStarted);
+        assertEquals(1, frl.srl.refreshSuccessful);
 
         long v2 = runCycle(producer, 2);
         consumer.triggerRefreshTo(v2+1);
 
-        Assert.assertEquals(2, frl.refreshStarted);
-        Assert.assertEquals(2, frl.refreshSuccessful);
-        Assert.assertEquals(1, frl.srl.refreshStarted);
-        Assert.assertEquals(1, frl.srl.refreshSuccessful);
+        assertEquals(2, frl.refreshStarted);
+        assertEquals(2, frl.refreshSuccessful);
+        assertEquals(1, frl.srl.refreshStarted);
+        assertEquals(1, frl.srl.refreshSuccessful);
     }
 
     private long runCycle(HollowProducer producer, final int cycleNumber) {

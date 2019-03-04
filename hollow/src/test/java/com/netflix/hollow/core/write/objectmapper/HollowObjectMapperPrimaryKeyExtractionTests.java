@@ -17,8 +17,8 @@
 package com.netflix.hollow.core.write.objectmapper;
 
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowObjectMapperPrimaryKeyExtractionTests {
     
@@ -31,9 +31,9 @@ public class HollowObjectMapperPrimaryKeyExtractionTests {
         Object[] key2 = mapper.extractPrimaryKey(new TypeA(2, "two")).getKey();
         Object[] key3 = mapper.extractPrimaryKey(new TypeA(3, "three")).getKey();
         
-        Assert.assertArrayEquals(new Object[] { 1, "one" }, key1);
-        Assert.assertArrayEquals(new Object[] { 2, "two" }, key2);
-        Assert.assertArrayEquals(new Object[] { 3, "three" }, key3);
+        assertArrayEquals(new Object[] { 1, "one" }, key1);
+        assertArrayEquals(new Object[] { 2, "two" }, key2);
+        assertArrayEquals(new Object[] { 3, "three" }, key3);
     }
     
     @Test
@@ -46,10 +46,10 @@ public class HollowObjectMapperPrimaryKeyExtractionTests {
         Object[] key3 = mapper.extractPrimaryKey(new TypeA(2, null)).getKey();
         Object[] key4 = mapper.extractPrimaryKey(new TypeA(null, null)).getKey();
         
-        Assert.assertArrayEquals(new Object[] { 1, null }, key1);
-        Assert.assertArrayEquals(new Object[] { null, null }, key2);
-        Assert.assertArrayEquals(new Object[] { 2, null }, key3);
-        Assert.assertArrayEquals(new Object[] { null, null }, key4);
+        assertArrayEquals(new Object[] { 1, null }, key1);
+        assertArrayEquals(new Object[] { null, null }, key2);
+        assertArrayEquals(new Object[] { 2, null }, key3);
+        assertArrayEquals(new Object[] { null, null }, key4);
     }
     
     @Test
@@ -59,9 +59,9 @@ public class HollowObjectMapperPrimaryKeyExtractionTests {
         
         try {
             mapper.extractPrimaryKey(new TypeAWithReferenceTypeForPrimaryKeyField(1, "asdf"));
-            Assert.fail();
+            fail();
         } catch(IllegalArgumentException expected) { 
-            Assert.assertEquals("Cannot extract POJO primary key from a REFERENCE mapped field type", expected.getMessage());
+            assertEquals("Cannot extract POJO primary key from a REFERENCE mapped field type", expected.getMessage());
         }
     }
     

@@ -23,15 +23,15 @@ import com.netflix.hollow.core.schema.HollowListSchema;
 import com.netflix.hollow.core.write.HollowListTypeWriteState;
 import com.netflix.hollow.core.write.HollowListWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowHistoryListTest extends AbstractStateEngineTest {
 
     private HollowListSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowListSchema("TestList", "TestObject");
 
@@ -113,7 +113,7 @@ public class HollowHistoryListTest extends AbstractStateEngineTest {
         HollowListTypeDataAccess typeDataAccess = (HollowListTypeDataAccess)dataAccess.getTypeDataAccess("TestList");
 
         for(int i=0;i<expectedElements.length;i++) {
-            Assert.assertEquals(expectedElements[i], typeDataAccess.getElementOrdinal(ordinal, i));
+            assertEquals(expectedElements[i], typeDataAccess.getElementOrdinal(ordinal, i));
         }
     }
 

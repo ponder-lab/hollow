@@ -2,8 +2,8 @@ package com.netflix.hollow.api.producer;
 
 import com.netflix.hollow.api.producer.enforcer.SingleProducerEnforcer;
 import java.util.concurrent.TimeUnit;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -26,7 +26,7 @@ public class HollowProducerListenerTest {
     @Mock
     private SingleProducerEnforcer singleProducerEnforcer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         this.producer = new HollowProducer.Builder()

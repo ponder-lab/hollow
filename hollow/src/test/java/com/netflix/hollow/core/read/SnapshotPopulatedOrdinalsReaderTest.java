@@ -26,8 +26,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class SnapshotPopulatedOrdinalsReaderTest {
 
@@ -42,9 +42,9 @@ public class SnapshotPopulatedOrdinalsReaderTest {
         SnapshotPopulatedOrdinalsReader.readOrdinals(dis, new HollowTypeStateListener[] { listener });
 
         BitSet populatedOrdinals = listener.getPopulatedOrdinals();
-        Assert.assertEquals(1000, populatedOrdinals.cardinality());
+        assertEquals(1000, populatedOrdinals.cardinality());
         for(int i=0;i<10000;i+=10)
-            Assert.assertTrue(populatedOrdinals.get(i));
+            assertTrue(populatedOrdinals.get(i));
     }
 
     private DataInputStream serializeToStream(ThreadSafeBitSet bitSet) throws IOException {

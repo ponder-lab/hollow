@@ -23,13 +23,13 @@ import com.netflix.hollow.core.write.HollowListTypeWriteState;
 import com.netflix.hollow.core.write.HollowListWriteRecord;
 import java.io.IOException;
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowListShardedTest extends AbstractStateEngineTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
     }
@@ -50,13 +50,13 @@ public class HollowListShardedTest extends AbstractStateEngineTest {
         
         roundTripSnapshot();
         
-        Assert.assertEquals(4, readStateEngine.getTypeState("TestList").numShards());
+        assertEquals(4, readStateEngine.getTypeState("TestList").numShards());
         
         HollowListTypeDataAccess listDataAccess = (HollowListTypeDataAccess) readStateEngine.getTypeDataAccess("TestList");
         for(int i=0;i<1000;i++) {
-            Assert.assertEquals(i, listDataAccess.getElementOrdinal(i, 0));
-            Assert.assertEquals(i+1, listDataAccess.getElementOrdinal(i, 1));
-            Assert.assertEquals(i+2, listDataAccess.getElementOrdinal(i, 2));
+            assertEquals(i, listDataAccess.getElementOrdinal(i, 0));
+            assertEquals(i+1, listDataAccess.getElementOrdinal(i, 1));
+            assertEquals(i+2, listDataAccess.getElementOrdinal(i, 2));
         }
 
         for(int i=0;i<2000;i++) {
@@ -76,9 +76,9 @@ public class HollowListShardedTest extends AbstractStateEngineTest {
         
         int ordinal = populatedOrdinals.nextSetBit(0);
         while(ordinal != -1) {
-            Assert.assertEquals(expectedValue, listDataAccess.getElementOrdinal(ordinal, 0));
-            Assert.assertEquals(expectedValue+1, listDataAccess.getElementOrdinal(ordinal, 1));
-            Assert.assertEquals(expectedValue+2, listDataAccess.getElementOrdinal(ordinal, 2));
+            assertEquals(expectedValue, listDataAccess.getElementOrdinal(ordinal, 0));
+            assertEquals(expectedValue+1, listDataAccess.getElementOrdinal(ordinal, 1));
+            assertEquals(expectedValue+2, listDataAccess.getElementOrdinal(ordinal, 2));
             
             expectedValue += 2;
             ordinal = populatedOrdinals.nextSetBit(ordinal+1);

@@ -16,8 +16,8 @@
  */
 package com.netflix.hollow.api.producer.validation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static com.netflix.hollow.test.AssertShim.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -31,7 +31,7 @@ import com.netflix.hollow.api.producer.HollowProducer;
 import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
 import com.netflix.hollow.core.write.objectmapper.HollowPrimaryKey;
 import java.util.function.BiPredicate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 public class ObjectModificationValidatorTest {

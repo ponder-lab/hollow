@@ -18,8 +18,8 @@ package com.netflix.hollow.core.index;
 
 import com.netflix.hollow.core.memory.pool.WastefulRecycler;
 import com.netflix.hollow.core.read.iterator.HollowOrdinalIterator;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class MultiLinkedElementArrayTest {
 
@@ -27,21 +27,21 @@ public class MultiLinkedElementArrayTest {
     public void testIterators() {
         MultiLinkedElementArray arr = new MultiLinkedElementArray(WastefulRecycler.SMALL_ARRAY_RECYCLER);
         
-        Assert.assertEquals(0, arr.newList());
+        assertEquals(0, arr.newList());
         
         arr.add(0, 100);
         arr.add(0, 200);
         arr.add(0, 300);
         
-        Assert.assertEquals(1, arr.newList());
+        assertEquals(1, arr.newList());
         
         arr.add(1, 101);
         
-        Assert.assertEquals(2, arr.newList());
+        assertEquals(2, arr.newList());
         
         arr.add(2, 102);
         
-        Assert.assertEquals(3, arr.newList());
+        assertEquals(3, arr.newList());
         
         arr.add(0, 400);
         arr.add(0, 500);
@@ -52,16 +52,16 @@ public class MultiLinkedElementArrayTest {
         arr.add(3, 203);
         arr.add(3, 303);
         
-        Assert.assertEquals(4, arr.newList());
+        assertEquals(4, arr.newList());
         
         arr.add(4, 0);
         
-        Assert.assertEquals(5, arr.newList());
+        assertEquals(5, arr.newList());
         
         arr.add(5, 0);
         arr.add(5, 0);
         
-        Assert.assertEquals(6, arr.newList());
+        assertEquals(6, arr.newList());
         
         arr.add(6, 0);
         arr.add(6, 0);
@@ -80,10 +80,10 @@ public class MultiLinkedElementArrayTest {
     
     private void assertIteratorContents(HollowOrdinalIterator iter, int... expectedOrdinals) {
         for(int i=0;i<expectedOrdinals.length;i++) {
-            Assert.assertEquals(expectedOrdinals[i], iter.next());
+            assertEquals(expectedOrdinals[i], iter.next());
         }
         
-        Assert.assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
+        assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
     }
 
 }

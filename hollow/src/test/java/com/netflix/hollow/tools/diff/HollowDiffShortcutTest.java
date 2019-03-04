@@ -24,8 +24,8 @@ import com.netflix.hollow.core.write.objectmapper.HollowPrimaryKey;
 import com.netflix.hollow.core.write.objectmapper.HollowTypeName;
 import com.netflix.hollow.tools.diff.count.HollowFieldDiff;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowDiffShortcutTest {
     
@@ -56,12 +56,12 @@ public class HollowDiffShortcutTest {
 
         diff.calculateDiffs();
         
-        Assert.assertEquals(1, typeADiff.getFieldDiffs().size());
+        assertEquals(1, typeADiff.getFieldDiffs().size());
         
         HollowFieldDiff aFieldDiff = typeADiff.getFieldDiffs().get(0);
         
-        Assert.assertEquals("TypeA.b (TypeB)", aFieldDiff.getFieldIdentifier().toString());
-        Assert.assertEquals(4, aFieldDiff.getNumDiffs());
+        assertEquals("TypeA.b (TypeB)", aFieldDiff.getFieldIdentifier().toString());
+        assertEquals(4, aFieldDiff.getNumDiffs());
         
     }
     
@@ -91,12 +91,12 @@ public class HollowDiffShortcutTest {
         typeADiff.addShortcutType("TypeB");
         diff.calculateDiffs();
         
-        Assert.assertEquals(1, typeADiff.getFieldDiffs().size());
+        assertEquals(1, typeADiff.getFieldDiffs().size());
         
         HollowFieldDiff aFieldDiff = typeADiff.getFieldDiffs().get(0);
         
-        Assert.assertEquals("TypeA.b (TypeB)", aFieldDiff.getFieldIdentifier().toString());
-        Assert.assertEquals(5, aFieldDiff.getNumDiffs());
+        assertEquals("TypeA.b (TypeB)", aFieldDiff.getFieldIdentifier().toString());
+        assertEquals(5, aFieldDiff.getNumDiffs());
     }    
     
     @Test
@@ -126,15 +126,15 @@ public class HollowDiffShortcutTest {
         
         HollowTypeDiff typeADiff = diff.getTypeDiff("Type0");
         
-        Assert.assertEquals(2, typeADiff.getFieldDiffs().size());
+        assertEquals(2, typeADiff.getFieldDiffs().size());
         
         HollowFieldDiff keyFieldDiff = typeADiff.getFieldDiffs().get(0);
         HollowFieldDiff bFieldDiff = typeADiff.getFieldDiffs().get(1);
         
-        Assert.assertEquals("Type0.a.key (INT)", keyFieldDiff.getFieldIdentifier().toString());
-        Assert.assertEquals(6, keyFieldDiff.getNumDiffs());
-        Assert.assertEquals("Type0.a.b (TypeB)", bFieldDiff.getFieldIdentifier().toString());
-        Assert.assertEquals(5, bFieldDiff.getNumDiffs());
+        assertEquals("Type0.a.key (INT)", keyFieldDiff.getFieldIdentifier().toString());
+        assertEquals(6, keyFieldDiff.getNumDiffs());
+        assertEquals("Type0.a.b (TypeB)", bFieldDiff.getFieldIdentifier().toString());
+        assertEquals(5, bFieldDiff.getNumDiffs());
     }    
     
     private HollowReadStateEngine createStateEngine(boolean addType0, TypeA... typeAs) throws IOException {

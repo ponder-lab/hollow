@@ -22,8 +22,8 @@ import com.netflix.hollow.core.schema.HollowSetSchema;
 import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowSetFastDeltaTest extends AbstractStateEngineTest {
 
@@ -50,7 +50,7 @@ public class HollowSetFastDeltaTest extends AbstractStateEngineTest {
         assertSet(typeState, 3, 40, 50, 61, 70);
         assertSet(typeState, 4, 1, 2, 3);
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         addRecord(10, 30);
         addRecord(40, 50, 61, 70);
@@ -65,14 +65,14 @@ public class HollowSetFastDeltaTest extends AbstractStateEngineTest {
         assertSet(typeState, 3, 40, 50, 61, 70);
         assertSet(typeState, 4, 1, 2, 3);
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
     }
 
     private void assertSet(HollowSetTypeReadState readState, int ordinal, int... elements) {
-        Assert.assertEquals(elements.length, readState.size(ordinal));
+        assertEquals(elements.length, readState.size(ordinal));
 
         for(int i=0;i<elements.length;i++) {
-            Assert.assertTrue(readState.contains(ordinal, elements[i]));
+            assertTrue(readState.contains(ordinal, elements[i]));
         }
     }
 

@@ -11,14 +11,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AbstractHollowHashIndexTests {
     private InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
@@ -246,9 +246,9 @@ public class AbstractHollowHashIndexTests {
         }
 
         for (int ord : expectedOrdinals) {
-            Assert.assertTrue(ordinalSet.contains(ord));
+            assertTrue(ordinalSet.contains(ord));
         }
-        Assert.assertEquals(expectedOrdinals.length, ordinalSet.size());
+        assertEquals(expectedOrdinals.length, ordinalSet.size());
     }
 
 

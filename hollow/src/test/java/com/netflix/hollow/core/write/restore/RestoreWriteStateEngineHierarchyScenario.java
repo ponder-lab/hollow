@@ -32,8 +32,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
 public class RestoreWriteStateEngineHierarchyScenario {
@@ -321,11 +321,11 @@ public class RestoreWriteStateEngineHierarchyScenario {
         GenericHollowObject b = (GenericHollowObject)bList.get(0);
 
         GenericHollowObject str = (GenericHollowObject)b.getReferencedGenericRecord("val");
-        Assert.assertEquals(val, str.getString("value"));
+        assertEquals(val, str.getString("value"));
         
         if(verifyEchoes) {
-            Assert.assertEquals(id, a.getInt("idEcho"));
-            Assert.assertEquals(id, b.getInt("idEcho"));
+            assertEquals(id, a.getInt("idEcho"));
+            assertEquals(id, b.getInt("idEcho"));
         }
     }
     

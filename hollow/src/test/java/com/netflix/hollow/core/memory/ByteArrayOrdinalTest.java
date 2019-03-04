@@ -16,8 +16,8 @@
  */
 package com.netflix.hollow.core.memory;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class ByteArrayOrdinalTest {
 
@@ -37,7 +37,7 @@ public class ByteArrayOrdinalTest {
             newOrdinals[i] = m.get(createBuffer("TEST" + i));
         }
 
-        Assert.assertArrayEquals(ordinals, newOrdinals);
+        assertArrayEquals(ordinals, newOrdinals);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class ByteArrayOrdinalTest {
             newOrdinals[i] = m.get(createBuffer("TEST" + i));
         }
 
-        Assert.assertArrayEquals(ordinals, newOrdinals);
+        assertArrayEquals(ordinals, newOrdinals);
     }
 
     static ByteDataBuffer createBuffer(String s) {

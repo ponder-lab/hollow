@@ -27,9 +27,9 @@ import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FilteredHollowBlobWriterTest {
     
@@ -37,7 +37,7 @@ public class FilteredHollowBlobWriterTest {
     private byte[] deltaData;
     private byte[] removeOnlyDeltaData;
     
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         HollowWriteStateEngine writeEngine = new HollowWriteStateEngine();
         HollowObjectMapper mapper = new HollowObjectMapper(writeEngine);
@@ -104,30 +104,30 @@ public class FilteredHollowBlobWriterTest {
         
         reader.applyDelta(new ByteArrayInputStream(filteredBlobStream.toByteArray()));
         
-        Assert.assertEquals(2, readEngine.getSchemas().size());
-        Assert.assertEquals(1, ((HollowObjectSchema)readEngine.getSchema("TypeA")).numFields());
-        Assert.assertEquals(2, ((HollowObjectSchema)readEngine.getSchema("TypeB")).numFields());
+        assertEquals(2, readEngine.getSchemas().size());
+        assertEquals(1, ((HollowObjectSchema)readEngine.getSchema("TypeA")).numFields());
+        assertEquals(2, ((HollowObjectSchema)readEngine.getSchema("TypeB")).numFields());
         
-        Assert.assertEquals(3, readEngine.getTypeState("TypeA").getPopulatedOrdinals().cardinality());
-        Assert.assertEquals(1, new GenericHollowObject(readEngine, "TypeA", 0).getInt("id"));
-        Assert.assertEquals(2, new GenericHollowObject(readEngine, "TypeA", 1).getInt("id"));
-        Assert.assertEquals(3, new GenericHollowObject(readEngine, "TypeA", 3).getInt("id"));
+        assertEquals(3, readEngine.getTypeState("TypeA").getPopulatedOrdinals().cardinality());
+        assertEquals(1, new GenericHollowObject(readEngine, "TypeA", 0).getInt("id"));
+        assertEquals(2, new GenericHollowObject(readEngine, "TypeA", 1).getInt("id"));
+        assertEquals(3, new GenericHollowObject(readEngine, "TypeA", 3).getInt("id"));
         
-        Assert.assertEquals(3, readEngine.getTypeState("TypeB").getPopulatedOrdinals().cardinality());
-        Assert.assertEquals(1, new GenericHollowObject(readEngine, "TypeB", 0).getInt("id"));
-        Assert.assertEquals(1.1f, new GenericHollowObject(readEngine, "TypeB", 0).getFloat("value"), 0);
-        Assert.assertEquals(2, new GenericHollowObject(readEngine, "TypeB", 1).getInt("id"));
-        Assert.assertEquals(2.2f, new GenericHollowObject(readEngine, "TypeB", 1).getFloat("value"), 0);
-        Assert.assertEquals(3, new GenericHollowObject(readEngine, "TypeB", 3).getInt("id"));
-        Assert.assertEquals(4.4f, new GenericHollowObject(readEngine, "TypeB", 3).getFloat("value"), 0);
+        assertEquals(3, readEngine.getTypeState("TypeB").getPopulatedOrdinals().cardinality());
+        assertEquals(1, new GenericHollowObject(readEngine, "TypeB", 0).getInt("id"));
+        assertEquals(1.1f, new GenericHollowObject(readEngine, "TypeB", 0).getFloat("value"), 0);
+        assertEquals(2, new GenericHollowObject(readEngine, "TypeB", 1).getInt("id"));
+        assertEquals(2.2f, new GenericHollowObject(readEngine, "TypeB", 1).getFloat("value"), 0);
+        assertEquals(3, new GenericHollowObject(readEngine, "TypeB", 3).getInt("id"));
+        assertEquals(4.4f, new GenericHollowObject(readEngine, "TypeB", 3).getFloat("value"), 0);
         
         filteredBlobStream.reset();
         blobWriter.filterDelta(new ByteArrayInputStream(removeOnlyDeltaData), filteredBlobStream);
         
         reader.applyDelta(new ByteArrayInputStream(filteredBlobStream.toByteArray()));
         
-        Assert.assertEquals(2, readEngine.getTypeState("TypeA").getPopulatedOrdinals().cardinality());
-        Assert.assertEquals(2, readEngine.getTypeState("TypeB").getPopulatedOrdinals().cardinality());
+        assertEquals(2, readEngine.getTypeState("TypeA").getPopulatedOrdinals().cardinality());
+        assertEquals(2, readEngine.getTypeState("TypeB").getPopulatedOrdinals().cardinality());
     }
 
     @SuppressWarnings("unused")

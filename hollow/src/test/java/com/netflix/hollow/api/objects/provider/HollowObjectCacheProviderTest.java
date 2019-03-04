@@ -17,25 +17,23 @@
 package com.netflix.hollow.api.objects.provider;
 
 import static com.netflix.hollow.api.objects.provider.Util.memoize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static com.netflix.hollow.test.AssertShim.assertNull;
+import static com.netflix.hollow.test.AssertShim.fail;
 import static org.mockito.Mockito.when;
 
 import com.netflix.hollow.api.custom.HollowTypeAPI;
 import com.netflix.hollow.core.read.engine.HollowTypeReadState;
 import com.netflix.hollow.core.read.engine.PopulatedOrdinalListener;
 import java.util.function.Supplier;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 public class HollowObjectCacheProviderTest {
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule().silent();
 
     @Mock
     HollowTypeReadState typeReadState;
@@ -46,7 +44,7 @@ public class HollowObjectCacheProviderTest {
     PopulatedOrdinalListener populatedOrdinalListener;
     Supplier<HollowObjectCacheProvider<TypeA>> subject;
 
-    @Before
+    @BeforeEach
     public void before() {
         populatedOrdinalListener = new PopulatedOrdinalListener();
 

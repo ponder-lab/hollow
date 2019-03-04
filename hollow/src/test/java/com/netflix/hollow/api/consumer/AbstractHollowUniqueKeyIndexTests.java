@@ -22,15 +22,15 @@ import com.netflix.hollow.api.producer.HollowProducer;
 import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
 import com.netflix.hollow.core.schema.HollowObjectSchema;
 import com.netflix.hollow.core.write.objectmapper.HollowPrimaryKey;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AbstractHollowUniqueKeyIndexTests {
 
     private InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
@@ -84,9 +84,9 @@ public class AbstractHollowUniqueKeyIndexTests {
         int ord0 = indexer.findMatch(1, 1.1d, "one");
         int ord2 = indexer.findMatch(2, 2.2d, "two");
 
-        Assert.assertEquals(0, ord0);
-        Assert.assertEquals(1, ord1);
-        Assert.assertEquals(2, ord2);
+        assertEquals(0, ord0);
+        assertEquals(1, ord1);
+        assertEquals(2, ord2);
         assertArrayEquals(indexer.getRecordKey(0), 1, 1.1d, "one");
         assertArrayEquals(indexer.getRecordKey(1), 1, 1.1d, "1");
         assertArrayEquals(indexer.getRecordKey(2), 2, 2.2d, "two");
@@ -106,10 +106,10 @@ public class AbstractHollowUniqueKeyIndexTests {
         ord2 = indexer.findMatch(2, 2.2d, "two");
         int ord3 = indexer.findMatch(3, 3.3d, "three");
 
-        Assert.assertEquals(0, ord0);
-        Assert.assertEquals(-1, ord1);
-        Assert.assertEquals(2, ord2);
-        Assert.assertEquals(3, ord3);
+        assertEquals(0, ord0);
+        assertEquals(-1, ord1);
+        assertEquals(2, ord2);
+        assertEquals(3, ord3);
         assertArrayEquals(indexer.getRecordKey(0), 1, 1.1d, "one");
         assertArrayEquals(indexer.getRecordKey(1), 1, 1.1d,
                 "1"); // it is a ghost record (marked deleted but it is available)
@@ -141,9 +141,9 @@ public class AbstractHollowUniqueKeyIndexTests {
         int ord0 = indexer.findMatch(1, 1.1d, "one");
         int ord2 = indexer.findMatch(2, 2.2d, "two");
 
-        Assert.assertEquals(0, ord0);
-        Assert.assertEquals(1, ord1);
-        Assert.assertEquals(2, ord2);
+        assertEquals(0, ord0);
+        assertEquals(1, ord1);
+        assertEquals(2, ord2);
         assertArrayEquals(indexer.getRecordKey(0), 1, 1.1d, "one");
         assertArrayEquals(indexer.getRecordKey(1), 1, 1.1d, "1");
         assertArrayEquals(indexer.getRecordKey(2), 2, 2.2d, "two");
@@ -164,10 +164,10 @@ public class AbstractHollowUniqueKeyIndexTests {
         ord2 = indexer.findMatch(2, 2.2d, "two");
         int ord3 = indexer.findMatch(3, 3.3d, "three");
 
-        Assert.assertEquals(0, ord0);
-        Assert.assertEquals(-1, ord1);
-        Assert.assertEquals(2, ord2);
-        Assert.assertEquals(3, ord3);
+        assertEquals(0, ord0);
+        assertEquals(-1, ord1);
+        assertEquals(2, ord2);
+        assertEquals(3, ord3);
         assertArrayEquals(indexer.getRecordKey(0), 1, 1.1d, "one");
         // it is a ghost record (marked deleted but it is available)
         assertArrayEquals(indexer.getRecordKey(1), 1, 1.1d, "1");
@@ -187,10 +187,10 @@ public class AbstractHollowUniqueKeyIndexTests {
         ord2 = indexer.findMatch(2, 2.2d, "two");
         ord3 = indexer.findMatch(3, 3.3d, "three");
 
-        Assert.assertEquals(0, ord0);
-        Assert.assertEquals(1, ord1);
-        Assert.assertEquals(2, ord2);
-        Assert.assertEquals(-1, ord3);
+        assertEquals(0, ord0);
+        assertEquals(1, ord1);
+        assertEquals(2, ord2);
+        assertEquals(-1, ord3);
 
         assertArrayEquals(indexer.getRecordKey(0), 1, 1.1d, "one");
         assertArrayEquals(indexer.getRecordKey(1), 1, 1.1d, "1");
@@ -201,7 +201,7 @@ public class AbstractHollowUniqueKeyIndexTests {
 
 
     private static void assertArrayEquals(Object[] actual, Object... expected) {
-        Assert.assertArrayEquals(expected, actual);
+        assertArrayEquals(expected, actual);
     }
 
 

@@ -25,15 +25,15 @@ import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
 import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowObjectDeltaTest extends AbstractStateEngineTest {
 
     HollowObjectSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema("TestObject", 2);
         schema.addField("f1", FieldType.INT);
@@ -67,7 +67,7 @@ public class HollowObjectDeltaTest extends AbstractStateEngineTest {
 
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         assertObject(typeState, 0, 1, "one");
         assertObject(typeState, 1, 2, "two");  /// this was "removed", but the data hangs around as a "ghost" until the following cycle.
@@ -84,14 +84,14 @@ public class HollowObjectDeltaTest extends AbstractStateEngineTest {
         assertObject(typeState, 3, 1000, "one thousand"); /// "ghost"
         assertObject(typeState, 4, 0, "zero"); /// "ghost"
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         addRecord(634, "six hundred thirty four");
         addRecord(0, "zero");
 
         roundTripDelta();
 
-        Assert.assertEquals(1, typeState.maxOrdinal());
+        assertEquals(1, typeState.maxOrdinal());
         assertObject(typeState, 0, 634, "six hundred thirty four"); /// now, since all records were removed, we can recycle the ordinal "0", even though it was a "ghost" in the last cycle.
         assertObject(typeState, 1, 0, "zero");  /// even though "zero" had an equivalent record in the previous cycle at ordinal "4", it is now assigned to recycled ordinal "1".
 
@@ -122,7 +122,7 @@ public class HollowObjectDeltaTest extends AbstractStateEngineTest {
 
         try {
             assertObject(typeState, 0, 0, null);
-            Assert.fail("Should have thrown Exception");
+            fail("Should have thrown Exception");
         } catch(NullPointerException expected) { }
     }
 
@@ -138,8 +138,8 @@ public class HollowObjectDeltaTest extends AbstractStateEngineTest {
     private void assertObject(HollowObjectTypeReadState readState, int ordinal, int intVal, String strVal) {
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(readState), ordinal);
 
-        Assert.assertEquals(intVal, obj.getInt("f1"));
-        Assert.assertEquals(strVal, obj.getString("f2"));
+        assertEquals(intVal, obj.getInt("f1"));
+        assertEquals(strVal, obj.getString("f2"));
     }
 
     @Override

@@ -21,8 +21,8 @@ import com.netflix.hollow.diffview.effigy.HollowEffigy.Field;
 import com.netflix.hollow.diffview.effigy.pairer.HollowEffigyCollectionPairer;
 import com.netflix.hollow.diffview.effigy.pairer.HollowEffigyFieldPairer.EffigyFieldPair;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowEffigyCollectionPairerTest {
 
@@ -47,7 +47,7 @@ public class HollowEffigyCollectionPairerTest {
 
         List<EffigyFieldPair> pairs = pairer.pair();
 
-        Assert.assertEquals(6, pairs.size());
+        assertEquals(6, pairs.size());
         assertPair(pairs.get(0), "1", "1");
         assertPair(pairs.get(1), "2", "2");
         assertPair(pairs.get(2), "3", "3");
@@ -59,16 +59,16 @@ public class HollowEffigyCollectionPairerTest {
     private void assertPair(EffigyFieldPair pair, String expectedFromField1, String expectedToField1) {
         if(expectedFromField1 != null) {
             HollowEffigy element = (HollowEffigy) pair.getFrom().getValue();
-            Assert.assertEquals(expectedFromField1, element.getFields().get(0).getValue());
+            assertEquals(expectedFromField1, element.getFields().get(0).getValue());
         } else {
-            Assert.assertNull(pair.getFrom());
+            assertNull(pair.getFrom());
         }
 
         if(expectedToField1 != null) {
             HollowEffigy element = (HollowEffigy) pair.getTo().getValue();
-            Assert.assertEquals(expectedToField1, element.getFields().get(0).getValue());
+            assertEquals(expectedToField1, element.getFields().get(0).getValue());
         } else {
-            Assert.assertNull(pair.getTo());
+            assertNull(pair.getTo());
         }
     }
 

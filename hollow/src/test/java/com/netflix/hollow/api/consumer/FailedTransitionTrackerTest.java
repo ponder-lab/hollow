@@ -21,16 +21,16 @@ import com.netflix.hollow.api.client.HollowUpdatePlan;
 import com.netflix.hollow.api.consumer.HollowConsumer.Blob;
 import java.io.IOException;
 import java.io.InputStream;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FailedTransitionTrackerTest {
 
     private FailedTransitionTracker tracker;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.tracker = new FailedTransitionTracker();
 
@@ -43,7 +43,7 @@ public class FailedTransitionTrackerTest {
         tracker.markAllTransitionsAsFailed(plan);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         this.tracker.clear();
     }
@@ -56,7 +56,7 @@ public class FailedTransitionTrackerTest {
         plan.add(new FakeHollowBlob(51, 52));
         plan.add(new FakeHollowBlob(52, 53));
 
-        Assert.assertFalse(tracker.anyTransitionWasFailed(plan));
+        assertFalse(tracker.anyTransitionWasFailed(plan));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class FailedTransitionTrackerTest {
         plan.add(new FakeHollowBlob(99, 100));
         plan.add(new FakeHollowBlob(100, 101));
 
-        Assert.assertTrue(tracker.anyTransitionWasFailed(plan));
+        assertTrue(tracker.anyTransitionWasFailed(plan));
     }
 
     @Test
@@ -76,19 +76,19 @@ public class FailedTransitionTrackerTest {
         plan.add(new FakeHollowBlob(1, 2));
         plan.add(new FakeHollowBlob(2, 3));
 
-        Assert.assertTrue(tracker.anyTransitionWasFailed(plan));
+        assertTrue(tracker.anyTransitionWasFailed(plan));
     }
 
     @Test
     public void testGetNumFailedSnapshotTransitions() {
         // setUp adds a single failed snapshot transition
-        Assert.assertEquals(1, tracker.getNumFailedSnapshotTransitions());
+        assertEquals(1, tracker.getNumFailedSnapshotTransitions());
     }
 
     @Test
     public void testGetNumFailedDeltaTransitions() {
         // setUp adds a two failed delta transitions
-        Assert.assertEquals(2, tracker.getNumFailedDeltaTransitions());
+        assertEquals(2, tracker.getNumFailedDeltaTransitions());
     }
 
     static class FakeHollowBlob extends Blob {

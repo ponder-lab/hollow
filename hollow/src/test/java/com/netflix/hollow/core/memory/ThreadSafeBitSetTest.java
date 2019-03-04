@@ -16,8 +16,8 @@
 package com.netflix.hollow.core.memory;
 
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class ThreadSafeBitSetTest {
 
@@ -30,23 +30,23 @@ public class ThreadSafeBitSetTest {
 
         set2.set(100);
 
-        Assert.assertEquals(set1, set2);
-        Assert.assertEquals(set2, set1);
+        assertEquals(set1, set2);
+        assertEquals(set2, set1);
 
         set1.set(100000);
 
-        Assert.assertNotEquals(set1, set2);
-        Assert.assertNotEquals(set2, set1);
+        assertNotEquals(set1, set2);
+        assertNotEquals(set2, set1);
 
         set1.clearAll();
 
-        Assert.assertNotEquals(set1, set2);
-        Assert.assertNotEquals(set2, set1);
+        assertNotEquals(set1, set2);
+        assertNotEquals(set2, set1);
 
         set1.set(100);
 
-        Assert.assertEquals(set1, set2);
-        Assert.assertEquals(set2, set1);
+        assertEquals(set1, set2);
+        assertEquals(set2, set1);
 
     }
 
@@ -55,17 +55,17 @@ public class ThreadSafeBitSetTest {
         ThreadSafeBitSet set1 = new ThreadSafeBitSet();
 
         set1.set(100);
-        Assert.assertEquals(100, set1.maxSetBit());
+        assertEquals(100, set1.maxSetBit());
 
         set1.set(100000);
-        Assert.assertEquals(100000, set1.maxSetBit());
+        assertEquals(100000, set1.maxSetBit());
 
         set1.set(1000000);
-        Assert.assertEquals(1000000, set1.maxSetBit());
+        assertEquals(1000000, set1.maxSetBit());
 
         set1.clearAll();
         set1.set(555555);
-        Assert.assertEquals(555555, set1.maxSetBit());
+        assertEquals(555555, set1.maxSetBit());
     }
 
     @Test
@@ -78,18 +78,18 @@ public class ThreadSafeBitSetTest {
         set1.set(100000);
         set1.set(1000000);
 
-        Assert.assertEquals(100, set1.nextSetBit(0));
-        Assert.assertEquals(101, set1.nextSetBit(101));
-        Assert.assertEquals(103, set1.nextSetBit(102));
-        Assert.assertEquals(100000, set1.nextSetBit(104));
-        Assert.assertEquals(1000000, set1.nextSetBit(100001));
-        Assert.assertEquals(-1, set1.nextSetBit(1000001));
-        Assert.assertEquals(-1, set1.nextSetBit(1015809));
+        assertEquals(100, set1.nextSetBit(0));
+        assertEquals(101, set1.nextSetBit(101));
+        assertEquals(103, set1.nextSetBit(102));
+        assertEquals(100000, set1.nextSetBit(104));
+        assertEquals(1000000, set1.nextSetBit(100001));
+        assertEquals(-1, set1.nextSetBit(1000001));
+        assertEquals(-1, set1.nextSetBit(1015809));
 
         set1.clearAll();
         set1.set(555555);
-        Assert.assertEquals(555555, set1.nextSetBit(0));
-        Assert.assertEquals(-1, set1.nextSetBit(555556));
+        assertEquals(555555, set1.nextSetBit(0));
+        assertEquals(-1, set1.nextSetBit(555556));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class ThreadSafeBitSetTest {
 
         set1.clear(21);
 
-        Assert.assertEquals(3, set1.cardinality());
+        assertEquals(3, set1.cardinality());
     }
 
     @Test
@@ -118,13 +118,13 @@ public class ThreadSafeBitSetTest {
 
         // validate content
         for (int ordinal : ordinals) {
-            Assert.assertTrue(tsbSet.get(ordinal));
+            assertTrue(tsbSet.get(ordinal));
         }
-        Assert.assertEquals(ordinals.length, tsbSet.cardinality());
+        assertEquals(ordinals.length, tsbSet.cardinality());
 
         tsbSet.clear(ordinals[0]);
-        Assert.assertFalse(tsbSet.get(0));
-        Assert.assertEquals(ordinals.length - 1, tsbSet.cardinality());
+        assertFalse(tsbSet.get(0));
+        assertEquals(ordinals.length - 1, tsbSet.cardinality());
     }
 
     @Test
@@ -141,16 +141,16 @@ public class ThreadSafeBitSetTest {
 
         // validate content
         for (int ordinal : ordinals) {
-            Assert.assertEquals(bSet.get(ordinal), tsbSet.get(ordinal));
+            assertEquals(bSet.get(ordinal), tsbSet.get(ordinal));
         }
-        Assert.assertEquals(bSet.cardinality(), tsbSet.cardinality());
+        assertEquals(bSet.cardinality(), tsbSet.cardinality());
 
         // compare toBitSet
         BitSet bSet2 = tsbSet.toBitSet();
-        Assert.assertEquals(bSet, bSet2);
+        assertEquals(bSet, bSet2);
 
         // compare toString
-        Assert.assertEquals(bSet.toString(), bSet.toString());
+        assertEquals(bSet.toString(), bSet.toString());
     }
 
     @Test
@@ -172,8 +172,8 @@ public class ThreadSafeBitSetTest {
 
         // validate content
         ThreadSafeBitSet result = ThreadSafeBitSet.orAll(tsbSets);
-        Assert.assertEquals(bSet.cardinality(), result.cardinality());
-        Assert.assertEquals(bSet, result.toBitSet());
+        assertEquals(bSet.cardinality(), result.cardinality());
+        assertEquals(bSet, result.toBitSet());
     }
 
     @Test
@@ -197,15 +197,15 @@ public class ThreadSafeBitSetTest {
             }
             ordinal = tsbSet1.nextSetBit(ordinal + 1);
         }
-        Assert.assertFalse(tsbSet1.equals(tsbSet2));
-        Assert.assertNotEquals(tsbSet1, tsbSet2);
-        Assert.assertNotEquals(tsbSet1.toBitSet(), tsbSet2.toBitSet());
+        assertFalse(tsbSet1.equals(tsbSet2));
+        assertNotEquals(tsbSet1, tsbSet2);
+        assertNotEquals(tsbSet1.toBitSet(), tsbSet2.toBitSet());
 
         // validate content
         ThreadSafeBitSet result = tsbSet1.andNot(tsbSet2);
-        Assert.assertEquals(andNot_tsbSet.cardinality(), result.cardinality());
-        Assert.assertTrue(andNot_tsbSet.equals(result));
-        Assert.assertEquals(andNot_tsbSet, result);
-        Assert.assertEquals(andNot_bSet, result.toBitSet());
+        assertEquals(andNot_tsbSet.cardinality(), result.cardinality());
+        assertTrue(andNot_tsbSet.equals(result));
+        assertEquals(andNot_tsbSet, result);
+        assertEquals(andNot_bSet, result.toBitSet());
     }
 }

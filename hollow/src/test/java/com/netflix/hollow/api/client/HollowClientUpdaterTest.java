@@ -19,9 +19,10 @@ package com.netflix.hollow.api.client;
 import static com.netflix.hollow.core.HollowConstants.VERSION_LATEST;
 import static com.netflix.hollow.core.HollowConstants.VERSION_NONE;
 import static java.util.Collections.emptyList;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.netflix.hollow.test.AssertShim.assertFalse;
+import static com.netflix.hollow.test.AssertShim.assertTrue;
+import static com.netflix.hollow.test.AssertShim.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,10 +36,9 @@ import com.netflix.hollow.test.HollowWriteStateEngineBuilder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.concurrent.CompletableFuture;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowClientUpdaterTest {
     private HollowConsumer.BlobRetriever retriever;
@@ -50,7 +50,7 @@ public class HollowClientUpdaterTest {
     private HollowConsumer.ObjectLongevityDetector objectLongevityDetector;
     private HollowAPIFactory apiFactory;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         retriever = mock(HollowConsumer.BlobRetriever.class);
         apiFactory = mock(HollowAPIFactory.class);
@@ -76,22 +76,19 @@ public class HollowClientUpdaterTest {
         assertTrue("Should still have no types", readStateEngine.getAllTypes().isEmpty());
     }
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
     @Test
-    public void testUpdateTo_updateToLatestButNoVersionsRetrieved_throwsException() throws Throwable {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Could not create an update plan, because no existing versions could be retrieved.");
-        subject.updateTo(VERSION_LATEST);
+    public void testUpdateTo_updateToLatestButNoVersionsRetrieved_throwsException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> subject.updateTo(VERSION_LATEST),
+                "Could not create an update plan, because no existing versions could be retrieved.");
     }
 
     @Test
-    public void testUpdateTo_updateToArbitraryVersionButNoVersionsRetrieved_throwsException() throws Throwable {
+    public void testUpdateTo_updateToArbitraryVersionButNoVersionsRetrieved_throwsException() {
         long v = Long.MAX_VALUE - 1;
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage(String.format("Could not create an update plan for version %s, because that version or any previous versions could not be retrieved.", v));
-        subject.updateTo(v);
+        assertThrows(IllegalArgumentException.class,
+                () -> subject.updateTo(v),
+                String.format("Could not create an update plan for version %s, because that version or any previous versions could not be retrieved.", v));
     }
 
     @Test

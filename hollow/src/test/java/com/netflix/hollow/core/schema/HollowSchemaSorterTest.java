@@ -4,8 +4,8 @@ import com.netflix.hollow.core.util.HollowWriteStateCreator;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import java.io.IOException;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowSchemaSorterTest {
     
@@ -30,11 +30,11 @@ public class HollowSchemaSorterTest {
         
         List<HollowSchema> sortedSchemas = HollowSchemaSorter.dependencyOrderedSchemaList(schemas);
         
-        Assert.assertEquals(4, sortedSchemas.size());
-        Assert.assertEquals("String", sortedSchemas.get(0).getName());
-        Assert.assertEquals("ListOfString", sortedSchemas.get(1).getName());
-        Assert.assertEquals("TypeB", sortedSchemas.get(2).getName());
-        Assert.assertEquals("TypeA", sortedSchemas.get(3).getName());
+        assertEquals(4, sortedSchemas.size());
+        assertEquals("String", sortedSchemas.get(0).getName());
+        assertEquals("ListOfString", sortedSchemas.get(1).getName());
+        assertEquals("TypeB", sortedSchemas.get(2).getName());
+        assertEquals("TypeA", sortedSchemas.get(3).getName());
     }
     
     @Test
@@ -47,9 +47,9 @@ public class HollowSchemaSorterTest {
         
         List<HollowSchema> sortedSchemas = HollowSchemaSorter.dependencyOrderedSchemaList(schemas);
 
-        Assert.assertEquals(2, sortedSchemas.size());
-        Assert.assertEquals("TypeB", sortedSchemas.get(0).getName());
-        Assert.assertEquals("TypeA", sortedSchemas.get(1).getName());
+        assertEquals(2, sortedSchemas.size());
+        assertEquals("TypeB", sortedSchemas.get(0).getName());
+        assertEquals("TypeA", sortedSchemas.get(1).getName());
     }
     
     @Test
@@ -63,12 +63,12 @@ public class HollowSchemaSorterTest {
         HollowWriteStateEngine stateEngine = new HollowWriteStateEngine();
         HollowWriteStateCreator.populateStateEngineWithTypeWriteStates(stateEngine, schemas);
         
-        Assert.assertTrue(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeA", "TypeB"));
-        Assert.assertTrue(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeA", "TypeC"));
-        Assert.assertTrue(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeB", "TypeC"));
-        Assert.assertFalse(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeC", "TypeB"));
-        Assert.assertFalse(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeB", "TypeA"));
-        Assert.assertFalse(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeC", "TypeA"));
+        assertTrue(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeA", "TypeB"));
+        assertTrue(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeA", "TypeC"));
+        assertTrue(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeB", "TypeC"));
+        assertFalse(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeC", "TypeB"));
+        assertFalse(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeB", "TypeA"));
+        assertFalse(HollowSchemaSorter.typeIsTransitivelyDependent(stateEngine, "TypeC", "TypeA"));
     }
 
 }

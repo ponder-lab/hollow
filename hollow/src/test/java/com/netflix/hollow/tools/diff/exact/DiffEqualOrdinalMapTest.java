@@ -18,15 +18,15 @@ package com.netflix.hollow.tools.diff.exact;
 
 import com.netflix.hollow.core.util.IntList;
 import com.netflix.hollow.tools.diff.exact.DiffEqualOrdinalMap.MatchIterator;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DiffEqualOrdinalMapTest {
 
     private DiffEqualOrdinalMap map;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         map = new DiffEqualOrdinalMap(10);
 
@@ -47,37 +47,37 @@ public class DiffEqualOrdinalMapTest {
 
     @Test
     public void testFromIdentityOrdinals() {
-        Assert.assertEquals(1, map.getIdentityFromOrdinal(1));
-        Assert.assertEquals(4, map.getIdentityFromOrdinal(2));
-        Assert.assertEquals(7, map.getIdentityFromOrdinal(3));
-        Assert.assertEquals(5025, map.getIdentityFromOrdinal(100));
-        Assert.assertEquals(-1, map.getIdentityFromOrdinal(200));
+        assertEquals(1, map.getIdentityFromOrdinal(1));
+        assertEquals(4, map.getIdentityFromOrdinal(2));
+        assertEquals(7, map.getIdentityFromOrdinal(3));
+        assertEquals(5025, map.getIdentityFromOrdinal(100));
+        assertEquals(-1, map.getIdentityFromOrdinal(200));
     }
 
     @Test
     public void testToIdentityOrdinals() {
         map.buildToOrdinalIdentityMapping();
 
-        Assert.assertEquals(1, map.getIdentityToOrdinal(1));
-        Assert.assertEquals(1, map.getIdentityToOrdinal(2));
-        Assert.assertEquals(1, map.getIdentityToOrdinal(3));
-        Assert.assertEquals(4, map.getIdentityToOrdinal(4));
-        Assert.assertEquals(4, map.getIdentityToOrdinal(5));
-        Assert.assertEquals(4, map.getIdentityToOrdinal(6));
-        Assert.assertEquals(7, map.getIdentityToOrdinal(7));
-        Assert.assertEquals(7, map.getIdentityToOrdinal(8));
-        Assert.assertEquals(7, map.getIdentityToOrdinal(9));
-        Assert.assertEquals(5025, map.getIdentityToOrdinal(5025));
-        Assert.assertEquals(-1, map.getIdentityToOrdinal(200));
+        assertEquals(1, map.getIdentityToOrdinal(1));
+        assertEquals(1, map.getIdentityToOrdinal(2));
+        assertEquals(1, map.getIdentityToOrdinal(3));
+        assertEquals(4, map.getIdentityToOrdinal(4));
+        assertEquals(4, map.getIdentityToOrdinal(5));
+        assertEquals(4, map.getIdentityToOrdinal(6));
+        assertEquals(7, map.getIdentityToOrdinal(7));
+        assertEquals(7, map.getIdentityToOrdinal(8));
+        assertEquals(7, map.getIdentityToOrdinal(9));
+        assertEquals(5025, map.getIdentityToOrdinal(5025));
+        assertEquals(-1, map.getIdentityToOrdinal(200));
     }
 
     private void assertMatchIterator(MatchIterator iter, int... values) {
         for(int i=0;i<values.length;i++) {
-            Assert.assertTrue(iter.hasNext());
-            Assert.assertEquals(values[i], iter.next());
+            assertTrue(iter.hasNext());
+            assertEquals(values[i], iter.next());
         }
 
-        Assert.assertFalse(iter.hasNext());
+        assertFalse(iter.hasNext());
     }
 
 

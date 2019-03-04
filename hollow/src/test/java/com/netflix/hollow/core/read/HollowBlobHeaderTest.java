@@ -25,9 +25,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowBlobHeaderTest {
     private static final String VERSION_NAME = "version";
@@ -44,7 +44,7 @@ public class HollowBlobHeaderTest {
     private HollowReadStateEngine readStateEngine;
     private HollowBlobReader blobReader;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         writeStateEngine = new HollowWriteStateEngine();
         writeStateEngine.addHeaderTag(VERSION_NAME, VERSION_VALUE);
@@ -58,15 +58,15 @@ public class HollowBlobHeaderTest {
     @Test
     public void writeAndReadHeadersForSnapshot() throws IOException {
         roundTripSnapshot();
-        Assert.assertEquals(VERSION_VALUE, readStateEngine.getHeaderTag(VERSION_NAME));
-        Assert.assertEquals(JAR_VERSION_VALUE, readStateEngine.getHeaderTag(JAR_VERSION_NAME));
+        assertEquals(VERSION_VALUE, readStateEngine.getHeaderTag(VERSION_NAME));
+        assertEquals(JAR_VERSION_VALUE, readStateEngine.getHeaderTag(JAR_VERSION_NAME));
     }
 
     @Test
     public void writeAndReadHeadersForDelta() throws IOException {
         roundTripDelta();
-        Assert.assertEquals(VERSION_VALUE, readStateEngine.getHeaderTag(VERSION_NAME));
-        Assert.assertEquals(JAR_VERSION_VALUE, readStateEngine.getHeaderTag(JAR_VERSION_NAME));
+        assertEquals(VERSION_VALUE, readStateEngine.getHeaderTag(VERSION_NAME));
+        assertEquals(JAR_VERSION_VALUE, readStateEngine.getHeaderTag(JAR_VERSION_NAME));
     }
 
     @Test
@@ -76,10 +76,10 @@ public class HollowBlobHeaderTest {
         headerTags.put(HEADER_NAME2, HEADER_VAL2);
         writeStateEngine.addHeaderTags(headerTags);
         roundTripSnapshot();
-        Assert.assertEquals(VERSION_VALUE, readStateEngine.getHeaderTag(VERSION_NAME));
-        Assert.assertEquals(JAR_VERSION_VALUE, readStateEngine.getHeaderTag(JAR_VERSION_NAME));
-        Assert.assertEquals(HEADER_VAL1, readStateEngine.getHeaderTag(HEADER_NAME1));
-        Assert.assertEquals(HEADER_VAL2, readStateEngine.getHeaderTag(HEADER_NAME2));
+        assertEquals(VERSION_VALUE, readStateEngine.getHeaderTag(VERSION_NAME));
+        assertEquals(JAR_VERSION_VALUE, readStateEngine.getHeaderTag(JAR_VERSION_NAME));
+        assertEquals(HEADER_VAL1, readStateEngine.getHeaderTag(HEADER_NAME1));
+        assertEquals(HEADER_VAL2, readStateEngine.getHeaderTag(HEADER_NAME2));
     }
 
     private void roundTripSnapshot() throws IOException {

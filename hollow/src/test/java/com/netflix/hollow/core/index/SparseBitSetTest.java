@@ -21,8 +21,8 @@ import com.netflix.hollow.core.util.SimultaneousExecutor;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for SparseBitSet implementation defined in HollowSparseIntegerSet.
@@ -46,13 +46,13 @@ public class SparseBitSetTest {
             intIndexed.add(r);
         }
 
-        Assert.assertEquals(100000, sparseBitSet.cardinality());
-        Assert.assertTrue(sparseBitSet.estimateBitsUsed() > 0);
+        assertEquals(100000, sparseBitSet.cardinality());
+        assertTrue(sparseBitSet.estimateBitsUsed() > 0);
 
         for (int i = 0; i < maxValue; i++) {
             if (intIndexed.contains(i))
-                Assert.assertTrue("Expected in set, but not found the int " + i, sparseBitSet.get(i));
-            else Assert.assertFalse("Not expected in set, but found the int " + i, sparseBitSet.get(i));
+                assertTrue("Expected in set, but not found the int " + i, sparseBitSet.get(i));
+            else assertFalse("Not expected in set, but found the int " + i, sparseBitSet.get(i));
         }
     }
 
@@ -72,7 +72,7 @@ public class SparseBitSetTest {
             }
             executor.awaitUninterruptibly();
             HollowSparseIntegerSet.SparseBitSet.compact(sparseBitSet);
-            Assert.assertTrue(sparseBitSet.cardinality() == 250001);
+            assertTrue(sparseBitSet.cardinality() == 250001);
         }
 
     }
@@ -115,21 +115,21 @@ public class SparseBitSetTest {
         sparseBitSet.set(2047); // bit in long for bucket 0
         sparseBitSet.set(4095);// bit in long for bucket 0
 
-        Assert.assertTrue(sparseBitSet.get(8000));
-        Assert.assertTrue(sparseBitSet.get(8001));
-        Assert.assertTrue(sparseBitSet.get(8002));
-        Assert.assertTrue(sparseBitSet.get(8167));
-        Assert.assertTrue(sparseBitSet.get(8067));
+        assertTrue(sparseBitSet.get(8000));
+        assertTrue(sparseBitSet.get(8001));
+        assertTrue(sparseBitSet.get(8002));
+        assertTrue(sparseBitSet.get(8167));
+        assertTrue(sparseBitSet.get(8067));
 
-        Assert.assertTrue(sparseBitSet.get(0));
-        Assert.assertTrue(sparseBitSet.get(4095));
-        Assert.assertTrue(sparseBitSet.get(512));
+        assertTrue(sparseBitSet.get(0));
+        assertTrue(sparseBitSet.get(4095));
+        assertTrue(sparseBitSet.get(512));
 
-        Assert.assertFalse(sparseBitSet.get(8003));
-        Assert.assertFalse(sparseBitSet.get(8063));
-        Assert.assertFalse(sparseBitSet.get(7999));
-        Assert.assertFalse(sparseBitSet.get(8168));
-        Assert.assertFalse(sparseBitSet.get(8191));
+        assertFalse(sparseBitSet.get(8003));
+        assertFalse(sparseBitSet.get(8063));
+        assertFalse(sparseBitSet.get(7999));
+        assertFalse(sparseBitSet.get(8168));
+        assertFalse(sparseBitSet.get(8191));
     }
 
     @Test
@@ -144,18 +144,18 @@ public class SparseBitSetTest {
         sparseBitSet.set(8067);// 2nd bit in long for bucket 1
 
         sparseBitSet.clear(8000); // not long removal, plain clear test
-        Assert.assertFalse(sparseBitSet.get(8000));
-        Assert.assertTrue(sparseBitSet.get(8001));
-        Assert.assertTrue(sparseBitSet.get(8002));
-        Assert.assertTrue(sparseBitSet.get(8067));
-        Assert.assertTrue(sparseBitSet.get(8167));
+        assertFalse(sparseBitSet.get(8000));
+        assertTrue(sparseBitSet.get(8001));
+        assertTrue(sparseBitSet.get(8002));
+        assertTrue(sparseBitSet.get(8067));
+        assertTrue(sparseBitSet.get(8167));
 
         sparseBitSet.clear(8001);
         sparseBitSet.clear(8002);// now first long should be removed from buckets
-        Assert.assertFalse(sparseBitSet.get(8001));
-        Assert.assertFalse(sparseBitSet.get(8002));
-        Assert.assertTrue(sparseBitSet.get(8067));
-        Assert.assertTrue(sparseBitSet.get(8167));
+        assertFalse(sparseBitSet.get(8001));
+        assertFalse(sparseBitSet.get(8002));
+        assertTrue(sparseBitSet.get(8067));
+        assertTrue(sparseBitSet.get(8167));
 
         // add them back
         sparseBitSet.set(8000);
@@ -164,20 +164,20 @@ public class SparseBitSetTest {
 
         // removing long from between other longs in bucket
         sparseBitSet.clear(8067);
-        Assert.assertTrue(sparseBitSet.get(8000));
-        Assert.assertTrue(sparseBitSet.get(8001));
-        Assert.assertTrue(sparseBitSet.get(8002));
-        Assert.assertTrue(sparseBitSet.get(8167));
-        Assert.assertFalse(sparseBitSet.get(8067));
+        assertTrue(sparseBitSet.get(8000));
+        assertTrue(sparseBitSet.get(8001));
+        assertTrue(sparseBitSet.get(8002));
+        assertTrue(sparseBitSet.get(8167));
+        assertFalse(sparseBitSet.get(8067));
 
         // removing the last long
         sparseBitSet.set(8067);
         sparseBitSet.clear(8167);
-        Assert.assertTrue(sparseBitSet.get(8000));
-        Assert.assertTrue(sparseBitSet.get(8001));
-        Assert.assertTrue(sparseBitSet.get(8002));
-        Assert.assertTrue(sparseBitSet.get(8067));
-        Assert.assertFalse(sparseBitSet.get(8167));
+        assertTrue(sparseBitSet.get(8000));
+        assertTrue(sparseBitSet.get(8001));
+        assertTrue(sparseBitSet.get(8002));
+        assertTrue(sparseBitSet.get(8067));
+        assertFalse(sparseBitSet.get(8167));
 
         // removing all longs
         sparseBitSet.clear(8000);
@@ -186,11 +186,11 @@ public class SparseBitSetTest {
         sparseBitSet.clear(8167);
         sparseBitSet.clear(8067);
 
-        Assert.assertFalse(sparseBitSet.get(8000));
-        Assert.assertFalse(sparseBitSet.get(8001));
-        Assert.assertFalse(sparseBitSet.get(8002));
-        Assert.assertFalse(sparseBitSet.get(8067));
-        Assert.assertFalse(sparseBitSet.get(8167));
+        assertFalse(sparseBitSet.get(8000));
+        assertFalse(sparseBitSet.get(8001));
+        assertFalse(sparseBitSet.get(8002));
+        assertFalse(sparseBitSet.get(8067));
+        assertFalse(sparseBitSet.get(8167));
 
         sparseBitSet.set(8000);
         sparseBitSet.set(8001);
@@ -198,11 +198,11 @@ public class SparseBitSetTest {
         sparseBitSet.set(8067);
         sparseBitSet.set(8167);
 
-        Assert.assertTrue(sparseBitSet.get(8000));
-        Assert.assertTrue(sparseBitSet.get(8001));
-        Assert.assertTrue(sparseBitSet.get(8002));
-        Assert.assertTrue(sparseBitSet.get(8167));
-        Assert.assertTrue(sparseBitSet.get(8067));
+        assertTrue(sparseBitSet.get(8000));
+        assertTrue(sparseBitSet.get(8001));
+        assertTrue(sparseBitSet.get(8002));
+        assertTrue(sparseBitSet.get(8167));
+        assertTrue(sparseBitSet.get(8067));
     }
 
     @Test
@@ -212,13 +212,13 @@ public class SparseBitSetTest {
         sparseBitSet.set(8000);
         sparseBitSet.set(8001);
         sparseBitSet.set(8002);
-        Assert.assertEquals(8002, sparseBitSet.findMaxValue());
+        assertEquals(8002, sparseBitSet.findMaxValue());
         sparseBitSet.set(8067);
-        Assert.assertEquals(8067, sparseBitSet.findMaxValue());
+        assertEquals(8067, sparseBitSet.findMaxValue());
         sparseBitSet.set(8167);
-        Assert.assertEquals(8167, sparseBitSet.findMaxValue());
+        assertEquals(8167, sparseBitSet.findMaxValue());
         sparseBitSet.clear(8167);
-        Assert.assertEquals(8067, sparseBitSet.findMaxValue());
+        assertEquals(8067, sparseBitSet.findMaxValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -239,15 +239,15 @@ public class SparseBitSetTest {
         sparseBitSet.set(2047); // bit in long for bucket 0
         sparseBitSet.set(4095);// bit in long for bucket 0
 
-        Assert.assertTrue(sparseBitSet.get(0));
-        Assert.assertTrue(sparseBitSet.get(4095));
-        Assert.assertTrue(sparseBitSet.get(512));
+        assertTrue(sparseBitSet.get(0));
+        assertTrue(sparseBitSet.get(4095));
+        assertTrue(sparseBitSet.get(512));
 
         HollowSparseIntegerSet.SparseBitSet compactSparseBitSet = HollowSparseIntegerSet.SparseBitSet.compact(sparseBitSet);
 
-        Assert.assertTrue(compactSparseBitSet.get(0));
-        Assert.assertTrue(compactSparseBitSet.get(4095));
-        Assert.assertTrue(compactSparseBitSet.get(512));
+        assertTrue(compactSparseBitSet.get(0));
+        assertTrue(compactSparseBitSet.get(4095));
+        assertTrue(compactSparseBitSet.get(512));
 
         boolean addedValueGreaterThanMax = true;
         try {
@@ -257,7 +257,7 @@ public class SparseBitSetTest {
         }
 
         if (addedValueGreaterThanMax)
-            Assert.fail("Should not be ale to set a value greater than max value in compacted bit set.");
+            fail("Should not be ale to set a value greater than max value in compacted bit set.");
 
     }
 
@@ -272,9 +272,9 @@ public class SparseBitSetTest {
         sparseBitSet.set(2047); // bit in long for bucket 0
         sparseBitSet.set(4095);// bit in long for bucket 0
 
-        Assert.assertTrue(sparseBitSet.get(0));
-        Assert.assertTrue(sparseBitSet.get(4095));
-        Assert.assertTrue(sparseBitSet.get(512));
+        assertTrue(sparseBitSet.get(0));
+        assertTrue(sparseBitSet.get(4095));
+        assertTrue(sparseBitSet.get(512));
 
         HollowSparseIntegerSet.SparseBitSet compactSparseBitSet = HollowSparseIntegerSet.SparseBitSet.compact(sparseBitSet);
 
@@ -286,13 +286,13 @@ public class SparseBitSetTest {
         }
 
         if (addedValueGreaterThanMax)
-            Assert.fail("Should not be ale to set a value greater than max value in compacted bit set.");
+            fail("Should not be ale to set a value greater than max value in compacted bit set.");
 
         HollowSparseIntegerSet.SparseBitSet resizedSparsedBitSet = HollowSparseIntegerSet.SparseBitSet.resize(compactSparseBitSet, 8192);
         resizedSparsedBitSet.set(4096);
-        Assert.assertTrue(resizedSparsedBitSet.get(0));
-        Assert.assertTrue(resizedSparsedBitSet.get(0));
-        Assert.assertTrue(resizedSparsedBitSet.get(4095));
-        Assert.assertTrue(resizedSparsedBitSet.get(512));
+        assertTrue(resizedSparsedBitSet.get(0));
+        assertTrue(resizedSparsedBitSet.get(0));
+        assertTrue(resizedSparsedBitSet.get(4095));
+        assertTrue(resizedSparsedBitSet.get(512));
     }
 }

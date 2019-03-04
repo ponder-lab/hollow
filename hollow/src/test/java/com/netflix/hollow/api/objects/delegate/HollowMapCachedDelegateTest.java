@@ -22,8 +22,8 @@ import com.netflix.hollow.core.read.engine.map.HollowMapTypeReadState;
 import com.netflix.hollow.core.schema.HollowMapSchema;
 import com.netflix.hollow.core.write.HollowMapTypeWriteState;
 import com.netflix.hollow.core.write.HollowMapWriteRecord;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowMapCachedDelegateTest extends AbstractStateEngineTest {
 
@@ -51,7 +51,7 @@ public class HollowMapCachedDelegateTest extends AbstractStateEngineTest {
 
         };
 
-        Assert.assertNull(delegate.get(map, 0, 10));
+        assertNull(delegate.get(map, 0, 10));
     }
 
 

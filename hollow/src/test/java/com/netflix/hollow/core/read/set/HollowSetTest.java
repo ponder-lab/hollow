@@ -25,8 +25,8 @@ import com.netflix.hollow.core.schema.HollowSetSchema;
 import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowSetTest extends AbstractStateEngineTest {
 
@@ -50,7 +50,7 @@ public class HollowSetTest extends AbstractStateEngineTest {
         }
 
         if(!foundValue)
-            Assert.fail("Did not find value in PotentialMatchOrdinalIterator");
+            fail("Did not find value in PotentialMatchOrdinalIterator");
     }
 
     @Test
@@ -61,8 +61,8 @@ public class HollowSetTest extends AbstractStateEngineTest {
 
         HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
 
-        Assert.assertEquals(0, typeState.size(0));
-        Assert.assertEquals(0, typeState.maxOrdinal());
+        assertEquals(0, typeState.size(0));
+        assertEquals(0, typeState.maxOrdinal());
     }
 
     @Test
@@ -73,13 +73,13 @@ public class HollowSetTest extends AbstractStateEngineTest {
 
         HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
 
-        Assert.assertEquals(1, typeState.size(0));
-        Assert.assertEquals(0, typeState.maxOrdinal());
+        assertEquals(1, typeState.size(0));
+        assertEquals(0, typeState.maxOrdinal());
 
         HollowOrdinalIterator iter = typeState.ordinalIterator(0);
 
-        Assert.assertEquals(0, iter.next());
-        Assert.assertEquals(NO_MORE_ORDINALS, iter.next());
+        assertEquals(0, iter.next());
+        assertEquals(NO_MORE_ORDINALS, iter.next());
     }
 
     @Test
@@ -91,8 +91,8 @@ public class HollowSetTest extends AbstractStateEngineTest {
         HollowSetTypeReadState typeState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
 
         try {
-            Assert.assertEquals(0, typeState.size(100));
-            Assert.fail("Should have thrown Exception");
+            assertEquals(0, typeState.size(100));
+            fail("Should have thrown Exception");
         } catch(NullPointerException expected) { }
     }
 

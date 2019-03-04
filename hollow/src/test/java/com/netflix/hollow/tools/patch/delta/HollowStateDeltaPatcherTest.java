@@ -27,8 +27,8 @@ import com.netflix.hollow.tools.checksum.HollowChecksum;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowStateDeltaPatcherTest {
 
@@ -60,7 +60,7 @@ public class HollowStateDeltaPatcherTest {
         HollowChecksum checksum1 = HollowChecksum.forStateEngineWithCommonSchemas(state1, state2);
         HollowChecksum checksum2 = HollowChecksum.forStateEngineWithCommonSchemas(state2, state1);
         
-        Assert.assertEquals(checksum1, checksum2);
+        assertEquals(checksum1, checksum2);
     }
     
     private HollowReadStateEngine constructState1() throws IOException {

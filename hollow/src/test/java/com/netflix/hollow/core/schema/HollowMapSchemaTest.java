@@ -17,8 +17,8 @@
 package com.netflix.hollow.core.schema;
 
 import com.netflix.hollow.core.index.key.PrimaryKey;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowMapSchemaTest {
 
@@ -28,28 +28,28 @@ public class HollowMapSchemaTest {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB");
             HollowMapSchema s2 = new HollowMapSchema("Test", "TypeA", "TypeB");
 
-            Assert.assertEquals(s1, s2);
+            assertEquals(s1, s2);
         }
 
         {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB");
             HollowMapSchema s2 = new HollowMapSchema("Test2", "TypeA", "TypeB");
 
-            Assert.assertNotEquals(s1, s2);
+            assertNotEquals(s1, s2);
         }
 
         {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB");
             HollowMapSchema s2 = new HollowMapSchema("Test", "TypeB", "TypeB");
 
-            Assert.assertNotEquals(s1, s2);
+            assertNotEquals(s1, s2);
         }
 
         {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB");
             HollowMapSchema s2 = new HollowMapSchema("Test", "TypeA", "TypeC");
 
-            Assert.assertNotEquals(s1, s2);
+            assertNotEquals(s1, s2);
         }
     }
 
@@ -59,34 +59,34 @@ public class HollowMapSchemaTest {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB", "f1");
             HollowMapSchema s2 = new HollowMapSchema("Test", "TypeA", "TypeB", "f1");
 
-            Assert.assertEquals(s1, s2);
-            Assert.assertEquals(s1.getHashKey(), s2.getHashKey());
-            Assert.assertEquals(new PrimaryKey("TypeA", "f1"), s2.getHashKey());
+            assertEquals(s1, s2);
+            assertEquals(s1.getHashKey(), s2.getHashKey());
+            assertEquals(new PrimaryKey("TypeA", "f1"), s2.getHashKey());
         }
 
         {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB", "f1", "f2");
             HollowMapSchema s2 = new HollowMapSchema("Test", "TypeA", "TypeB", "f1", "f2");
 
-            Assert.assertEquals(s1, s2);
-            Assert.assertEquals(s1.getHashKey(), s2.getHashKey());
-            Assert.assertEquals(new PrimaryKey("TypeA", "f1", "f2"), s2.getHashKey());
+            assertEquals(s1, s2);
+            assertEquals(s1.getHashKey(), s2.getHashKey());
+            assertEquals(new PrimaryKey("TypeA", "f1", "f2"), s2.getHashKey());
         }
 
         {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB");
             HollowMapSchema s2 = new HollowMapSchema("Test", "TypeA", "TypeB", "f1");
 
-            Assert.assertNotEquals(s1, s2);
-            Assert.assertNotEquals(s1.getHashKey(), s2.getHashKey());
+            assertNotEquals(s1, s2);
+            assertNotEquals(s1.getHashKey(), s2.getHashKey());
         }
 
         {
             HollowMapSchema s1 = new HollowMapSchema("Test", "TypeA", "TypeB", "f1");
             HollowMapSchema s2 = new HollowMapSchema("Test", "TypeA", "TypeB", "f1", "f2");
 
-            Assert.assertNotEquals(s1, s2);
-            Assert.assertNotEquals(s1.getHashKey(), s2.getHashKey());
+            assertNotEquals(s1, s2);
+            assertNotEquals(s1.getHashKey(), s2.getHashKey());
         }
     }
 }

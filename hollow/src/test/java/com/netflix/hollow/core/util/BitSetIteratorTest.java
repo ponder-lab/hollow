@@ -16,16 +16,16 @@
 package com.netflix.hollow.core.util;
 
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class BitSetIteratorTest {
 
     @Test
     public void testEmpty() {
         BitSetIterator it = new BitSetIterator(new BitSet());
-        Assert.assertFalse(it.hasNext());
-        Assert.assertNull(it.next());
+        assertFalse(it.hasNext());
+        assertNull(it.next());
     }
 
     @Test
@@ -39,11 +39,11 @@ public class BitSetIteratorTest {
         BitSetIterator it = new BitSetIterator(bs);
         while (it.hasNext()) {
             Integer value = it.next();
-            Assert.assertTrue(bs.get(value));
+            assertTrue(bs.get(value));
             count++;
         }
 
-        Assert.assertEquals(bs.cardinality(), count);
+        assertEquals(bs.cardinality(), count);
     }
 
     @Test
@@ -68,18 +68,18 @@ public class BitSetIteratorTest {
         BitSetIterator it = new BitSetIterator(bs, start, limit);
         while (it.hasNext()) {
             Integer value = it.next();
-            Assert.assertTrue(bs.get(value));
+            assertTrue(bs.get(value));
             count++;
         }
 
         if (limit == null) {
             int expected = (start == null || start==0) ? bs.cardinality() : (bs.cardinality() - start)+1;
-            Assert.assertEquals(expected, count);
+            assertEquals(expected, count);
         } else {
             int max = Math.min(limit, bs.cardinality());
             int expected =  (start == null || start==0) ? max : Math.min((bs.cardinality() - start)+1, max);
             if (expected<0) expected=0;
-            Assert.assertEquals(expected, count);
+            assertEquals(expected, count);
         }
     }
 }

@@ -23,15 +23,15 @@ import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.Map;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowFieldMatchQueryTest {
     
     private HollowReadStateEngine stateEngine;
     
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         HollowWriteStateEngine writeEngine = new HollowWriteStateEngine();
         HollowObjectMapper mapper = new HollowObjectMapper(writeEngine);
@@ -55,13 +55,13 @@ public class HollowFieldMatchQueryTest {
         
         Map<String, BitSet> matches = query.findMatchingRecords("id", "2");
         
-        Assert.assertEquals(2, matches.size());
+        assertEquals(2, matches.size());
 
-        Assert.assertEquals(1, matches.get("TypeA").cardinality());
-        Assert.assertTrue(matches.get("TypeA").get(1));
+        assertEquals(1, matches.get("TypeA").cardinality());
+        assertTrue(matches.get("TypeA").get(1));
 
-        Assert.assertEquals(1, matches.get("TypeB").cardinality());
-        Assert.assertTrue(matches.get("TypeB").get(1));
+        assertEquals(1, matches.get("TypeB").cardinality());
+        assertTrue(matches.get("TypeB").get(1));
     }
 
     @Test
@@ -70,9 +70,9 @@ public class HollowFieldMatchQueryTest {
         
         Map<String, BitSet> matches = query.findMatchingRecords("TypeA", "id", "2");
         
-        Assert.assertEquals(1, matches.size());
-        Assert.assertEquals(1, matches.get("TypeA").cardinality());
-        Assert.assertTrue(matches.get("TypeA").get(1));
+        assertEquals(1, matches.size());
+        assertEquals(1, matches.get("TypeA").cardinality());
+        assertTrue(matches.get("TypeA").get(1));
     }
     
     @Test
@@ -81,9 +81,9 @@ public class HollowFieldMatchQueryTest {
         
         Map<String, BitSet> matches = query.findMatchingRecords("bValue", "4.4");
         
-        Assert.assertEquals(1, matches.size());
-        Assert.assertEquals(1, matches.get("TypeB").cardinality());
-        Assert.assertTrue(matches.get("TypeB").get(3));
+        assertEquals(1, matches.size());
+        assertEquals(1, matches.get("TypeB").cardinality());
+        assertTrue(matches.get("TypeB").get(3));
     }
 
     @SuppressWarnings("unused")

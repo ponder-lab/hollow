@@ -1,22 +1,20 @@
 package com.netflix.hollow.api.producer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static com.netflix.hollow.test.AssertShim.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 public class WriteStateTest {
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule().silent();
     @Mock
     private HollowWriteStateEngine writeStateEngine;
     @Mock
@@ -25,7 +23,7 @@ public class WriteStateTest {
     private HollowProducer.WriteState subject;
     private long version;
 
-    @Before
+    @BeforeEach
     public void before() {
         when(objectMapper.getStateEngine()).thenReturn(writeStateEngine);
 

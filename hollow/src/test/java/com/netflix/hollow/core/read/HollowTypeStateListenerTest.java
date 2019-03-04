@@ -29,9 +29,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.BitSet;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowTypeStateListenerTest {
 
@@ -45,7 +45,7 @@ public class HollowTypeStateListenerTest {
 
     PopulatedOrdinalListener listener;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         listener = new PopulatedOrdinalListener();
 
@@ -84,12 +84,12 @@ public class HollowTypeStateListenerTest {
 
         BitSet populatedBitSet = listener.getPopulatedOrdinals();
 
-        Assert.assertEquals(4, populatedBitSet.cardinality());
+        assertEquals(4, populatedBitSet.cardinality());
 
-        Assert.assertTrue(populatedBitSet.get(0));
-        Assert.assertTrue(populatedBitSet.get(2));
-        Assert.assertTrue(populatedBitSet.get(3));
-        Assert.assertTrue(populatedBitSet.get(4));
+        assertTrue(populatedBitSet.get(0));
+        assertTrue(populatedBitSet.get(2));
+        assertTrue(populatedBitSet.get(3));
+        assertTrue(populatedBitSet.get(4));
     }
 
     private void addRecord(HollowObjectTypeWriteState writeState, int intVal, String strVal) {

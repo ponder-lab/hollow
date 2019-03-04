@@ -1,10 +1,10 @@
 package com.netflix.hollow.core.util;
 
 import static com.netflix.hollow.core.util.Threads.daemonThread;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static com.netflix.hollow.test.AssertShim.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 // TODO(timt): tag as MEDIUM test
 public class ThreadsTest {

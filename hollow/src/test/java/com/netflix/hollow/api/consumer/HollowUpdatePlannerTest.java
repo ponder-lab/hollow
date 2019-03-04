@@ -21,16 +21,16 @@ import com.netflix.hollow.api.client.HollowUpdatePlanner;
 import com.netflix.hollow.api.consumer.HollowConsumer.Blob;
 import com.netflix.hollow.test.consumer.TestBlob;
 import com.netflix.hollow.test.consumer.TestBlobRetriever;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowUpdatePlannerTest {
 
     TestBlobRetriever mockTransitionCreator;
     HollowUpdatePlanner planner;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mockTransitionCreator = new TestBlobRetriever();
         planner = new HollowUpdatePlanner(mockTransitionCreator, new HollowConsumer.DoubleSnapshotConfig() {
@@ -57,7 +57,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planInitializingUpdate(5);
 
-        Assert.assertEquals(plan.numTransitions(), 5);
+        assertEquals(plan.numTransitions(), 5);
 
         assertTransition(plan.getTransition(0), Long.MIN_VALUE, 1);
         assertTransition(plan.getTransition(1), 1, 2);
@@ -77,7 +77,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(3, 5, true);
 
-        Assert.assertEquals(plan.numTransitions(), 2);
+        assertEquals(plan.numTransitions(), 2);
 
         assertTransition(plan.getTransition(0), 3, 4);
         assertTransition(plan.getTransition(1), 4, 5);
@@ -94,7 +94,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(1, 6, true);
 
-        Assert.assertEquals(plan.numTransitions(), 3);
+        assertEquals(plan.numTransitions(), 3);
 
         assertTransition(plan.getTransition(0), Long.MIN_VALUE, 4);
         assertTransition(plan.getTransition(1), 4, 5);
@@ -112,7 +112,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(1, 6, false);
 
-        Assert.assertEquals(plan.numTransitions(), 3);
+        assertEquals(plan.numTransitions(), 3);
 
         assertTransition(plan.getTransition(0), 1, 2);
         assertTransition(plan.getTransition(1), 2, 3);
@@ -127,7 +127,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(5, 3, true);
 
-        Assert.assertEquals(plan.numTransitions(), 2);
+        assertEquals(plan.numTransitions(), 2);
 
         assertTransition(plan.getTransition(0), 5, 4);
         assertTransition(plan.getTransition(1), 4, 3);
@@ -144,7 +144,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(5, 1, true);
 
-        Assert.assertEquals(plan.numTransitions(), 2);
+        assertEquals(plan.numTransitions(), 2);
 
         assertTransition(plan.getTransition(0), Long.MIN_VALUE, 0);
         assertTransition(plan.getTransition(1), 0, 1);
@@ -161,7 +161,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(5, 1, false);
 
-        Assert.assertEquals(plan.numTransitions(), 3);
+        assertEquals(plan.numTransitions(), 3);
 
         assertTransition(plan.getTransition(0), 5, 4);
         assertTransition(plan.getTransition(1), 4, 3);
@@ -177,7 +177,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planInitializingUpdate(5);
 
-        Assert.assertEquals(plan.numTransitions(), 2);
+        assertEquals(plan.numTransitions(), 2);
 
         assertTransition(plan.getTransition(0), Long.MIN_VALUE, 0);
         assertTransition(plan.getTransition(1), 0, 3);
@@ -193,9 +193,9 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(0, 7, true);
 
-        Assert.assertEquals(plan.numTransitions(), 2);
+        assertEquals(plan.numTransitions(), 2);
 
-        Assert.assertTrue(plan.isSnapshotPlan());
+        assertTrue(plan.isSnapshotPlan());
         assertTransition(plan.getSnapshotTransition(), Long.MIN_VALUE, 6);
         assertTransition(plan.getTransition(1), 6, 7);
     }
@@ -210,7 +210,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(0, 7, true);
 
-        Assert.assertEquals(plan.numTransitions(), 3);
+        assertEquals(plan.numTransitions(), 3);
 
         assertTransition(plan.getTransition(0), 0, 1);
         assertTransition(plan.getTransition(1), 1, 2);
@@ -226,7 +226,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(10, 5, true);
 
-        Assert.assertEquals(plan.numTransitions(), 3);
+        assertEquals(plan.numTransitions(), 3);
 
         assertTransition(plan.getTransition(0), 10, 8);
         assertTransition(plan.getTransition(1), 8, 6);
@@ -240,7 +240,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(1, 5, true);
 
-        Assert.assertEquals(2, plan.numTransitions());
+        assertEquals(2, plan.numTransitions());
 
         assertTransition(plan.getTransition(0), 1, 2);
         assertTransition(plan.getTransition(1), 2, 3);
@@ -255,7 +255,7 @@ public class HollowUpdatePlannerTest {
 
         HollowUpdatePlan plan = planner.planUpdate(5, 3, true);
 
-        Assert.assertEquals(2, plan.numTransitions());
+        assertEquals(2, plan.numTransitions());
 
         assertTransition(plan.getTransition(0), Long.MIN_VALUE, 1);
         assertTransition(plan.getTransition(1), 1, 2);
@@ -263,8 +263,8 @@ public class HollowUpdatePlannerTest {
 
 
     private void assertTransition(HollowConsumer.Blob transition, long expectedFrom, long expectedTo) {
-        Assert.assertEquals(transition.getFromVersion(), expectedFrom);
-        Assert.assertEquals(transition.getToVersion(), expectedTo);
+        assertEquals(transition.getFromVersion(), expectedFrom);
+        assertEquals(transition.getToVersion(), expectedTo);
     }
 
 

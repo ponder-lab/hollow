@@ -37,8 +37,8 @@ import com.netflix.hollow.tools.diff.count.HollowFieldDiff;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowDiffChangedSchemaTest {
 
@@ -55,7 +55,7 @@ public class HollowDiffChangedSchemaTest {
     HollowWriteStateEngine stateEngine2;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         typeASchema1 = new HollowObjectSchema("TypeA", 3);
         typeASchema1.addField("key", FieldType.BYTES);

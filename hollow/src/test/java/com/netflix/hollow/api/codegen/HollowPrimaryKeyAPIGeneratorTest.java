@@ -16,7 +16,7 @@
 package com.netflix.hollow.api.codegen;
 
 import com.netflix.hollow.core.write.objectmapper.HollowPrimaryKey;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HollowPrimaryKeyAPIGeneratorTest extends AbstractHollowAPIGeneratorTest {
 

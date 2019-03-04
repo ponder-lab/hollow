@@ -21,8 +21,8 @@ import com.netflix.hollow.core.read.engine.object.HollowObjectTypeReadState;
 import com.netflix.hollow.core.type.accessor.StringDataAccessor;
 import java.io.IOException;
 import java.util.Arrays;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTest<String> {
 
@@ -46,10 +46,10 @@ public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTes
         roundTripSnapshot();
         {
             StringDataAccessor dAccessor = new StringDataAccessor(readStateEngine, new PrimitiveTypeTestAPI(readStateEngine));
-            Assert.assertEquals(3, dAccessor.getAddedRecords().size());
+            assertEquals(3, dAccessor.getAddedRecords().size());
             assertList(dAccessor.getAddedRecords(), Arrays.<String>asList("one", "two", "three"));
-            Assert.assertTrue(dAccessor.getRemovedRecords().isEmpty());
-            Assert.assertTrue(dAccessor.getUpdatedRecords().isEmpty());
+            assertTrue(dAccessor.getRemovedRecords().isEmpty());
+            assertTrue(dAccessor.getUpdatedRecords().isEmpty());
         }
 
         writeStateEngine.prepareForNextCycle(); /// not necessary to call, but needs to be a no-op.
@@ -63,15 +63,15 @@ public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTes
         roundTripDelta();
         {
             StringDataAccessor dAccessor = new StringDataAccessor(readStateEngine, new PrimitiveTypeTestAPI(readStateEngine));
-            Assert.assertEquals(2, dAccessor.getAddedRecords().size());
+            assertEquals(2, dAccessor.getAddedRecords().size());
             assertList(dAccessor.getAddedRecords(), Arrays.asList("one thousand", "zero"));
-            Assert.assertEquals(1, dAccessor.getRemovedRecords().size());
+            assertEquals(1, dAccessor.getRemovedRecords().size());
             assertList(dAccessor.getRemovedRecords(), Arrays.asList("two"));
-            Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
+            assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("String");
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         assertObject(typeState, 0, "one");
         assertObject(typeState, 1, "two"); /// this was "removed", but the data hangs around as a "ghost" until the following cycle.
@@ -82,10 +82,10 @@ public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTes
         roundTripDelta(); // remove everything
         {
             StringDataAccessor dAccessor = new StringDataAccessor(readStateEngine, new PrimitiveTypeTestAPI(readStateEngine));
-            Assert.assertEquals(0, dAccessor.getAddedRecords().size());
-            Assert.assertEquals(4, dAccessor.getRemovedRecords().size());
+            assertEquals(0, dAccessor.getAddedRecords().size());
+            assertEquals(4, dAccessor.getRemovedRecords().size());
             assertList(dAccessor.getRemovedRecords(), Arrays.asList("one",  "three", "one thousand", "zero"));
-            Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
+            assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
         assertObject(typeState, 0, "one"); /// all records were "removed", but again hang around until the following cycle.
@@ -94,7 +94,7 @@ public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTes
         assertObject(typeState, 3, "one thousand"); /// "ghost"
         assertObject(typeState, 4, "zero"); /// "ghost"
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         addRecord("six hundred thirty four");
         addRecord("zero");
@@ -102,13 +102,13 @@ public class StringDataAccessorTest extends AbstractPrimitiveTypeDataAccessorTes
         roundTripDelta();
         {
             StringDataAccessor dAccessor = new StringDataAccessor(readStateEngine, new PrimitiveTypeTestAPI(readStateEngine));
-            Assert.assertEquals(2, dAccessor.getAddedRecords().size());
+            assertEquals(2, dAccessor.getAddedRecords().size());
             assertList(dAccessor.getAddedRecords(), Arrays.asList("six hundred thirty four", "zero"));
-            Assert.assertEquals(0, dAccessor.getRemovedRecords().size());
-            Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
+            assertEquals(0, dAccessor.getRemovedRecords().size());
+            assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
-        Assert.assertEquals(1, typeState.maxOrdinal());
+        assertEquals(1, typeState.maxOrdinal());
         assertObject(typeState, 0, "six hundred thirty four"); /// now, since all records were removed, we can recycle the ordinal "0", even though it was a "ghost" in the last cycle.
         assertObject(typeState, 1, "zero"); /// even though "zero" had an equivalent record in the previous cycle at ordinal "4", it is now assigned to recycled ordinal "1".
     }

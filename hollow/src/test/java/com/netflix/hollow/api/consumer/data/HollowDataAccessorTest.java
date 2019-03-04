@@ -29,16 +29,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowDataAccessorTest extends AbstractStateEngineTest {
     private static final String TEST_TYPE = "TestObject";
     HollowObjectSchema schema;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema(TEST_TYPE, 2, new PrimaryKey(TEST_TYPE, "f1"));
         schema.addField("f1", FieldType.INT);
@@ -57,12 +57,12 @@ public class HollowDataAccessorTest extends AbstractStateEngineTest {
         {
             GenericHollowRecordDataAccessor dAccessor = new GenericHollowRecordDataAccessor(readStateEngine, TEST_TYPE);
             dAccessor.computeDataChange();
-            Assert.assertTrue(dAccessor.isDataChangeComputed());
+            assertTrue(dAccessor.isDataChangeComputed());
 
-            Assert.assertEquals(3, dAccessor.getAddedRecords().size());
+            assertEquals(3, dAccessor.getAddedRecords().size());
             assertList(dAccessor.getAddedRecords(), Arrays.asList(1, 2, 3));
-            Assert.assertTrue(dAccessor.getRemovedRecords().isEmpty());
-            Assert.assertTrue(dAccessor.getUpdatedRecords().isEmpty());
+            assertTrue(dAccessor.getRemovedRecords().isEmpty());
+            assertTrue(dAccessor.getUpdatedRecords().isEmpty());
         }
 
         writeStateEngine.prepareForNextCycle(); /// not necessary to call, but needs to be a no-op.
@@ -76,20 +76,20 @@ public class HollowDataAccessorTest extends AbstractStateEngineTest {
         roundTripDelta();
         {
             GenericHollowRecordDataAccessor dAccessor = new GenericHollowRecordDataAccessor(readStateEngine, TEST_TYPE);
-            Assert.assertFalse(dAccessor.isDataChangeComputed()); // Make sure it does not pre compute
+            assertFalse(dAccessor.isDataChangeComputed()); // Make sure it does not pre compute
 
-            Assert.assertEquals(2, dAccessor.getAddedRecords().size());
+            assertEquals(2, dAccessor.getAddedRecords().size());
             assertList(dAccessor.getAddedRecords(), Arrays.asList(1000, 0));
-            Assert.assertEquals(1, dAccessor.getRemovedRecords().size());
+            assertEquals(1, dAccessor.getRemovedRecords().size());
             assertList(dAccessor.getRemovedRecords(), Arrays.asList(2));
-            Assert.assertEquals(1, dAccessor.getUpdatedRecords().size());
+            assertEquals(1, dAccessor.getUpdatedRecords().size());
             assertUpdatedList(dAccessor.getUpdatedRecords(), Arrays.asList("three"), Arrays.asList("three_updated"));
 
-            Assert.assertTrue(dAccessor.isDataChangeComputed()); // Make sure data change is computed once data change API are invoked
+            assertTrue(dAccessor.isDataChangeComputed()); // Make sure data change is computed once data change API are invoked
         }
 
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState(TEST_TYPE);
-        Assert.assertEquals(5, typeState.maxOrdinal());
+        assertEquals(5, typeState.maxOrdinal());
 
         assertObject(typeState, 0, 1, "one");
         assertObject(typeState, 1, 2, "two"); /// this was "removed", but the data hangs around as a "ghost" until the following cycle.
@@ -101,10 +101,10 @@ public class HollowDataAccessorTest extends AbstractStateEngineTest {
         roundTripDelta(); // remove everything
         {
             GenericHollowRecordDataAccessor dAccessor = new GenericHollowRecordDataAccessor(readStateEngine, TEST_TYPE);
-            Assert.assertEquals(0, dAccessor.getAddedRecords().size());
-            Assert.assertEquals(4, dAccessor.getRemovedRecords().size());
+            assertEquals(0, dAccessor.getAddedRecords().size());
+            assertEquals(4, dAccessor.getRemovedRecords().size());
             assertList(dAccessor.getRemovedRecords(), Arrays.asList(1, 3, 1000, 0));
-            Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
+            assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
         assertObject(typeState, 0, 1, "one"); /// all records were "removed", but again hang around until the following cycle.
@@ -114,7 +114,7 @@ public class HollowDataAccessorTest extends AbstractStateEngineTest {
         assertObject(typeState, 4, 1000, "one thousand"); /// "ghost"
         assertObject(typeState, 5, 0, "zero"); /// "ghost"
 
-        Assert.assertEquals(5, typeState.maxOrdinal());
+        assertEquals(5, typeState.maxOrdinal());
 
         addRecord(634, "six hundred thirty four");
         addRecord(0, "zero");
@@ -122,13 +122,13 @@ public class HollowDataAccessorTest extends AbstractStateEngineTest {
         roundTripDelta();
         {
             GenericHollowRecordDataAccessor dAccessor = new GenericHollowRecordDataAccessor(readStateEngine, TEST_TYPE);
-            Assert.assertEquals(2, dAccessor.getAddedRecords().size());
+            assertEquals(2, dAccessor.getAddedRecords().size());
             assertList(dAccessor.getAddedRecords(), Arrays.asList(634, 0));
-            Assert.assertEquals(0, dAccessor.getRemovedRecords().size());
-            Assert.assertEquals(0, dAccessor.getUpdatedRecords().size());
+            assertEquals(0, dAccessor.getRemovedRecords().size());
+            assertEquals(0, dAccessor.getUpdatedRecords().size());
         }
 
-        Assert.assertEquals(1, typeState.maxOrdinal());
+        assertEquals(1, typeState.maxOrdinal());
         assertObject(typeState, 0, 634, "six hundred thirty four"); /// now, since all records were removed, we can recycle the ordinal "0", even
                                                                     /// though it was a "ghost" in the last cycle.
         assertObject(typeState, 1, 0, "zero"); /// even though "zero" had an equivalent record in the previous cycle at ordinal "4", it is now
@@ -147,15 +147,15 @@ public class HollowDataAccessorTest extends AbstractStateEngineTest {
     private void assertObject(HollowObjectTypeReadState readState, int ordinal, int intVal, String strVal) {
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(readState), ordinal);
 
-        Assert.assertEquals(intVal, obj.getInt("f1"));
-        Assert.assertEquals(strVal, obj.getString("f2"));
+        assertEquals(intVal, obj.getInt("f1"));
+        assertEquals(strVal, obj.getString("f2"));
     }
 
     private void assertList(Collection<GenericHollowObject> listOfObj, List<Integer> listOfIds) {
         int i = 0;
         for (GenericHollowObject obj : listOfObj) {
             int id = listOfIds.get(i++);
-            Assert.assertEquals(id, obj.getInt("f1"));
+            assertEquals(id, obj.getInt("f1"));
         }
     }
 
@@ -164,13 +164,13 @@ public class HollowDataAccessorTest extends AbstractStateEngineTest {
         for (UpdatedRecord<GenericHollowObject> obj : listOfObj) {
             int beforeId = obj.getBefore().getInt("f1");
             int afterId = obj.getAfter().getInt("f1");
-            Assert.assertEquals(beforeId, afterId);
+            assertEquals(beforeId, afterId);
 
             String beforeVal = beforeValues.get(i);
             String afterVal = afterValues.get(i++);
-            Assert.assertNotEquals(beforeVal, afterVal);
-            Assert.assertEquals(beforeVal, obj.getBefore().getString("f2"));
-            Assert.assertEquals(afterVal, obj.getAfter().getString("f2"));
+            assertNotEquals(beforeVal, afterVal);
+            assertEquals(beforeVal, obj.getBefore().getString("f2"));
+            assertEquals(afterVal, obj.getAfter().getString("f2"));
         }
     }
 

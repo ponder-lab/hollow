@@ -22,14 +22,14 @@ import com.netflix.hollow.api.producer.HollowProducer;
 import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
 import com.netflix.hollow.core.write.objectmapper.HollowPrimaryKey;
 import com.netflix.hollow.core.write.objectmapper.HollowTypeName;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ProducerValidationTests {
     private InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
@@ -71,10 +71,10 @@ public class ProducerValidationTests {
                 newState.add(new TypeWithPrimaryKey(1, "Angelina Jolie", "as;dlkfjasd;l"));
                 newState.add(new TypeWithPrimaryKey(1, "Brad Pitt", "as;dlkfjasd;l"));
             });
-            Assert.fail();
+            fail();
         } catch (ValidationStatusException expected) {
-            Assert.assertEquals(1, expected.getValidationStatus().getResults().size());
-            Assert.assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
+            assertEquals(1, expected.getValidationStatus().getResults().size());
+            assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
                     .startsWith("Duplicate keys found for type TypeWithPrimaryKey"));
         }
     }
@@ -94,7 +94,7 @@ public class ProducerValidationTests {
 
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         consumer.triggerRefresh();
-        Assert.assertEquals(2, consumer.getStateEngine().getTypeState("TypeWithPrimaryKey").getPopulatedOrdinals()
+        assertEquals(2, consumer.getStateEngine().getTypeState("TypeWithPrimaryKey").getPopulatedOrdinals()
                 .cardinality());
     }
 

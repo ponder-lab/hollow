@@ -23,14 +23,14 @@ import com.netflix.hollow.api.producer.HollowProducer.Populator;
 import com.netflix.hollow.api.producer.HollowProducer.WriteState;
 import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
 import com.netflix.hollow.core.write.objectmapper.HollowPrimaryKey;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RecordCountVarianceValidatorTests {
     private InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
@@ -60,11 +60,11 @@ public class RecordCountVarianceValidatorTests {
                     newState.add(new TypeWithPrimaryKey(7, "Angelina Jolie5", "as;dlkfjasd;l"));
                 }
             });
-            Assert.fail();
+            fail();
         } catch (ValidationStatusException expected) {
-            Assert.assertEquals(1, expected.getValidationStatus().getResults().size());
+            assertEquals(1, expected.getValidationStatus().getResults().size());
             //System.out.println("Message:"+expected.getIndividualFailures().get(0).getMessage());
-            Assert.assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
+            assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
                     .startsWith("Record count validation for type"));
         }
     }
@@ -90,11 +90,11 @@ public class RecordCountVarianceValidatorTests {
                     newState.add(new TypeWithPrimaryKey(1, "Bruce Willis", "as;dlkfjasd;l"));
                 }
             });
-            Assert.fail();
+            fail();
         } catch (ValidationStatusException expected) {
             //System.out.println("Message:"+expected.getIndividualFailures().get(0).getMessage());
-            Assert.assertEquals(1, expected.getValidationStatus().getResults().size());
-            Assert.assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
+            assertEquals(1, expected.getValidationStatus().getResults().size());
+            assertTrue(expected.getValidationStatus().getResults().get(0).getMessage()
                     .startsWith("Record count validation for type"));
         }
     }
@@ -123,15 +123,15 @@ public class RecordCountVarianceValidatorTests {
         });
         HollowConsumer consumer = HollowConsumer.withBlobRetriever(blobStore).build();
         consumer.triggerRefresh();
-        Assert.assertEquals(3, consumer.getStateEngine().getTypeState("TypeWithPrimaryKey").getPopulatedOrdinals()
+        assertEquals(3, consumer.getStateEngine().getTypeState("TypeWithPrimaryKey").getPopulatedOrdinals()
                 .cardinality());
     }
 
     @Test
     public void testGetChangePercent() {
         RecordCountVarianceValidator val = new RecordCountVarianceValidator("someType", 3.0f);
-        Assert.assertTrue((Float.compare(99.99999652463547f, val.getChangePercent(0, 28382664)) == 0));
-        Assert.assertTrue((Float.compare(99.646645f, val.getChangePercent(1, 283)) == 0));
+        assertTrue((Float.compare(99.99999652463547f, val.getChangePercent(0, 28382664)) == 0));
+        assertTrue((Float.compare(99.646645f, val.getChangePercent(1, 283)) == 0));
 
     }
 

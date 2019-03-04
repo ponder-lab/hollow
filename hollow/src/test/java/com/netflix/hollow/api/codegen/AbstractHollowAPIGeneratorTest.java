@@ -15,13 +15,13 @@
  */
 package com.netflix.hollow.api.codegen;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.netflix.hollow.test.AssertShim.assertFalse;
+import static com.netflix.hollow.test.AssertShim.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.function.UnaryOperator;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 
 public class AbstractHollowAPIGeneratorTest {
     private String tmpFolder = System.getProperty("java.io.tmpdir");
@@ -63,7 +63,7 @@ public class AbstractHollowAPIGeneratorTest {
                 new File(sourceFolder + "/" + relativePath).exists());
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         HollowCodeGenerationCompileUtil.cleanupFolder(new File(sourceFolder), null);
         HollowCodeGenerationCompileUtil.cleanupFolder(new File(clazzFolder), null);

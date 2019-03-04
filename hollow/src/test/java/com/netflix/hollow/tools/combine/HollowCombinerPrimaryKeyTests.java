@@ -25,9 +25,9 @@ import com.netflix.hollow.core.util.StateEngineRoundTripper;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowCombinerPrimaryKeyTests {
     
@@ -35,7 +35,7 @@ public class HollowCombinerPrimaryKeyTests {
     HollowReadStateEngine input2;
     HollowReadStateEngine input3; 
     
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         
         HollowWriteStateEngine input = new HollowWriteStateEngine();
@@ -178,9 +178,9 @@ public class HollowCombinerPrimaryKeyTests {
         combiner.combine();
         HollowReadStateEngine output = StateEngineRoundTripper.roundTripSnapshot(combiner.getCombinedStateEngine());
         
-        Assert.assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeA", "key").getMatchingOrdinal(9));
-        Assert.assertNotEquals(-1, new HollowPrimaryKeyIndex(output, "TypeB", "key").getMatchingOrdinal(8));
-        Assert.assertNotEquals(-1, new HollowPrimaryKeyIndex(output, "TypeC", "key").getMatchingOrdinal(8));
+        assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeA", "key").getMatchingOrdinal(9));
+        assertNotEquals(-1, new HollowPrimaryKeyIndex(output, "TypeB", "key").getMatchingOrdinal(8));
+        assertNotEquals(-1, new HollowPrimaryKeyIndex(output, "TypeC", "key").getMatchingOrdinal(8));
         
         director.excludeReferencedObjects();
         
@@ -189,9 +189,9 @@ public class HollowCombinerPrimaryKeyTests {
         combiner.combine();
         output = StateEngineRoundTripper.roundTripSnapshot(combiner.getCombinedStateEngine());
         
-        Assert.assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeA", "key").getMatchingOrdinal(9));
-        Assert.assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeB", "key").getMatchingOrdinal(8));
-        Assert.assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeC", "key").getMatchingOrdinal(8));
+        assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeA", "key").getMatchingOrdinal(9));
+        assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeB", "key").getMatchingOrdinal(8));
+        assertEquals(-1, new HollowPrimaryKeyIndex(output, "TypeC", "key").getMatchingOrdinal(8));
     }
     
     
@@ -199,16 +199,16 @@ public class HollowCombinerPrimaryKeyTests {
     private void assertObject(HollowReadStateEngine output, int aKey, int expectAOrigin, int expectBKey, int expectBOrigin, int expectCKey, int expectCOrigin) {
         HollowPrimaryKeyIndex idx = new HollowPrimaryKeyIndex(output, new PrimaryKey("TypeA", "key"));
         GenericHollowObject typeA = (GenericHollowObject)GenericHollowRecordHelper.instantiate(output, "TypeA", idx.getMatchingOrdinal(aKey));
-        Assert.assertEquals(aKey, typeA.getInt("key"));
-        Assert.assertEquals(expectAOrigin, typeA.getInt("origin"));
+        assertEquals(aKey, typeA.getInt("key"));
+        assertEquals(expectAOrigin, typeA.getInt("origin"));
         
         GenericHollowObject typeB = (GenericHollowObject)typeA.getReferencedGenericRecord("b");
-        Assert.assertEquals(expectBKey, typeB.getInt("key"));
-        Assert.assertEquals(expectBOrigin, typeB.getInt("origin"));
+        assertEquals(expectBKey, typeB.getInt("key"));
+        assertEquals(expectBOrigin, typeB.getInt("origin"));
         
         GenericHollowObject typeC = (GenericHollowObject)typeB.getReferencedGenericRecord("c");
-        Assert.assertEquals(expectCKey, typeC.getInt("key"));
-        Assert.assertEquals(expectCOrigin, typeC.getInt("origin"));
+        assertEquals(expectCKey, typeC.getInt("key"));
+        assertEquals(expectCOrigin, typeC.getInt("origin"));
     }
     
     

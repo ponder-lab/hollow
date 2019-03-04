@@ -23,8 +23,8 @@ import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class RestoreWriteStateEngineSetTest extends AbstractStateEngineTest {
 
@@ -53,7 +53,7 @@ public class RestoreWriteStateEngineSetTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        Assert.assertEquals(4, readStateEngine.getTypeState("TestSet").maxOrdinal());
+        assertEquals(4, readStateEngine.getTypeState("TestSet").maxOrdinal());
         assertSet(0, 1, 2, 3);
         assertSet(1, 4, 5, 6);
         assertSet(3, 1000, 1001, 1002);
@@ -63,11 +63,11 @@ public class RestoreWriteStateEngineSetTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        Assert.assertEquals(4, readStateEngine.getTypeState("TestSet").maxOrdinal());
+        assertEquals(4, readStateEngine.getTypeState("TestSet").maxOrdinal());
 
         roundTripDelta();
 
-        Assert.assertEquals(3, readStateEngine.getTypeState("TestSet").maxOrdinal());
+        assertEquals(3, readStateEngine.getTypeState("TestSet").maxOrdinal());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class RestoreWriteStateEngineSetTest extends AbstractStateEngineTest {
 
         try {
             writeStateEngine.restoreFrom(readStateEngine);
-            Assert.fail("Should have thrown IllegalStateException because shard configuration has changed");
+            fail("Should have thrown IllegalStateException because shard configuration has changed");
         } catch(IllegalStateException expected) { }
     }
 
@@ -97,11 +97,11 @@ public class RestoreWriteStateEngineSetTest extends AbstractStateEngineTest {
     private void assertSet(int ordinal, int... elements) {
         HollowSetTypeReadState readState = (HollowSetTypeReadState) readStateEngine.getTypeState("TestSet");
 
-        Assert.assertEquals(elements.length, readState.size(ordinal));
+        assertEquals(elements.length, readState.size(ordinal));
 
         for(int element : elements) {
             if(!readState.contains(ordinal, element, element + 10)) { // the hash code is deliberately specified here as different from the ordinal.
-                Assert.fail("Set did not contain element: " + element);
+                fail("Set did not contain element: " + element);
             }
         }
     }

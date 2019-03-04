@@ -23,8 +23,8 @@ import com.netflix.hollow.core.schema.HollowListSchema;
 import com.netflix.hollow.core.write.HollowListTypeWriteState;
 import com.netflix.hollow.core.write.HollowListWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowListFastDeltaTest extends AbstractStateEngineTest {
 
@@ -79,7 +79,7 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
         assertList(typeState, 12, 120, 130, 140);
         assertList(typeState, 13, 71, 81, 91, 101);
 
-        Assert.assertEquals(13, typeState.maxOrdinal());
+        assertEquals(13, typeState.maxOrdinal());
 
 
         addRecord(10,  20,  30);
@@ -114,7 +114,7 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
         assertList(typeState, 12, 120, 130, 140);
         assertList(typeState, 13, 71, 81, 91, 101);
 
-        Assert.assertEquals(13, typeState.maxOrdinal());
+        assertEquals(13, typeState.maxOrdinal());
     }
 
     private void addRecord(int... ordinals) {
@@ -131,10 +131,10 @@ public class HollowListFastDeltaTest extends AbstractStateEngineTest {
         HollowOrdinalIterator iter = readState.ordinalIterator(ordinal);
 
         for(int i=0;i<elements.length;i++) {
-            Assert.assertEquals(elements[i], iter.next());
+            assertEquals(elements[i], iter.next());
         }
 
-        Assert.assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
+        assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
     }
 
     @Override

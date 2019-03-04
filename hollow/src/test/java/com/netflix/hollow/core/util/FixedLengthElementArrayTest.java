@@ -19,8 +19,8 @@ package com.netflix.hollow.core.util;
 import com.netflix.hollow.core.memory.encoding.FixedLengthElementArray;
 import com.netflix.hollow.core.memory.pool.WastefulRecycler;
 import java.util.Random;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class FixedLengthElementArrayTest {
 
@@ -39,7 +39,7 @@ public class FixedLengthElementArrayTest {
         for(int j=0;j<100;j++) {
             for(int i=0;i<1000000;i++) {
                 if(testValue != arr.getElementValue(i*numBitsPerElement, numBitsPerElement, bitMask))
-                    Assert.fail();
+                    fail();
             }
         }
     }
@@ -48,7 +48,7 @@ public class FixedLengthElementArrayTest {
     public void testGetEmpty() {
         FixedLengthElementArray arr = new FixedLengthElementArray(
                 WastefulRecycler.SMALL_ARRAY_RECYCLER, 17000);
-        Assert.assertEquals(0, arr.getElementValue(0, 4));
+        assertEquals(0, arr.getElementValue(0, 4));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class FixedLengthElementArrayTest {
         for(int j=0;j<100;j++) {
             for(int i=0;i<10000;i++) {
                 if(testValue != arr.getLargeElementValue(i*numBitsPerElement, numBitsPerElement))
-                    Assert.fail();
+                    fail();
             }
         }
     }
@@ -105,7 +105,7 @@ public class FixedLengthElementArrayTest {
                 long toLong = dest.getElementValue(compareBitStart + copyToRangeOffset, bitsToCompare);
 
                 if(fromLong != toLong)
-                    Assert.fail();
+                    fail();
 
                 numBitsLeftToCompare -= bitsToCompare;
                 compareBitStart += bitsToCompare;
@@ -122,9 +122,9 @@ public class FixedLengthElementArrayTest {
 
         arrTo.copyBits(arrFrom, 10, 10, 10);
 
-        Assert.assertEquals(0, arrTo.getElementValue(0, 10));
-        Assert.assertEquals(1023, arrTo.getElementValue(10, 10));
-        Assert.assertEquals(0, arrTo.getLargeElementValue(20, 10));
+        assertEquals(0, arrTo.getElementValue(0, 10));
+        assertEquals(1023, arrTo.getElementValue(10, 10));
+        assertEquals(0, arrTo.getLargeElementValue(20, 10));
 
     }
 
@@ -146,14 +146,14 @@ public class FixedLengthElementArrayTest {
 
         for(int i=0;i<1000000;i+=65) {
             long val = arr.getElementValue(i, 60);
-            Assert.assertEquals(startVal + i + 1000, val);
+            assertEquals(startVal + i + 1000, val);
         }
 
         arr.incrementMany(0, -2000, 65, elementCount);
 
         for(int i=0;i<1000000;i+=65) {
             long val = arr.getElementValue(i, 60);
-            Assert.assertEquals(startVal + i - 1000, val);
+            assertEquals(startVal + i - 1000, val);
         }
 
     }
@@ -178,14 +178,14 @@ public class FixedLengthElementArrayTest {
 
     @Test
     public void convenienceMethodForNumberOfBitsRequiredForValue() {
-        Assert.assertEquals(1, FixedLengthElementArray.bitsRequiredToRepresentValue(0));
-        Assert.assertEquals(1, FixedLengthElementArray.bitsRequiredToRepresentValue(1));
-        Assert.assertEquals(2, FixedLengthElementArray.bitsRequiredToRepresentValue(2));
-        Assert.assertEquals(2, FixedLengthElementArray.bitsRequiredToRepresentValue(3));
-        Assert.assertEquals(3, FixedLengthElementArray.bitsRequiredToRepresentValue(4));
-        Assert.assertEquals(5, FixedLengthElementArray.bitsRequiredToRepresentValue(16));
-        Assert.assertEquals(5, FixedLengthElementArray.bitsRequiredToRepresentValue(31));
-        Assert.assertEquals(63, FixedLengthElementArray.bitsRequiredToRepresentValue(Long.MAX_VALUE));
+        assertEquals(1, FixedLengthElementArray.bitsRequiredToRepresentValue(0));
+        assertEquals(1, FixedLengthElementArray.bitsRequiredToRepresentValue(1));
+        assertEquals(2, FixedLengthElementArray.bitsRequiredToRepresentValue(2));
+        assertEquals(2, FixedLengthElementArray.bitsRequiredToRepresentValue(3));
+        assertEquals(3, FixedLengthElementArray.bitsRequiredToRepresentValue(4));
+        assertEquals(5, FixedLengthElementArray.bitsRequiredToRepresentValue(16));
+        assertEquals(5, FixedLengthElementArray.bitsRequiredToRepresentValue(31));
+        assertEquals(63, FixedLengthElementArray.bitsRequiredToRepresentValue(Long.MAX_VALUE));
     }
 
 }

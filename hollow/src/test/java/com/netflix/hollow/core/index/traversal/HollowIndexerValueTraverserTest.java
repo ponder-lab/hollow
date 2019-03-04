@@ -31,9 +31,9 @@ import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowIndexerValueTraverserTest extends AbstractStateEngineTest {
 
@@ -45,7 +45,7 @@ public class HollowIndexerValueTraverserTest extends AbstractStateEngineTest {
     private HollowSetSchema fSchema;
     private HollowObjectSchema gSchema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         aSchema = new HollowObjectSchema("A", 3);
         aSchema.addField("a", FieldType.INT);
@@ -100,7 +100,7 @@ public class HollowIndexerValueTraverserTest extends AbstractStateEngineTest {
         }
 
 
-        Assert.assertEquals(15, traverser.getNumMatches());
+        assertEquals(15, traverser.getNumMatches());
         assertValueTraverserContainsEntry(traverser, 1, "1", true, "three", 3.1f);
         assertValueTraverserContainsEntry(traverser, 1, "2", false, "two", 2.1f);
         assertValueTraverserContainsEntry(traverser, 1, "3", true, "two", 2.1f);
@@ -118,7 +118,7 @@ public class HollowIndexerValueTraverserTest extends AbstractStateEngineTest {
             }
             if(allMatched) return;
         }
-        Assert.fail("entry not found");
+        fail("entry not found");
     }
 
     private int a(int a, int b, int c) {

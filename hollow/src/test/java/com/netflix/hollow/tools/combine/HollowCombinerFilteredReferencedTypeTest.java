@@ -7,8 +7,8 @@ import com.netflix.hollow.core.util.StateEngineRoundTripper;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import com.netflix.hollow.core.write.objectmapper.HollowObjectMapper;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowCombinerFilteredReferencedTypeTest {
     
@@ -35,9 +35,9 @@ public class HollowCombinerFilteredReferencedTypeTest {
         HollowReadStateEngine combinedReadStateEngine = StateEngineRoundTripper.roundTripSnapshot(combined);
         
         HollowTypeReadState typeState = combinedReadStateEngine.getTypeState("TypeA");
-        Assert.assertEquals(3, typeState.getPopulatedOrdinals().cardinality());
+        assertEquals(3, typeState.getPopulatedOrdinals().cardinality());
         
-        Assert.assertNull(combinedReadStateEngine.getTypeState("TypeB"));
+        assertNull(combinedReadStateEngine.getTypeState("TypeB"));
     }
     
     

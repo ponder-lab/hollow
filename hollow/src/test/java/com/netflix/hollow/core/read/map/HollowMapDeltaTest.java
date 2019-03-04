@@ -23,8 +23,8 @@ import com.netflix.hollow.core.schema.HollowMapSchema;
 import com.netflix.hollow.core.write.HollowMapTypeWriteState;
 import com.netflix.hollow.core.write.HollowMapWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowMapDeltaTest extends AbstractStateEngineTest {
 
@@ -51,7 +51,7 @@ public class HollowMapDeltaTest extends AbstractStateEngineTest {
         assertMap(typeState, 3, 100, 200, 300, 400, 500, 600, 700, 800);
         assertMap(typeState, 4, 1, 2, 3, 4);
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         roundTripDelta();
 
@@ -61,14 +61,14 @@ public class HollowMapDeltaTest extends AbstractStateEngineTest {
         assertMap(typeState, 3, 100, 200, 300, 400, 500, 600, 700, 800); /// "ghost"
         assertMap(typeState, 4, 1, 2, 3, 4); /// "ghost"
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         addRecord(634, 54732);
         addRecord(1, 2, 3, 4);
 
         roundTripDelta();
 
-        Assert.assertEquals(1, typeState.maxOrdinal());
+        assertEquals(1, typeState.maxOrdinal());
         assertMap(typeState, 0, 634, 54732); /// now, since all maps were removed, we can recycle the ordinal "0", even though it was a "ghost" in the last cycle.
         assertMap(typeState, 1, 1, 2, 3, 4);  /// even though 1, 2, 3 had an equivalent map in the previous cycle at ordinal "4", it is now assigned to recycled ordinal "1".
     }
@@ -101,8 +101,8 @@ public class HollowMapDeltaTest extends AbstractStateEngineTest {
 
         HollowMapTypeReadState typeState = (HollowMapTypeReadState) readStateEngine.getTypeState("TestMap");
 
-        Assert.assertEquals(0, typeState.maxOrdinal());
-        Assert.assertEquals(0, typeState.size(0));
+        assertEquals(0, typeState.maxOrdinal());
+        assertEquals(0, typeState.size(0));
     }
 
     @Test
@@ -113,15 +113,15 @@ public class HollowMapDeltaTest extends AbstractStateEngineTest {
 
         HollowMapTypeReadState typeState = (HollowMapTypeReadState) readStateEngine.getTypeState("TestMap");
 
-        Assert.assertEquals(0, typeState.maxOrdinal());
-        Assert.assertEquals(1, typeState.size(0));
+        assertEquals(0, typeState.maxOrdinal());
+        assertEquals(1, typeState.size(0));
 
         HollowMapEntryOrdinalIterator ordinalIterator = typeState.ordinalIterator(0);
 
-        Assert.assertTrue(ordinalIterator.next());
-        Assert.assertEquals(0, ordinalIterator.getKey());
-        Assert.assertEquals(0, ordinalIterator.getValue());
-        Assert.assertFalse(ordinalIterator.next());
+        assertTrue(ordinalIterator.next());
+        assertEquals(0, ordinalIterator.getKey());
+        assertEquals(0, ordinalIterator.getValue());
+        assertFalse(ordinalIterator.next());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class HollowMapDeltaTest extends AbstractStateEngineTest {
 
         try {
             assertMap(typeState, 0, 0, 0);
-            Assert.fail("Should have thrown Exception");
+            fail("Should have thrown Exception");
         } catch(NullPointerException expected) { }
     }
 
@@ -151,10 +151,10 @@ public class HollowMapDeltaTest extends AbstractStateEngineTest {
     }
 
     private void assertMap(HollowMapTypeReadState readState, int ordinal, int... elements) {
-        Assert.assertEquals(elements.length / 2, readState.size(ordinal));
+        assertEquals(elements.length / 2, readState.size(ordinal));
 
         for(int i=0;i<elements.length;i+=2) {
-            Assert.assertEquals(elements[i+1], readState.get(ordinal, elements[i]));
+            assertEquals(elements[i+1], readState.get(ordinal, elements[i]));
         }
     }
 

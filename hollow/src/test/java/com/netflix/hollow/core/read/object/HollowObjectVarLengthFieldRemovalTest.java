@@ -25,15 +25,15 @@ import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
 import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowObjectVarLengthFieldRemovalTest extends AbstractStateEngineTest {
 
     private HollowObjectSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema("TestObject", 2);
         schema.addField("f1", FieldType.INT);
@@ -64,7 +64,7 @@ public class HollowObjectVarLengthFieldRemovalTest extends AbstractStateEngineTe
         roundTripDelta();
 
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
-        Assert.assertEquals(3, typeState.maxOrdinal());
+        assertEquals(3, typeState.maxOrdinal());
         assertObject(typeState, 0, 1, "one");
         assertObject(typeState, 1, 4, "four");
         assertObject(typeState, 2, 3, "three");
@@ -83,8 +83,8 @@ public class HollowObjectVarLengthFieldRemovalTest extends AbstractStateEngineTe
     private void assertObject(HollowObjectTypeReadState readState, int ordinal, int intVal, String strVal) {
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(readState), ordinal);
 
-        Assert.assertEquals(intVal, obj.getInt("f1"));
-        Assert.assertEquals(strVal, obj.getString("f2"));
+        assertEquals(intVal, obj.getInt("f1"));
+        assertEquals(strVal, obj.getString("f2"));
     }
 
     @Override

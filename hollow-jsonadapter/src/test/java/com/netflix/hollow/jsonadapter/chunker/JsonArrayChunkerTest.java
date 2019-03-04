@@ -19,8 +19,8 @@ package com.netflix.hollow.jsonadapter.chunker;
 import com.netflix.hollow.core.util.SimultaneousExecutor;
 import java.io.StringReader;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class JsonArrayChunkerTest {
 
@@ -35,8 +35,8 @@ public class JsonArrayChunkerTest {
         String obj1 = IOUtils.toString(chunker.nextChunk());
         String obj2 = IOUtils.toString(chunker.nextChunk());
         
-        Assert.assertEquals("{ \"f1\\\"\" : \"value1\", \"f2\" : { \"f1.1\" : \"hel}}{{{{lo \\\"w{orld\\\"\" } }", obj1);
-        Assert.assertEquals("{ \"obj2\" : \"f2.1\" }", obj2);
+        assertEquals("{ \"f1\\\"\" : \"value1\", \"f2\" : { \"f1.1\" : \"hel}}{{{{lo \\\"w{orld\\\"\" } }", obj1);
+        assertEquals("{ \"obj2\" : \"f2.1\" }", obj2);
     }
 
 }

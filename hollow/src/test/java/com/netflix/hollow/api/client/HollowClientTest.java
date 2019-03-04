@@ -28,9 +28,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("deprecation")
 public class HollowClientTest {
@@ -47,7 +47,7 @@ public class HollowClientTest {
     private final ByteArrayOutputStream delta2 = new ByteArrayOutputStream();
     private final ByteArrayOutputStream delta3 = new ByteArrayOutputStream();
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         this.writeEngine = new HollowWriteStateEngine();
 
@@ -85,10 +85,10 @@ public class HollowClientTest {
         client.triggerRefreshTo(3);
         client.triggerRefreshTo(4);
 
-        Assert.assertEquals(1, dataAccess.readInt(1, 0));
-        Assert.assertEquals("one", dataAccess.readString(1, 1));
-        Assert.assertEquals(3, dataAccess.readInt(3, 0));
-        Assert.assertEquals("three", dataAccess.readString(3, 1));
+        assertEquals(1, dataAccess.readInt(1, 0));
+        assertEquals("one", dataAccess.readString(1, 1));
+        assertEquals(3, dataAccess.readInt(3, 0));
+        assertEquals("three", dataAccess.readString(3, 1));
     }
 
     private void createChain() throws IOException {

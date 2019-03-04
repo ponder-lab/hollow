@@ -23,15 +23,15 @@ import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
 import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowObjectExactBitBoundaryEdgeCaseTest extends AbstractStateEngineTest {
 
     private HollowObjectSchema schema;
     private HollowObjectSchema schema2;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema("TestObject", 3);
         schema.addField("float1", FieldType.FLOAT);

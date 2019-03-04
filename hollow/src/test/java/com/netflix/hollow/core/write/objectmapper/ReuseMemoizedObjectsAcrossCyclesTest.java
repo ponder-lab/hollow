@@ -24,8 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class ReuseMemoizedObjectsAcrossCyclesTest {
 
@@ -37,21 +37,21 @@ public class ReuseMemoizedObjectsAcrossCyclesTest {
         TypeA a1 = new TypeA(1);
         TypeA a2 = new TypeA(2);
 
-        Assert.assertEquals(0, mapper.add(a1));
-        Assert.assertEquals(1, mapper.add(a2));
-        Assert.assertEquals(0, mapper.add(a1));
+        assertEquals(0, mapper.add(a1));
+        assertEquals(1, mapper.add(a2));
+        assertEquals(0, mapper.add(a1));
 
         HollowReadStateEngine readEngine = StateEngineRoundTripper.roundTripSnapshot(writeEngine);
         writeEngine.prepareForNextCycle();
 
-        Assert.assertEquals(0, mapper.add(a1));
-        Assert.assertEquals(2, mapper.add(new TypeA(3)));
-        Assert.assertEquals(1, mapper.add(a2));
-        Assert.assertEquals(1, mapper.add(a2));
+        assertEquals(0, mapper.add(a1));
+        assertEquals(2, mapper.add(new TypeA(3)));
+        assertEquals(1, mapper.add(a2));
+        assertEquals(1, mapper.add(a2));
 
         StateEngineRoundTripper.roundTripDelta(writeEngine, readEngine);
 
-        Assert.assertEquals(3, readEngine.getTypeState("TypeA").getPopulatedOrdinals().cardinality());
+        assertEquals(3, readEngine.getTypeState("TypeA").getPopulatedOrdinals().cardinality());
     }
     
     @Test
@@ -62,22 +62,22 @@ public class ReuseMemoizedObjectsAcrossCyclesTest {
         List<TypeA> a1 = new MemoizedList<TypeA>(Arrays.asList(new TypeA(1)));
         List<TypeA> a2 = new MemoizedList<TypeA>(Arrays.asList(new TypeA(2)));
 
-        Assert.assertEquals(0, mapper.add(new ListType(a1)));
-        Assert.assertEquals(1, mapper.add(new ListType(a2)));
-        Assert.assertEquals(0, mapper.add(new ListType(a1)));
+        assertEquals(0, mapper.add(new ListType(a1)));
+        assertEquals(1, mapper.add(new ListType(a2)));
+        assertEquals(0, mapper.add(new ListType(a1)));
 
         HollowReadStateEngine readEngine = StateEngineRoundTripper.roundTripSnapshot(writeEngine);
         writeEngine.prepareForNextCycle();
 
         List<TypeA> a3 = new MemoizedList<TypeA>(Arrays.asList(new TypeA(3)));
         
-        Assert.assertEquals(0, mapper.add(new ListType(a1)));
-        Assert.assertEquals(2, mapper.add(new ListType(a3)));
-        Assert.assertEquals(1, mapper.add(new ListType(a2)));
+        assertEquals(0, mapper.add(new ListType(a1)));
+        assertEquals(2, mapper.add(new ListType(a3)));
+        assertEquals(1, mapper.add(new ListType(a2)));
 
         StateEngineRoundTripper.roundTripDelta(writeEngine, readEngine);
 
-        Assert.assertEquals(3, readEngine.getTypeState("ListOfTypeA").getPopulatedOrdinals().cardinality());
+        assertEquals(3, readEngine.getTypeState("ListOfTypeA").getPopulatedOrdinals().cardinality());
     }
     
     @SuppressWarnings("unused")
@@ -97,22 +97,22 @@ public class ReuseMemoizedObjectsAcrossCyclesTest {
         Set<TypeA> a1 = new MemoizedSet<TypeA>(Arrays.asList(new TypeA(1)));
         Set<TypeA> a2 = new MemoizedSet<TypeA>(Arrays.asList(new TypeA(2)));
 
-        Assert.assertEquals(0, mapper.add(new SetType(a1)));
-        Assert.assertEquals(1, mapper.add(new SetType(a2)));
-        Assert.assertEquals(0, mapper.add(new SetType(a1)));
+        assertEquals(0, mapper.add(new SetType(a1)));
+        assertEquals(1, mapper.add(new SetType(a2)));
+        assertEquals(0, mapper.add(new SetType(a1)));
 
         HollowReadStateEngine readEngine = StateEngineRoundTripper.roundTripSnapshot(writeEngine);
         writeEngine.prepareForNextCycle();
 
         Set<TypeA> a3 = new MemoizedSet<TypeA>(Arrays.asList(new TypeA(3)));
         
-        Assert.assertEquals(0, mapper.add(new SetType(a1)));
-        Assert.assertEquals(2, mapper.add(new SetType(a3)));
-        Assert.assertEquals(1, mapper.add(new SetType(a2)));
+        assertEquals(0, mapper.add(new SetType(a1)));
+        assertEquals(2, mapper.add(new SetType(a3)));
+        assertEquals(1, mapper.add(new SetType(a2)));
 
         StateEngineRoundTripper.roundTripDelta(writeEngine, readEngine);
 
-        Assert.assertEquals(3, readEngine.getTypeState("SetOfTypeA").getPopulatedOrdinals().cardinality());
+        assertEquals(3, readEngine.getTypeState("SetOfTypeA").getPopulatedOrdinals().cardinality());
     }
 
     @SuppressWarnings("unused")
@@ -135,9 +135,9 @@ public class ReuseMemoizedObjectsAcrossCyclesTest {
         Map<Integer, TypeA> a2 = new MemoizedMap<Integer, TypeA>();
         a2.put(2, new TypeA(2));
 
-        Assert.assertEquals(0, mapper.add(new MapType(a1)));
-        Assert.assertEquals(1, mapper.add(new MapType(a2)));
-        Assert.assertEquals(0, mapper.add(new MapType(a1)));
+        assertEquals(0, mapper.add(new MapType(a1)));
+        assertEquals(1, mapper.add(new MapType(a2)));
+        assertEquals(0, mapper.add(new MapType(a1)));
 
         HollowReadStateEngine readEngine = StateEngineRoundTripper.roundTripSnapshot(writeEngine);
         writeEngine.prepareForNextCycle();
@@ -145,13 +145,13 @@ public class ReuseMemoizedObjectsAcrossCyclesTest {
         Map<Integer, TypeA> a3 = new MemoizedMap<Integer, TypeA>();
         a3.put(3, new TypeA(3));
         
-        Assert.assertEquals(0, mapper.add(new MapType(a1)));
-        Assert.assertEquals(2, mapper.add(new MapType(a3)));
-        Assert.assertEquals(1, mapper.add(new MapType(a2)));
+        assertEquals(0, mapper.add(new MapType(a1)));
+        assertEquals(2, mapper.add(new MapType(a3)));
+        assertEquals(1, mapper.add(new MapType(a2)));
 
         StateEngineRoundTripper.roundTripDelta(writeEngine, readEngine);
 
-        Assert.assertEquals(3, readEngine.getTypeState("MapOfIntegerToTypeA").getPopulatedOrdinals().cardinality());
+        assertEquals(3, readEngine.getTypeState("MapOfIntegerToTypeA").getPopulatedOrdinals().cardinality());
         
     }
     

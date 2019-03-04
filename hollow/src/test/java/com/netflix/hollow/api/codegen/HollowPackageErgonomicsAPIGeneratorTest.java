@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.UnaryOperator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HollowPackageErgonomicsAPIGeneratorTest extends AbstractHollowAPIGeneratorTest {
     private static final String API_CLASS_NAME = "PackageErgoTestAPI";

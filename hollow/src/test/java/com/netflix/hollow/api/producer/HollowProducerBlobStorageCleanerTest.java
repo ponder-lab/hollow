@@ -23,10 +23,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HollowProducerBlobStorageCleanerTest {
 
@@ -34,7 +34,7 @@ public class HollowProducerBlobStorageCleanerTest {
 
     private File publishDir;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         publishDir = new File(SCRATCH_DIR, "publish-dir");
         publishDir.mkdir();
@@ -64,7 +64,7 @@ public class HollowProducerBlobStorageCleanerTest {
 
         File[] files = listFiles(HollowProducer.Blob.Type.SNAPSHOT.prefix);
         List<String> fileNames = getFileNames(files);
-        Assert.assertEquals(5, files.length);
+        assertEquals(5, files.length);
 
         incrementalProducer.addOrModify(new TypeA(6, "three", 1000));
         incrementalProducer.runCycle();
@@ -74,9 +74,9 @@ public class HollowProducerBlobStorageCleanerTest {
         File[] filesAfterCleanup = listFiles(HollowProducer.Blob.Type.SNAPSHOT.prefix);
         List<String> fileNamesAfterCleanup = getFileNames(filesAfterCleanup);
 
-        Assert.assertEquals(5, files.length);
-        Assert.assertFalse(fileNamesAfterCleanup.contains("snapshot-1"));
-        Assert.assertNotEquals(fileNamesAfterCleanup, fileNames);
+        assertEquals(5, files.length);
+        assertFalse(fileNamesAfterCleanup.contains("snapshot-1"));
+        assertNotEquals(fileNamesAfterCleanup, fileNames);
     }
 
     @SuppressWarnings("unused")
@@ -105,7 +105,7 @@ public class HollowProducerBlobStorageCleanerTest {
         return fileNames;
     }
 
-    @After
+    @AfterEach
     public void removeAllFiles() {
         Arrays.stream(publishDir.listFiles()).forEach(File::delete);
     }

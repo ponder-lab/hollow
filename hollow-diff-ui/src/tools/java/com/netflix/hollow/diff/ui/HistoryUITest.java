@@ -19,7 +19,7 @@ import com.netflix.hollow.tools.history.keyindex.HollowHistoryKeyIndex;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HistoryUITest {
 

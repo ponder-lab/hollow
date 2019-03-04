@@ -15,10 +15,12 @@
  */
 package com.netflix.hollow.api.codegen;
 
-import static org.junit.Assert.assertEquals;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 public class ArgumentParserTest {
     enum Commands {
@@ -27,19 +29,23 @@ public class ArgumentParserTest {
         writeArgumentParserClass;
     };
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void test_missingDash() {
-        new ArgumentParser<Commands>(Commands.class, new String[]{"-orderCoffee=f"});
+        assertThrows(IllegalArgumentException.class,
+                () -> new ArgumentParser<>(Commands.class, new String[]{"-orderCoffee=f"}));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void test_missingValue() {
-        new ArgumentParser<Commands>(Commands.class, new String[]{"--orderCoffee"});
+        assertThrows(IllegalArgumentException.class,
+                () -> new ArgumentParser<>(Commands.class, new String[]{"--orderCoffee"}));
+
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void test_missingArgument() {
-        new ArgumentParser<Commands>(Commands.class, new String[]{"--compileOnFirstTry=f"});
+        assertThrows(IllegalArgumentException.class,
+                () -> new ArgumentParser<>(Commands.class, new String[]{"--compileOnFirstTry=f"}));
     }
 
     @Test

@@ -17,44 +17,44 @@
 package com.netflix.hollow.core.schema;
 
 import com.netflix.hollow.core.schema.HollowSchema.SchemaType;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowSchemaTest {
 
     @Test
     public void isNullableObjectEquals() {
-        Assert.assertTrue(HollowSchema.isNullableObjectEquals(null, null));
-        Assert.assertTrue(HollowSchema.isNullableObjectEquals("S1", "S1"));
-        Assert.assertTrue(HollowSchema.isNullableObjectEquals(1, 1));
+        assertTrue(HollowSchema.isNullableObjectEquals(null, null));
+        assertTrue(HollowSchema.isNullableObjectEquals("S1", "S1"));
+        assertTrue(HollowSchema.isNullableObjectEquals(1, 1));
 
-        Assert.assertFalse(HollowSchema.isNullableObjectEquals(null, 1));
-        Assert.assertFalse(HollowSchema.isNullableObjectEquals(null, "S1"));
-        Assert.assertFalse(HollowSchema.isNullableObjectEquals("S1", null));
-        Assert.assertFalse(HollowSchema.isNullableObjectEquals("S1", ""));
-        Assert.assertFalse(HollowSchema.isNullableObjectEquals("S1", "S2"));
-        Assert.assertFalse(HollowSchema.isNullableObjectEquals("S1", 1));
+        assertFalse(HollowSchema.isNullableObjectEquals(null, 1));
+        assertFalse(HollowSchema.isNullableObjectEquals(null, "S1"));
+        assertFalse(HollowSchema.isNullableObjectEquals("S1", null));
+        assertFalse(HollowSchema.isNullableObjectEquals("S1", ""));
+        assertFalse(HollowSchema.isNullableObjectEquals("S1", "S2"));
+        assertFalse(HollowSchema.isNullableObjectEquals("S1", 1));
     }
 
     @Test
     public void fromTypeId() {
-        Assert.assertEquals(SchemaType.OBJECT, SchemaType.fromTypeId(0));
-        Assert.assertEquals(SchemaType.OBJECT, SchemaType.fromTypeId(6));
+        assertEquals(SchemaType.OBJECT, SchemaType.fromTypeId(0));
+        assertEquals(SchemaType.OBJECT, SchemaType.fromTypeId(6));
 
-        Assert.assertNotEquals(SchemaType.OBJECT, SchemaType.fromTypeId(1));
-        Assert.assertEquals(SchemaType.LIST, SchemaType.fromTypeId(2));
+        assertNotEquals(SchemaType.OBJECT, SchemaType.fromTypeId(1));
+        assertEquals(SchemaType.LIST, SchemaType.fromTypeId(2));
 
-        Assert.assertEquals(SchemaType.SET, SchemaType.fromTypeId(1));
-        Assert.assertEquals(SchemaType.SET, SchemaType.fromTypeId(4));
+        assertEquals(SchemaType.SET, SchemaType.fromTypeId(1));
+        assertEquals(SchemaType.SET, SchemaType.fromTypeId(4));
 
-        Assert.assertEquals(SchemaType.MAP, SchemaType.fromTypeId(3));
-        Assert.assertEquals(SchemaType.MAP, SchemaType.fromTypeId(5));
+        assertEquals(SchemaType.MAP, SchemaType.fromTypeId(3));
+        assertEquals(SchemaType.MAP, SchemaType.fromTypeId(5));
     }
 
     @Test
     public void hasKey() {
-        Assert.assertTrue(SchemaType.hasKey(4));
-        Assert.assertTrue(SchemaType.hasKey(5));
-        Assert.assertTrue(SchemaType.hasKey(6));
+        assertTrue(SchemaType.hasKey(4));
+        assertTrue(SchemaType.hasKey(5));
+        assertTrue(SchemaType.hasKey(6));
     }
 }

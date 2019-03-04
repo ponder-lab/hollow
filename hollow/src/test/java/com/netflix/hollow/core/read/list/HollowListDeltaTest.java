@@ -23,8 +23,8 @@ import com.netflix.hollow.core.schema.HollowListSchema;
 import com.netflix.hollow.core.write.HollowListTypeWriteState;
 import com.netflix.hollow.core.write.HollowListWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowListDeltaTest extends AbstractStateEngineTest {
 
@@ -51,7 +51,7 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
         assertList(typeState, 3, 100, 200, 300, 400, 500, 600, 700);
         assertList(typeState, 4, 1, 2, 3);
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         roundTripDelta();
 
@@ -61,14 +61,14 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
         assertList(typeState, 3, 100, 200, 300, 400, 500, 600, 700); /// "ghost"
         assertList(typeState, 4, 1, 2, 3); /// "ghost"
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         addRecord(634, 54732);
         addRecord(1, 2, 3);
 
         roundTripDelta();
 
-        Assert.assertEquals(1, typeState.maxOrdinal());
+        assertEquals(1, typeState.maxOrdinal());
         assertList(typeState, 0, 634, 54732); /// now, since all lists were removed, we can recycle the ordinal "0", even though it was a "ghost" in the last cycle.
         assertList(typeState, 1, 1, 2, 3);  /// even though 1, 2, 3 had an equivalent list in the previous cycle at ordinal "4", it is now assigned to recycled ordinal "1".
 
@@ -108,7 +108,7 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
 
         try {
             assertList(typeState, 0, 0);
-            Assert.fail("Should have thrown Exception");
+            fail("Should have thrown Exception");
         } catch(NullPointerException expected) { }
     }
 
@@ -126,10 +126,10 @@ public class HollowListDeltaTest extends AbstractStateEngineTest {
         HollowOrdinalIterator iter = readState.ordinalIterator(ordinal);
 
         for(int i=0;i<elements.length;i++) {
-            Assert.assertEquals(elements[i], iter.next());
+            assertEquals(elements[i], iter.next());
         }
 
-        Assert.assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
+        assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
     }
 
     @Override

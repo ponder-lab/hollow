@@ -1,5 +1,8 @@
 package com.netflix.hollow.api.producer;
 
+import static com.netflix.hollow.test.AssertShim.assertFalse;
+import static com.netflix.hollow.test.AssertShim.assertTrue;
+
 import com.netflix.hollow.api.consumer.HollowConsumer;
 import com.netflix.hollow.api.consumer.InMemoryBlobStore;
 import com.netflix.hollow.api.objects.generic.GenericHollowObject;
@@ -11,12 +14,11 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
+@Tag("large")
 public class HollowIncrementalProducerMultithreadingTest {
 
     private static final int ELEMENTS = 20000;
@@ -25,13 +27,10 @@ public class HollowIncrementalProducerMultithreadingTest {
 
     private InMemoryBlobStore blobStore;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
     }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     @Test
     public void updateAndPublishUsingMultithreading() {
@@ -55,12 +54,12 @@ public class HollowIncrementalProducerMultithreadingTest {
 
             /// now we read the changes and assert
             HollowPrimaryKeyIndex idx = createPrimaryKeyIndex(versionAfterUpdate);
-            Assert.assertFalse(idx.containsDuplicates());
-            Assert.assertTrue(Arrays.stream(notModifiedElementIds)
+            assertFalse(idx.containsDuplicates());
+            assertTrue(Arrays.stream(notModifiedElementIds)
                                       .boxed()
                                       .map(elementId -> getHollowObject(idx, elementId))
                                       .allMatch(obj -> obj.getInt("value") == obj.getInt("id")));
-            Assert.assertTrue(Arrays.stream(modifiedElementIds)
+            assertTrue(Arrays.stream(modifiedElementIds)
                                       .boxed()
                                       .map(elementId -> getHollowObject(idx, elementId))
                                       .allMatch(obj -> obj.getInt("value") != obj.getInt("id")));
@@ -89,11 +88,11 @@ public class HollowIncrementalProducerMultithreadingTest {
 
             /// now we read the changes and assert
             HollowPrimaryKeyIndex idx = createPrimaryKeyIndex(versionAfterDelete);
-            Assert.assertTrue(Arrays.stream(notModifiedElementIds)
+            assertTrue(Arrays.stream(notModifiedElementIds)
                                       .boxed()
                                       .map(elementId -> getHollowObject(idx, elementId))
                                       .allMatch(obj -> obj.getInt("value") == obj.getInt("id")));
-            Assert.assertTrue(Arrays.stream(deletedElementIds)
+            assertTrue(Arrays.stream(deletedElementIds)
                                       .boxed()
                                       .map(elementId -> getOrdinal(idx, elementId))
                                       .allMatch(ordinal -> ordinal == -1));

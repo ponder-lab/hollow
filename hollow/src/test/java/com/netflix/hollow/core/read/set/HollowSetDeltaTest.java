@@ -22,8 +22,8 @@ import com.netflix.hollow.core.schema.HollowSetSchema;
 import com.netflix.hollow.core.write.HollowSetTypeWriteState;
 import com.netflix.hollow.core.write.HollowSetWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowSetDeltaTest extends AbstractStateEngineTest {
 
@@ -50,7 +50,7 @@ public class HollowSetDeltaTest extends AbstractStateEngineTest {
         assertSet(typeState, 3, 100, 200, 300, 400, 500, 600, 700);
         assertSet(typeState, 4, 1, 2, 3);
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         roundTripDelta();
 
@@ -60,14 +60,14 @@ public class HollowSetDeltaTest extends AbstractStateEngineTest {
         assertSet(typeState, 3, 100, 200, 300, 400, 500, 600, 700); /// "ghost"
         assertSet(typeState, 4, 1, 2, 3); /// "ghost"
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
 
         addRecord(634, 54732);
         addRecord(1, 2, 3);
 
         roundTripDelta();
 
-        Assert.assertEquals(1, typeState.maxOrdinal());
+        assertEquals(1, typeState.maxOrdinal());
         assertSet(typeState, 0, 634, 54732); /// now, since all sets were removed, we can recycle the ordinal "0", even though it was a "ghost" in the last cycle.
         assertSet(typeState, 1, 1, 2, 3);  /// even though 1, 2, 3 had an equivalent set in the previous cycle at ordinal "4", it is now assigned to recycled ordinal "1".
 
@@ -84,10 +84,10 @@ public class HollowSetDeltaTest extends AbstractStateEngineTest {
     }
 
     private void assertSet(HollowSetTypeReadState readState, int ordinal, int... elements) {
-        Assert.assertEquals(elements.length, readState.size(ordinal));
+        assertEquals(elements.length, readState.size(ordinal));
 
         for(int i=0;i<elements.length;i++) {
-            Assert.assertTrue(readState.contains(ordinal, elements[i]));
+            assertTrue(readState.contains(ordinal, elements[i]));
         }
     }
 

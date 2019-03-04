@@ -17,16 +17,17 @@
 package com.netflix.hollow.core.util;
 
 import static com.netflix.hollow.core.HollowConstants.HASH_TABLE_MAX_SIZE;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static com.netflix.hollow.test.AssertShim.fail;
 
 import com.netflix.hollow.core.memory.ByteDataBuffer;
 import com.netflix.hollow.core.memory.encoding.HashCodes;
 import com.netflix.hollow.core.memory.encoding.VarInt;
 import com.netflix.hollow.core.memory.pool.WastefulRecycler;
 import java.util.Random;
-import junit.framework.AssertionFailedError;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class HashCodesTest {
 
@@ -36,12 +37,12 @@ public class HashCodesTest {
     public void testStringHashCode() {
         for(int i=0;i<10000;i++) {
             String str = buildRandomString(true, 25);
-            Assert.assertEquals(accurateStringHashCode(str), HashCodes.hashCode(str));
+            assertEquals(accurateStringHashCode(str), HashCodes.hashCode(str));
         }
         
         for(int i=0;i<10000;i++) {
             String str = buildRandomString(false, 25);
-            Assert.assertEquals(accurateStringHashCode(str), HashCodes.hashCode(str));
+            assertEquals(accurateStringHashCode(str), HashCodes.hashCode(str));
         }
     }
 
@@ -52,28 +53,28 @@ public class HashCodesTest {
 
         try {
             HashCodes.hashTableSize(-1);
-            Assert.fail("exception expected");
+            fail("exception expected");
         } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("cannot be negative; numElements=-1", ex.getMessage());
+            assertEquals("cannot be negative; numElements=-1", ex.getMessage());
         }
 
-        Assert.assertEquals(1, HashCodes.hashTableSize(0));
-        Assert.assertEquals(2, HashCodes.hashTableSize(1));
-        Assert.assertEquals(4, HashCodes.hashTableSize(2));
+        assertEquals(1, HashCodes.hashTableSize(0));
+        assertEquals(2, HashCodes.hashTableSize(1));
+        assertEquals(4, HashCodes.hashTableSize(2));
 
         // first integer overflow boundary condition (214_748_364)
         N = Integer.MAX_VALUE / 10;
-        Assert.assertEquals(1 << 29, HashCodes.hashTableSize(N));
-        Assert.assertEquals(536870912, HashCodes.hashTableSize(N + 1));
+        assertEquals(1 << 29, HashCodes.hashTableSize(N));
+        assertEquals(536870912, HashCodes.hashTableSize(N + 1));
 
         // exceeding maximum hash table size (before load factor)
         N = HASH_TABLE_MAX_SIZE;
-        Assert.assertEquals(1073741824, HashCodes.hashTableSize(N));
+        assertEquals(1073741824, HashCodes.hashTableSize(N));
         try {
             HashCodes.hashTableSize(N + 1);
-            Assert.fail("exception expected");
+            fail("exception expected");
         } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("exceeds maximum number of buckets; numElements=751619277", ex.getMessage());
+            assertEquals("exceeds maximum number of buckets; numElements=751619277", ex.getMessage());
         }
 
         // Note: technically these overflow conditions aren't reachable because max buckets is a lower
@@ -81,22 +82,22 @@ public class HashCodesTest {
         N = (int)((1L<<31) * 7L / 10L);
         try {
             HashCodes.hashTableSize(N);
-            Assert.fail("exception expected");
+            fail("exception expected");
         } catch (IllegalArgumentException ex) {}
         try {
             HashCodes.hashTableSize(N + 1);
-            Assert.fail("exception expected");
+            fail("exception expected");
         } catch (IllegalArgumentException ex) {}
 
         // max int
         try {
             HashCodes.hashTableSize(Integer.MAX_VALUE);
-            Assert.fail("exception expected");
+            fail("exception expected");
         } catch (IllegalArgumentException ex) {}
     }
 
+    @Disabled
     @Test
-    @Ignore
     public void testHashTableSize_exhaustively() {
         int size = HashCodes.hashTableSize(2);
         for (int N=3; N< HASH_TABLE_MAX_SIZE; ++N) {
@@ -114,7 +115,7 @@ public class HashCodesTest {
                 sb.append("(~2^");
                 sb.append(31 - Integer.numberOfLeadingZeros(s));
                 sb.append(')');
-                throw new AssertionFailedError(sb.toString());
+                fail(sb.toString());
             }
             size = s;
         }

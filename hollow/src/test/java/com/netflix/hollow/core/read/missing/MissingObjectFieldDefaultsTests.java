@@ -16,9 +16,9 @@
  */
 package com.netflix.hollow.core.read.missing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+import static com.netflix.hollow.test.AssertShim.assertFalse;
+import static com.netflix.hollow.test.AssertShim.assertTrue;
 
 import com.netflix.hollow.api.objects.generic.GenericHollowObject;
 import com.netflix.hollow.api.objects.generic.GenericHollowRecordHelper;
@@ -28,14 +28,14 @@ import com.netflix.hollow.core.schema.HollowObjectSchema.FieldType;
 import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MissingObjectFieldDefaultsTests extends AbstractStateEngineTest {
 
     HollowObjectSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema("TestObject", 2);
         schema.addField("f1", FieldType.INT);

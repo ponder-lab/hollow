@@ -16,20 +16,21 @@
  */
 package com.netflix.hollow.core.read.map;
 
+import static com.netflix.hollow.test.AssertShim.assertEquals;
+
 import com.netflix.hollow.core.AbstractStateEngineTest;
 import com.netflix.hollow.core.read.engine.map.HollowMapTypeReadState;
 import com.netflix.hollow.core.schema.HollowMapSchema;
 import com.netflix.hollow.core.write.HollowMapTypeWriteState;
 import com.netflix.hollow.core.write.HollowMapWriteRecord;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class HollowMapLargeTest extends AbstractStateEngineTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
     }
@@ -39,7 +40,7 @@ public class HollowMapLargeTest extends AbstractStateEngineTest {
         testSnapshot(1 << 9, 1 << 8, 1 << 22);
     }
 
-    @Ignore
+    @Disabled
     @Test
     // This test configuration can use up lots of memory
     public void testSnapshotLarge() throws IOException {
@@ -63,11 +64,11 @@ public class HollowMapLargeTest extends AbstractStateEngineTest {
 
         for (int n = 0; n < nMaps; n++) {
             int l = typeState.size(n);
-            Assert.assertEquals(maxOrdinal, l);
+            assertEquals(maxOrdinal, l);
 
             int v = initialValue - n;
             for (int i = 0; i < maxOrdinal; i++, v--) {
-                Assert.assertEquals(n + " " + i, v, typeState.get(n, i));
+                assertEquals(n + " " + i, v, typeState.get(n, i));
             }
         }
     }
@@ -77,7 +78,7 @@ public class HollowMapLargeTest extends AbstractStateEngineTest {
         testDelta(1 << 9, 1 << 8, 1 << 22);
     }
 
-    @Ignore
+    @Disabled
     @Test
     // This test configuration can use up lots of memory
     public void testDeltaLarge() throws IOException {
@@ -111,11 +112,11 @@ public class HollowMapLargeTest extends AbstractStateEngineTest {
 
         for (int n = 0; n < nMaps; n++) {
             int l = typeState.size(n);
-            Assert.assertEquals(maxOrdinal, l);
+            assertEquals(maxOrdinal, l);
 
             int v = initialValue - n;
             for (int i = 0; i < maxOrdinal; i++, v--) {
-                Assert.assertEquals(n + " " + i, v, typeState.get(n, i));
+                assertEquals(n + " " + i, v, typeState.get(n, i));
             }
         }
     }

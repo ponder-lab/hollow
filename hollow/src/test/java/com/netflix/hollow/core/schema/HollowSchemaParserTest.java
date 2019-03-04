@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class HollowSchemaParserTest {
 
@@ -41,18 +41,18 @@ public class HollowSchemaParserTest {
 
         HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
 
-        Assert.assertEquals("TypeA", schema.getName());
-        Assert.assertEquals(3, schema.numFields());
-        Assert.assertEquals(FieldType.INT, schema.getFieldType(0));
-        Assert.assertEquals("a1", schema.getFieldName(0));
-        Assert.assertEquals(FieldType.STRING, schema.getFieldType(1));
-        Assert.assertEquals("a2", schema.getFieldName(1));
-        Assert.assertEquals(FieldType.REFERENCE, schema.getFieldType(2));
-        Assert.assertEquals("String", schema.getReferencedType(2));
-        Assert.assertEquals("a3", schema.getFieldName(2));
+        assertEquals("TypeA", schema.getName());
+        assertEquals(3, schema.numFields());
+        assertEquals(FieldType.INT, schema.getFieldType(0));
+        assertEquals("a1", schema.getFieldName(0));
+        assertEquals(FieldType.STRING, schema.getFieldType(1));
+        assertEquals("a2", schema.getFieldName(1));
+        assertEquals(FieldType.REFERENCE, schema.getFieldType(2));
+        assertEquals("String", schema.getReferencedType(2));
+        assertEquals("a3", schema.getFieldName(2));
 
         // HollowObjectSchame.toString is parsed properly
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
     @Test
@@ -65,19 +65,19 @@ public class HollowSchemaParserTest {
 
         HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
 
-        Assert.assertEquals("TypeA", schema.getName());
-        Assert.assertEquals(3, schema.numFields());
-        Assert.assertEquals(FieldType.INT, schema.getFieldType(0));
-        Assert.assertEquals("a1", schema.getFieldName(0));
-        Assert.assertEquals(FieldType.STRING, schema.getFieldType(1));
-        Assert.assertEquals("a2", schema.getFieldName(1));
-        Assert.assertEquals(FieldType.REFERENCE, schema.getFieldType(2));
-        Assert.assertEquals("String", schema.getReferencedType(2));
-        Assert.assertEquals("a3", schema.getFieldName(2));
+        assertEquals("TypeA", schema.getName());
+        assertEquals(3, schema.numFields());
+        assertEquals(FieldType.INT, schema.getFieldType(0));
+        assertEquals("a1", schema.getFieldName(0));
+        assertEquals(FieldType.STRING, schema.getFieldType(1));
+        assertEquals("a2", schema.getFieldName(1));
+        assertEquals(FieldType.REFERENCE, schema.getFieldType(2));
+        assertEquals("String", schema.getReferencedType(2));
+        assertEquals("a3", schema.getFieldName(2));
 
         // Make sure primary key and HollowObjectSchame.toString is parsed properly
-        Assert.assertEquals(new PrimaryKey("TypeA", "a1"), schema.getPrimaryKey());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals(new PrimaryKey("TypeA", "a1"), schema.getPrimaryKey());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
     @Test
@@ -90,19 +90,19 @@ public class HollowSchemaParserTest {
 
         HollowObjectSchema schema = (HollowObjectSchema) HollowSchemaParser.parseSchema(objectSchema);
 
-        Assert.assertEquals("TypeA", schema.getName());
-        Assert.assertEquals(3, schema.numFields());
-        Assert.assertEquals(FieldType.INT, schema.getFieldType(0));
-        Assert.assertEquals("a1", schema.getFieldName(0));
-        Assert.assertEquals(FieldType.STRING, schema.getFieldType(1));
-        Assert.assertEquals("a2", schema.getFieldName(1));
-        Assert.assertEquals(FieldType.REFERENCE, schema.getFieldType(2));
-        Assert.assertEquals("String", schema.getReferencedType(2));
-        Assert.assertEquals("a3", schema.getFieldName(2));
+        assertEquals("TypeA", schema.getName());
+        assertEquals(3, schema.numFields());
+        assertEquals(FieldType.INT, schema.getFieldType(0));
+        assertEquals("a1", schema.getFieldName(0));
+        assertEquals(FieldType.STRING, schema.getFieldType(1));
+        assertEquals("a2", schema.getFieldName(1));
+        assertEquals(FieldType.REFERENCE, schema.getFieldType(2));
+        assertEquals("String", schema.getReferencedType(2));
+        assertEquals("a3", schema.getFieldName(2));
 
         // Make sure primary key and HollowObjectSchame.toString is parsed properly
-        Assert.assertEquals(new PrimaryKey("TypeA", "a1", "a3.value"), schema.getPrimaryKey());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals(new PrimaryKey("TypeA", "a1", "a3.value"), schema.getPrimaryKey());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
     @Test
@@ -111,9 +111,9 @@ public class HollowSchemaParserTest {
 
         HollowListSchema schema = (HollowListSchema) HollowSchemaParser.parseSchema(listSchema);
 
-        Assert.assertEquals("ListOfTypeA", schema.getName());
-        Assert.assertEquals("TypeA", schema.getElementType());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals("ListOfTypeA", schema.getName());
+        assertEquals("TypeA", schema.getElementType());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
 
@@ -123,9 +123,9 @@ public class HollowSchemaParserTest {
 
         HollowSetSchema schema = (HollowSetSchema) HollowSchemaParser.parseSchema(listSchema);
 
-        Assert.assertEquals("SetOfTypeA", schema.getName());
-        Assert.assertEquals("TypeA", schema.getElementType());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals("SetOfTypeA", schema.getName());
+        assertEquals("TypeA", schema.getElementType());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
     @Test
@@ -134,10 +134,10 @@ public class HollowSchemaParserTest {
 
         HollowSetSchema schema = (HollowSetSchema) HollowSchemaParser.parseSchema(listSchema);
 
-        Assert.assertEquals("SetOfTypeA", schema.getName());
-        Assert.assertEquals("TypeA", schema.getElementType());
-        Assert.assertEquals(new PrimaryKey("TypeA", "id.value"), schema.getHashKey());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals("SetOfTypeA", schema.getName());
+        assertEquals("TypeA", schema.getElementType());
+        assertEquals(new PrimaryKey("TypeA", "id.value"), schema.getHashKey());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
     @Test
@@ -146,10 +146,10 @@ public class HollowSchemaParserTest {
 
         HollowSetSchema schema = (HollowSetSchema) HollowSchemaParser.parseSchema(listSchema);
 
-        Assert.assertEquals("SetOfTypeA", schema.getName());
-        Assert.assertEquals("TypeA", schema.getElementType());
-        Assert.assertEquals(new PrimaryKey("TypeA", "id.value", "region.country.id", "key"), schema.getHashKey());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals("SetOfTypeA", schema.getName());
+        assertEquals("TypeA", schema.getElementType());
+        assertEquals(new PrimaryKey("TypeA", "id.value", "region.country.id", "key"), schema.getHashKey());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
 
@@ -159,10 +159,10 @@ public class HollowSchemaParserTest {
 
         HollowMapSchema schema = (HollowMapSchema) HollowSchemaParser.parseSchema(listSchema);
 
-        Assert.assertEquals("MapOfStringToTypeA", schema.getName());
-        Assert.assertEquals("String", schema.getKeyType());
-        Assert.assertEquals("TypeA", schema.getValueType());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals("MapOfStringToTypeA", schema.getName());
+        assertEquals("String", schema.getKeyType());
+        assertEquals("TypeA", schema.getValueType());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
 
@@ -172,11 +172,11 @@ public class HollowSchemaParserTest {
 
         HollowMapSchema schema = (HollowMapSchema) HollowSchemaParser.parseSchema(listSchema);
 
-        Assert.assertEquals("MapOfStringToTypeA", schema.getName());
-        Assert.assertEquals("String", schema.getKeyType());
-        Assert.assertEquals("TypeA", schema.getValueType());
-        Assert.assertEquals(new PrimaryKey("String", "value"), schema.getHashKey());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals("MapOfStringToTypeA", schema.getName());
+        assertEquals("String", schema.getKeyType());
+        assertEquals("TypeA", schema.getValueType());
+        assertEquals(new PrimaryKey("String", "value"), schema.getHashKey());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
 
@@ -186,11 +186,11 @@ public class HollowSchemaParserTest {
 
         HollowMapSchema schema = (HollowMapSchema) HollowSchemaParser.parseSchema(listSchema);
 
-        Assert.assertEquals("MapOfStringToTypeA", schema.getName());
-        Assert.assertEquals("String", schema.getKeyType());
-        Assert.assertEquals("TypeA", schema.getValueType());
-        Assert.assertEquals(new PrimaryKey("String", "id.value", "region.country.id", "key"), schema.getHashKey());
-        Assert.assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
+        assertEquals("MapOfStringToTypeA", schema.getName());
+        assertEquals("String", schema.getKeyType());
+        assertEquals("TypeA", schema.getValueType());
+        assertEquals(new PrimaryKey("String", "id.value", "region.country.id", "key"), schema.getHashKey());
+        assertEquals(schema, HollowSchemaParser.parseSchema(schema.toString()));
     }
 
     @Test
@@ -210,7 +210,7 @@ public class HollowSchemaParserTest {
 
         List<HollowSchema> schemas = HollowSchemaParser.parseCollectionOfSchemas(manySchemas);
 
-        Assert.assertEquals(4, schemas.size());
+        assertEquals(4, schemas.size());
     }
 
     @Test
@@ -220,9 +220,9 @@ public class HollowSchemaParserTest {
             input = getClass().getResourceAsStream("/schema1.txt");
             List<HollowSchema> schemas =
                     HollowSchemaParser.parseCollectionOfSchemas(new BufferedReader(new InputStreamReader(input)));
-            Assert.assertEquals("Should have two schemas", 2, schemas.size());
-            Assert.assertEquals("Should have Minion schema", "Minion", schemas.get(0).getName());
-            Assert.assertEquals("Should have String schema", "String", schemas.get(1).getName());
+            assertEquals("Should have two schemas", 2, schemas.size());
+            assertEquals("Should have Minion schema", "Minion", schemas.get(0).getName());
+            assertEquals("Should have String schema", "String", schemas.get(1).getName());
         } finally {
             if (input != null) {
                 input.close();

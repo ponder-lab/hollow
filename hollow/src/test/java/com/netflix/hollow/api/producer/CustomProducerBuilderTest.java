@@ -1,8 +1,8 @@
 package com.netflix.hollow.api.producer;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 // this test doesn't do much beyond making sure that a custom builder will
 // compile and ensure that HollowProducer.Builder is parameterized correctly
@@ -10,7 +10,7 @@ import org.junit.Test;
 // methods
 public class CustomProducerBuilderTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
     }
 
@@ -18,7 +18,7 @@ public class CustomProducerBuilderTest {
     public void defaultBehavior() {
         HollowProducer producer = new AugmentedBuilder()
                 .build();
-        Assert.assertFalse(producer instanceof AugmentedProducer);
+        assertFalse(producer instanceof AugmentedProducer);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class CustomProducerBuilderTest {
                 .withNumStatesBetweenSnapshots(42) // should be called before custom builder methods
                 .withAugmentation()
                 .build();
-        Assert.assertTrue(consumer instanceof AugmentedProducer);
+        assertTrue(consumer instanceof AugmentedProducer);
     }
 
     private static class AugmentedBuilder extends HollowProducer.Builder<AugmentedBuilder> {

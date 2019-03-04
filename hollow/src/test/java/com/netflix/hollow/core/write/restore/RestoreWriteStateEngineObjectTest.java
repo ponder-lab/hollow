@@ -26,15 +26,15 @@ import com.netflix.hollow.core.write.HollowObjectTypeWriteState;
 import com.netflix.hollow.core.write.HollowObjectWriteRecord;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
 
     private HollowObjectSchema schema;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         schema = new HollowObjectSchema("TestObject", 2);
         schema.addField("f1", FieldType.INT);
@@ -67,7 +67,7 @@ public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
 
         HollowObjectTypeReadState typeState = (HollowObjectTypeReadState) readStateEngine.getTypeState("TestObject");
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
         assertObject(typeState, 0, 1, "one");
         assertObject(typeState, 1, 4, "four");
         assertObject(typeState, 2, 3, "three"); /// ghost
@@ -82,7 +82,7 @@ public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        Assert.assertEquals(4, typeState.maxOrdinal());
+        assertEquals(4, typeState.maxOrdinal());
         assertObject(typeState, 1, 4, "four");
         assertObject(typeState, 2, 20, "twenty");
         assertObject(typeState, 3, 1000, "one thousand");
@@ -98,7 +98,7 @@ public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
 
         try {
             writeStateEngine.restoreFrom(readStateEngine);
-            Assert.fail("Should have thrown IllegalStateException because shard configuration has changed");
+            fail("Should have thrown IllegalStateException because shard configuration has changed");
         } catch(IllegalStateException expected) { }
     }
 
@@ -114,8 +114,8 @@ public class RestoreWriteStateEngineObjectTest extends AbstractStateEngineTest {
     private void assertObject(HollowObjectTypeReadState readState, int ordinal, int intVal, String strVal) {
         GenericHollowObject obj = new GenericHollowObject(new HollowObjectGenericDelegate(readState), ordinal);
 
-        Assert.assertEquals(intVal, obj.getInt("f1"));
-        Assert.assertEquals(strVal, obj.getString("f2"));
+        assertEquals(intVal, obj.getInt("f1"));
+        assertEquals(strVal, obj.getString("f2"));
     }
 
     @Override

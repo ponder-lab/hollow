@@ -5,9 +5,9 @@ import com.netflix.hollow.api.producer.HollowProducer;
 import com.netflix.hollow.api.producer.HollowProducerFakeListener;
 import com.netflix.hollow.api.producer.HollowProducerListener;
 import com.netflix.hollow.api.producer.fs.HollowInMemoryBlobStager;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class HollowProducerMetricsTests {
@@ -16,7 +16,7 @@ public class HollowProducerMetricsTests {
     private HollowProducerMetrics hollowProducerMetrics;
     private HollowProducerFakeListener hollowProducerFakeListener;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blobStore = new InMemoryBlobStore();
         hollowProducerMetrics = new HollowProducerMetrics();
@@ -27,14 +27,14 @@ public class HollowProducerMetricsTests {
     public void metricsDoNotBreakWithNullStateEngineInSuccess() {
         HollowProducerListener.ProducerStatus producerStatus = hollowProducerFakeListener.getSuccessFakeStatus(1L);
         hollowProducerMetrics.updateCycleMetrics(producerStatus);
-        Assert.assertEquals(hollowProducerMetrics.getCyclesSucceeded(), 1);
+        assertEquals(hollowProducerMetrics.getCyclesSucceeded(), 1);
     }
 
     @Test
     public void metricsDoNotBreakWithNullStateEngineInFail() {
         HollowProducerListener.ProducerStatus producerStatus = hollowProducerFakeListener.getFailFakeStatus(1L);
         hollowProducerMetrics.updateCycleMetrics(producerStatus);
-        Assert.assertEquals(hollowProducerMetrics.getCycleFailed(), 1);
+        assertEquals(hollowProducerMetrics.getCycleFailed(), 1);
     }
 
     @Test
@@ -50,10 +50,10 @@ public class HollowProducerMetricsTests {
         });
 
         HollowProducerMetrics hollowProducerMetrics = producer.getMetrics();
-        Assert.assertEquals(hollowProducerMetrics.getCyclesSucceeded(), 1);
-        Assert.assertEquals(hollowProducerMetrics.getCyclesCompleted(), 1);
-        Assert.assertEquals(hollowProducerMetrics.getTotalPopulatedOrdinals(), 1);
-        Assert.assertEquals(hollowProducerMetrics.getSnapshotsCompleted(), 1);
+        assertEquals(hollowProducerMetrics.getCyclesSucceeded(), 1);
+        assertEquals(hollowProducerMetrics.getCyclesCompleted(), 1);
+        assertEquals(hollowProducerMetrics.getTotalPopulatedOrdinals(), 1);
+        assertEquals(hollowProducerMetrics.getSnapshotsCompleted(), 1);
     }
 
     @Test
@@ -72,8 +72,8 @@ public class HollowProducerMetricsTests {
         } catch (Exception ignored){ }
 
         HollowProducerMetrics hollowProducerMetrics = producer.getMetrics();
-        Assert.assertEquals(hollowProducerMetrics.getCyclesSucceeded(), 0);
-        Assert.assertEquals(hollowProducerMetrics.getCyclesCompleted(), 1);
-        Assert.assertEquals(hollowProducerMetrics.getCycleFailed(), 1);
+        assertEquals(hollowProducerMetrics.getCyclesSucceeded(), 0);
+        assertEquals(hollowProducerMetrics.getCyclesCompleted(), 1);
+        assertEquals(hollowProducerMetrics.getCycleFailed(), 1);
     }
 }

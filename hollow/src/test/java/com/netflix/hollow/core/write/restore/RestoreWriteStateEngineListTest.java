@@ -24,8 +24,8 @@ import com.netflix.hollow.core.write.HollowListTypeWriteState;
 import com.netflix.hollow.core.write.HollowListWriteRecord;
 import com.netflix.hollow.core.write.HollowWriteStateEngine;
 import java.io.IOException;
-import org.junit.Assert;
-import org.junit.Test;
+import static com.netflix.hollow.test.AssertShim.*;
+import org.junit.jupiter.api.Test;
 
 public class RestoreWriteStateEngineListTest extends AbstractStateEngineTest {
 
@@ -54,7 +54,7 @@ public class RestoreWriteStateEngineListTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        Assert.assertEquals(4, readStateEngine.getTypeState("TestList").maxOrdinal());
+        assertEquals(4, readStateEngine.getTypeState("TestList").maxOrdinal());
         assertList(0, 1, 2, 3);
         assertList(1, 4, 5, 6);
         assertList(3, 1000, 1001, 1002);
@@ -64,11 +64,11 @@ public class RestoreWriteStateEngineListTest extends AbstractStateEngineTest {
 
         roundTripDelta();
 
-        Assert.assertEquals(4, readStateEngine.getTypeState("TestList").maxOrdinal());
+        assertEquals(4, readStateEngine.getTypeState("TestList").maxOrdinal());
 
         roundTripDelta();
 
-        Assert.assertEquals(3, readStateEngine.getTypeState("TestList").maxOrdinal());
+        assertEquals(3, readStateEngine.getTypeState("TestList").maxOrdinal());
     }
     
     @Test
@@ -81,7 +81,7 @@ public class RestoreWriteStateEngineListTest extends AbstractStateEngineTest {
 
         try {
             writeStateEngine.restoreFrom(readStateEngine);
-            Assert.fail("Should have thrown IllegalStateException because shard configuration has changed");
+            fail("Should have thrown IllegalStateException because shard configuration has changed");
         } catch(IllegalStateException expected) { }
     }
 
@@ -100,10 +100,10 @@ public class RestoreWriteStateEngineListTest extends AbstractStateEngineTest {
         HollowOrdinalIterator iter = readState.ordinalIterator(ordinal);
 
         for(int i=0;i<elements.length;i++) {
-            Assert.assertEquals(elements[i], iter.next());
+            assertEquals(elements[i], iter.next());
         }
 
-        Assert.assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
+        assertEquals(HollowOrdinalIterator.NO_MORE_ORDINALS, iter.next());
     }
 
     @Override
