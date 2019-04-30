@@ -41,7 +41,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Used by HollowIncrementalProducer for Delta-Based Producer Input
  * @since 2.9.9
+ * @deprecated see {@link HollowProducer.Incremental#runIncrementalCycle(HollowProducer.Incremental.IncrementalPopulator)}
+ * @see HollowProducer.Incremental#runIncrementalCycle(HollowProducer.Incremental.IncrementalPopulator)
  */
+@Deprecated
 public class HollowIncrementalCyclePopulator implements HollowProducer.Populator {
 
     public static final Object DELETE_RECORD = new Object();
@@ -150,7 +153,8 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
         List<Map.Entry<RecordPrimaryKey, Object>> entryList = new ArrayList<>(mutations.entrySet());
         
         AtomicInteger nextMutation = new AtomicInteger(0);
-        
+
+        // @@@ Use parallel stream
         SimultaneousExecutor executor = new SimultaneousExecutor(threadsPerCpu, getClass(), "add-records");
         for(int i=0;i<executor.getCorePoolSize();i++) {
             executor.execute(() -> {
@@ -167,7 +171,7 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
                         else
                             currentMutation = aia.obj;
                     }
-                    
+
                     if(currentMutation != DELETE_RECORD) {
                         if(currentMutation instanceof FlatRecord) {
                             if(flatRecordDumper == null)
@@ -190,15 +194,15 @@ public class HollowIncrementalCyclePopulator implements HollowProducer.Populator
             throw new RuntimeException(e);
         }
     }
-    
+
     static final class AddIfAbsent {
         private final Object obj;
         private boolean wasFound;
-        
+
         public AddIfAbsent(Object obj) {
             this.obj = obj;
             this.wasFound = false;
         }
-        
+
     }
 }
