@@ -324,7 +324,7 @@ public class HollowHistoricalStateCreator {
     }
 
     private static HollowReadStateEngine roundTripStateEngine(HollowWriteStateEngine writeEngine) {
-        HollowBlobWriter writer = new HollowBlobWriter(writeEngine);
+        final HollowBlobWriter writer = new HollowBlobWriter(writeEngine);
         HollowReadStateEngine removedRecordCopies = new HollowReadStateEngine();
         HollowBlobReader reader = new HollowBlobReader(removedRecordCopies);
 

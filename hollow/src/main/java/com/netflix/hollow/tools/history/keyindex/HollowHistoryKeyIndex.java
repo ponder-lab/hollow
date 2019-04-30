@@ -153,7 +153,7 @@ public class HollowHistoryKeyIndex {
     }
 
     private HollowReadStateEngine roundTripStateEngine(boolean isInitialUpdate, boolean isSnapshot) {
-        HollowBlobWriter writer = new HollowBlobWriter(writeStateEngine);
+        final HollowBlobWriter writer = new HollowBlobWriter(writeStateEngine);
         // Use existing readStateEngine on initial update or delta;
         // otherwise, create new one to properly handle double snapshot
         HollowReadStateEngine newReadStateEngine = (isInitialUpdate || !isSnapshot)

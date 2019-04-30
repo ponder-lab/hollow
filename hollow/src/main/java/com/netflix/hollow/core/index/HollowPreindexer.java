@@ -74,7 +74,7 @@ public class HollowPreindexer {
     }
 
     private HollowHashIndexField getHollowHashIndexField(HollowTypeReadState originalTypeState, String selectField,
-            Map<String, Integer> baseFieldToIndexMap, boolean truncate) {
+            final Map<String, Integer> baseFieldToIndexMap, boolean truncate) {
         FieldPaths.FieldPath<FieldPaths.FieldSegment> path = FieldPaths.createFieldPathForHashIndex(
                 stateEngine, type, selectField);
 

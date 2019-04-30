@@ -382,7 +382,7 @@ public class HollowObjectJavaGenerator extends HollowConsumerJavaFileGenerator {
         classBuilder.append("    }\n\n");
     }
 
-    private void appendPrimaryKey(StringBuilder classBuilder, PrimaryKey pk) {
+    private void appendPrimaryKey(final StringBuilder classBuilder, PrimaryKey pk) {
         if (pk.numFields() == 1) {
             String fieldPath = pk.getFieldPath(0);
             FieldType fieldType = pk.getFieldType(dataset, 0);

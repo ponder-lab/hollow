@@ -148,7 +148,7 @@ public class HollowWriteStateCreator {
         populateUsingReadEngine(writeEngine, readEngine, true);
     }
 
-    public static void populateUsingReadEngine(HollowWriteStateEngine writeEngine, HollowReadStateEngine readEngine, boolean preserveHashPositions) {
+    public static void populateUsingReadEngine(final HollowWriteStateEngine writeEngine, HollowReadStateEngine readEngine, boolean preserveHashPositions) {
         SimultaneousExecutor executor = new SimultaneousExecutor(HollowWriteStateCreator.class, "populate");
         
         for(HollowTypeWriteState writeState : writeEngine.getOrderedTypeStates()) {

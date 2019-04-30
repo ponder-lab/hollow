@@ -160,7 +160,7 @@ final class ListenerSupport {
 
         void fireProducerRestoreComplete(Status.RestoreStageBuilder b) {
             Status s = b.build();
-            long versionDesired = b.versionDesired;
+            final long versionDesired = b.versionDesired;
             long versionReached = b.versionReached;
             Duration elapsed = b.elapsed();
 
@@ -245,7 +245,7 @@ final class ListenerSupport {
 
         void fireBlobStage(Status.PublishBuilder b) {
             Status s = b.build();
-            HollowProducer.Blob blob = b.blob;
+            final HollowProducer.Blob blob = b.blob;
             Duration elapsed = b.elapsed();
 
             fire(PublishListener.class,
@@ -259,7 +259,7 @@ final class ListenerSupport {
 
         void fireBlobPublish(Status.PublishBuilder b) {
             Status s = b.build();
-            HollowProducer.Blob blob = b.blob;
+            final HollowProducer.Blob blob = b.blob;
             Duration elapsed = b.elapsed();
 
             fire(PublishListener.class,
@@ -306,7 +306,7 @@ final class ListenerSupport {
             return new Status.StageWithStateBuilder().readState(readState);
         }
 
-        void fireValidationComplete(Status.StageWithStateBuilder b, ValidationStatus vs) {
+        void fireValidationComplete(Status.StageWithStateBuilder b, final ValidationStatus vs) {
             Status s = b.build();
             HollowProducer.ReadState readState = b.readState;
             long version = b.version;
@@ -322,7 +322,7 @@ final class ListenerSupport {
 
 
         Status.StageWithStateBuilder fireAnnouncementStart(HollowProducer.ReadState readState) {
-            long version = readState.getVersion();
+            final long version = readState.getVersion();
             fire(AnnouncementListener.class,
                     l -> l.onAnnouncementStart(version));
 
