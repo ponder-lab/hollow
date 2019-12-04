@@ -102,7 +102,7 @@ public class ReadWriteStateEngineTest {
     }
 
     private static HollowReadStateEngine roundTripSnapshotPipe(HollowWriteStateEngine writeEngine) {
-        HollowBlobWriter writer = new HollowBlobWriter(writeEngine);
+        final HollowBlobWriter writer = new HollowBlobWriter(writeEngine);
         HollowReadStateEngine removedRecordCopies = new HollowReadStateEngine();
         HollowBlobReader reader = new HollowBlobReader(removedRecordCopies);
 
@@ -114,7 +114,7 @@ public class ReadWriteStateEngineTest {
         Exception pipeException = null;
         // Ensure read-side is closed after completion of read
         try (PipedInputStream in = new PipedInputStream(1 << 15)) {
-            PipedOutputStream out = new PipedOutputStream(in);
+            final PipedOutputStream out = new PipedOutputStream(in);
             executor.execute(() -> {
                 // Ensure write-side is closed after completion of write
                 try (Closeable ac = out) {
@@ -147,7 +147,7 @@ public class ReadWriteStateEngineTest {
     }
 
     private static HollowReadStateEngine roundTripSnapshotPipeBuffered(HollowWriteStateEngine writeEngine) {
-        HollowBlobWriter writer = new HollowBlobWriter(writeEngine);
+        final HollowBlobWriter writer = new HollowBlobWriter(writeEngine);
         HollowReadStateEngine removedRecordCopies = new HollowReadStateEngine();
         HollowBlobReader reader = new HollowBlobReader(removedRecordCopies);
 
@@ -159,7 +159,7 @@ public class ReadWriteStateEngineTest {
         Exception pipeException = null;
         // Ensure read-side is closed after completion of read
         try (PipedInputStream in = new PipedInputStream(1 << 15)) {
-            PipedOutputStream out = new PipedOutputStream(in);
+            final PipedOutputStream out = new PipedOutputStream(in);
             executor.execute(() -> {
                 // Ensure write-side is closed after completion of write
                 try (Closeable ac = out) {
